@@ -1,0 +1,56 @@
+{
+    "name": "ylsideas/feature-flags",
+    "description": "A Laravel package for handling feature flags",
+    "keywords": [
+        "ylsideas",
+        "feature-flags"
+    ],
+    "homepage": "https://github.com/ylsideas/feature-flags",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Peter Fox",
+            "email": "peter.fox@ylsideas.co",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "5.8.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.8.*",
+        "phpunit/phpunit": "^7.0",
+        "predis/predis": "^1.1",
+        "scrutinizer/ocular": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "YlsIdeas\\FeatureFlags\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "YlsIdeas\\FeatureFlags\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --no-coverage",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "YlsIdeas\\FeatureFlags\\FeatureFlagsServiceProvider"
+            ],
+            "aliases": {
+                "FeatureFlags": "YlsIdeas\\FeatureFlags\\Facades\\Features"
+            }
+        }
+    }
+}

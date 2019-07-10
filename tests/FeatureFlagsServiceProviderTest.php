@@ -1,0 +1,127 @@
+<?php
+
+namespace YlsIdeas\FeatureFlags\Tests;
+
+use Illuminate\Support\Str;
+use Orchestra\Testbench\TestCase;
+use YlsIdeas\FeatureFlags\Manager;
+use Illuminate\Support\Facades\File;
+use YlsIdeas\FeatureFlags\Contracts\Repository;
+use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
+use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
+use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
+use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
+use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
+
+class FeatureFlagsServiceProviderTest extends TestCase
+{
+    protected function getPackageProviders($app)
+    {
+        return [
+            FeatureFlagsServiceProvider::class,
+        ];
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->cleanUp();
+    }
+
+    public function tearDown(): void
+    {
+        $this->cleanUp();
+        parent::tearDown();
+    }
+
+    /** @test */
+    public function addsTheDatabaseRepositoryToTheContainer()
+    {
+        $repository = $this->app->make(DatabaseRepository::class);
+
+        $this->assertInstanceOf(Repository::class, $repository);
+        $this->assertInstanceOf(DatabaseRepository::class, $repository);
+    }
+
+    /** @test */
+    public function addsTheInMemoryRepositoryToTheContainer()
+    {
+        $repository = $this->app->make(InMemoryRepository::class);
+
+        $this->assertInstanceOf(Repository::class, $repository);
+        $this->assertInstanceOf(InMemoryRepository::class, $repository);
+    }
+
+    /** @test */
+    public function addsTheChainRepositoryToTheContainer()
+    {
+        $repository = $this->app->make(ChainRepository::class);
+
+        $this->assertInstanceOf(Repository::class, $repository);
+        $this->assertInstanceOf(ChainRepository::class, $repository);
+    }
+
+    /** @test */
+    public function addsTheRedisRepositoryToTheContainer()
+    {
+        $repository = $this->app->make(RedisRepository::class);
+
+        $this->assertInstanceOf(Repository::class, $repository);
+        $this->assertInstanceOf(RedisRepository::class, $repository);
+    }
+
+    /** @test */
+    public function addsManagerToTheContainer()
+    {
+        $repository = $this->app->make(Manager::class);
+
+        $this->assertInstanceOf(Manager::class, $repository);
+    }
+
+    /** @test */
+    public function publishesTheFeaturesConfig()
+    {
+        $this->assertFalse(File::exists(config_path('features.php')));
+
+        $this->artisan('vendor:publish', [
+            '--tag' => 'config',
+            '--force' => true,
+        ]);
+
+        $this->assertTrue(File::exists(config_path('features.php')));
+    }
+
+    /** @test */
+    public function publishesTheFeaturesMigration()
+    {
+        $this->assertNull(
+            collect(File::files(database_path('migrations')))
+                ->first(function (\SplFileInfo $file) {
+                    return Str::endsWith($file->getFilename(), '_create_features_table.php');
+                })
+        );
+
+        $this->artisan('vendor:publish', [
+            '--tag' => 'features-migration',
+            '--force' => true,
+        ]);
+
+        $filename =
+            collect(File::files(database_path('migrations')))
+                ->first(function (\SplFileInfo $file) {
+                    return Str::endsWith($file->getFilename(), '_create_features_table.php');
+                });
+
+        $this->assertNotNull($filename);
+    }
+
+    protected function cleanUp()
+    {
+        File::delete(config_path('features.php'));
+
+        collect(File::files(database_path('migrations')))
+            ->each(function (\SplFileInfo $file) {
+                return File::delete($file->getPathname());
+            });
+    }
+}

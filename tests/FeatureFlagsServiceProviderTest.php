@@ -4,8 +4,10 @@ namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
+use Illuminate\Redis\RedisManager;
 use YlsIdeas\FeatureFlags\Manager;
 use Illuminate\Support\Facades\File;
+use Illuminate\Redis\Connections\Connection;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
@@ -64,6 +66,18 @@ class FeatureFlagsServiceProviderTest extends TestCase
     /** @test */
     public function addsTheRedisRepositoryToTheContainer()
     {
+        $this->app->extend(RedisManager::class, function () {
+            $connection = $this->mock(Connection::class);
+            $redis = $this->mock(RedisManager::class);
+
+            $redis->shouldReceive('connection')
+                ->with('default')
+                ->once()
+                ->andReturn($connection);
+
+            return $redis;
+        });
+
         $repository = $this->app->make(RedisRepository::class);
 
         $this->assertInstanceOf(Repository::class, $repository);

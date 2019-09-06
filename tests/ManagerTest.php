@@ -24,12 +24,24 @@ class ManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
+    protected $app;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->app = \Mockery::mock(Application::class);
+
+        // Required For Laravel 6 but not 5.8
+        $config = \Mockery::mock(\Illuminate\Contracts\Config\Repository::class);
+        $this->app->shouldReceive('make')
+            ->with('config')
+            ->andReturn($config);
+    }
+
     /** @test */
     public function itCanBeInitialised()
     {
-        $app = \Mockery::mock(Application::class);
-
-        $manager = new Manager($app, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->app, \Mockery::mock(Dispatcher::class));
 
         $this->assertInstanceOf(Manager::class, $manager);
     }
@@ -37,10 +49,9 @@ class ManagerTest extends TestCase
     /** @test */
     public function itCanProvidesDefaultDriver()
     {
-        $app = \Mockery::mock(Application::class);
         $config = \Mockery::mock(Repository::class);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
             ->andReturn($config)
             ->once();
@@ -49,7 +60,7 @@ class ManagerTest extends TestCase
             ->with('features.default')
             ->andReturn('database');
 
-        $manager = new Manager($app, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->app, \Mockery::mock(Dispatcher::class));
 
         $this->assertEquals('database', $manager->getDefaultDriver());
     }
@@ -57,17 +68,16 @@ class ManagerTest extends TestCase
     /** @test */
     public function itCanCheckIfFeaturesAreAccessible()
     {
-        $app = \Mockery::mock(Application::class);
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
             ->andReturn($config)
             ->once();
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(DatabaseRepository::class)
             ->once()
             ->andReturn($databaseRepository);
@@ -89,7 +99,7 @@ class ManagerTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $manager = new Manager($app, $dispatcher);
+        $manager = new Manager($this->app, $dispatcher);
 
         $this->assertTrue($manager->accessible('my-feature'));
     }
@@ -97,17 +107,16 @@ class ManagerTest extends TestCase
     /** @test */
     public function itCanFetchAllTheFeaturesAndTheirCurrentState()
     {
-        $app = \Mockery::mock(Application::class);
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
             ->andReturn($config)
             ->once();
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(DatabaseRepository::class)
             ->once()
             ->andReturn($databaseRepository);
@@ -122,7 +131,7 @@ class ManagerTest extends TestCase
                 'my-feature' => true,
             ]);
 
-        $manager = new Manager($app, $dispatcher);
+        $manager = new Manager($this->app, $dispatcher);
 
         $this->assertSame(['my-feature' => true], $manager->all());
     }
@@ -130,17 +139,16 @@ class ManagerTest extends TestCase
     /** @test */
     public function itCanTurnOnFeatures()
     {
-        $app = \Mockery::mock(Application::class);
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
             ->andReturn($config)
             ->once();
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(DatabaseRepository::class)
             ->once()
             ->andReturn($databaseRepository);
@@ -157,7 +165,7 @@ class ManagerTest extends TestCase
             ->with('my-feature')
             ->once();
 
-        $manager = new Manager($app, $dispatcher);
+        $manager = new Manager($this->app, $dispatcher);
 
         $manager->turnOn('my-feature');
     }
@@ -165,17 +173,16 @@ class ManagerTest extends TestCase
     /** @test */
     public function itCanTurnOffFeatures()
     {
-        $app = \Mockery::mock(Application::class);
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
             ->andReturn($config)
             ->once();
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with(DatabaseRepository::class)
             ->once()
             ->andReturn($databaseRepository);
@@ -192,7 +199,7 @@ class ManagerTest extends TestCase
             ->with('my-feature')
             ->once();
 
-        $manager = new Manager($app, $dispatcher);
+        $manager = new Manager($this->app, $dispatcher);
 
         $manager->turnOff('my-feature');
     }
@@ -203,15 +210,14 @@ class ManagerTest extends TestCase
      */
     public function itCanCreateDrivers($driver, $repository)
     {
-        $app = \Mockery::mock(Application::class);
         $instance = \Mockery::mock($repository);
 
-        $app->shouldReceive('make')
+        $this->app->shouldReceive('make')
             ->with($repository)
             ->once()
             ->andReturn($instance);
 
-        $manager = new Manager($app, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->app, \Mockery::mock(Dispatcher::class));
 
         $this->assertSame($instance, $manager->driver($driver));
     }
@@ -222,8 +228,7 @@ class ManagerTest extends TestCase
      */
     public function isCanFlagPartsOfThePackageToBeTurnedOff($item)
     {
-        $app = \Mockery::mock(Application::class);
-        $manager = new Manager($app, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->app, \Mockery::mock(Dispatcher::class));
 
         $this->assertTrue($manager->{"uses$item"}());
 

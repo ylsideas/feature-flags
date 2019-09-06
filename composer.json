@@ -17,12 +17,12 @@
     ],
     "require": {
         "php": "^7.2",
-        "illuminate/support": "5.8.*"
+        "illuminate/support": "6.*|5.8.*"
     },
     "require-dev": {
-        "orchestra/testbench": "3.8.*",
-        "phpunit/phpunit": "^7.0",
-        "predis/predis": "^1.1",
+        "orchestra/testbench": "4.0.*|3.9.*|3.8.*",
+        "phpunit/phpunit": "^8.3.4",
+        "mockery/mockery": "^1.2.3",
         "scrutinizer/ocular": "^1.6"
     },
     "autoload": {

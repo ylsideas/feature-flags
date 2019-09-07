@@ -41,9 +41,9 @@ class FeatureFlagState
     public function handle(Request $request, Closure $next, string $feature, string $state = 'on', $abort = 403)
     {
         if (
-            ! ($this->check($state)
-            ? $this->repository->accessible($feature)
-            : ! $this->repository->accessible($feature))
+            ($this->check($state)
+                ? ! $this->repository->accessible($feature)
+                : $this->repository->accessible($feature))
         ) {
             $this->application->abort($abort);
         }

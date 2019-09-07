@@ -39,7 +39,35 @@ class FeatureFlagStateTest extends TestCase
         $middleware = new FeatureFlagState($repository, $app);
 
         $middleware->handle($request, function () {
-        }, 'my-feature');
+        }, 'my-feature', 'on');
+    }
+
+    /** @test */
+    public function itCanAbortRequestsWhenFeaturesAreNotAccessibleAndExpectingToBeOff()
+    {
+        $exception = new HttpException(404);
+
+        $this->expectExceptionObject($exception);
+        $app = \Mockery::mock(Application::class);
+
+        $app->shouldReceive('abort')
+            ->with(403)
+            ->once()
+            ->andThrow($exception);
+
+        $repository = \Mockery::mock(Repository::class);
+
+        $repository->shouldReceive('accessible')
+            ->with('my-feature')
+            ->once()
+            ->andReturn(true);
+
+        $request = new Request();
+
+        $middleware = new FeatureFlagState($repository, $app);
+
+        $middleware->handle($request, function () {
+        }, 'my-feature', 'off');
     }
 
     /** @test */

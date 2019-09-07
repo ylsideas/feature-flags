@@ -102,7 +102,19 @@ class ValidatorsTest extends TestCase
             'exists' => 'requiredWithFeature:my-feature,off',
         ]);
 
-        $this->assertTrue($validator->fails());
-        $this->assertTrue($validator->errors()->has('exists'));
+        $this->assertFalse($validator->fails());
+    }
+
+    /** @test */
+    public function ruleMustBeUsedWithFeatureNameParameter()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $validator = Validator::make([
+        ], [
+            'exists' => 'requiredWithFeature',
+        ]);
+
+        $validator->fails();
     }
 }

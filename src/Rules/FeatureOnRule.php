@@ -12,12 +12,21 @@ class FeatureOnRule
 
     public function validate($attribute, $value, $parameters)
     {
-        $correctFeatureState = $this->check($parameters[0] ?? 'on')
-            ? Features::accessible($parameters[0])
-            : ! Features::accessible($parameters[0]);
+        if (! is_string($parameters[0] ?? null)) {
+            throw new \InvalidArgumentException(
+                'First parameter for `requiredWithFeature` validation rule must be the name of the feature'
+            );
+        }
 
-        return $correctFeatureState
-            ? $this->validateRequired($attribute, $value)
-            : true;
+        $featureState =
+            $this->check($parameters[1] ?? 'on')
+                ? ! Features::accessible($parameters[0])
+                : Features::accessible($parameters[0]);
+
+        if (! $featureState) {
+            return $this->validateRequired($attribute, $value);
+        }
+
+        return true;
     }
 }

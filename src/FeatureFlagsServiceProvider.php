@@ -119,7 +119,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
 
     protected function bladeDirectives()
     {
-        Blade::if('feature', function ($feature, $applyIfOn = true) {
+        Blade::if('feature', function (string $feature, $applyIfOn = true) {
             return $applyIfOn
                 ? Features::accessible($feature)
                 : ! Features::accessible($feature);

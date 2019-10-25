@@ -14,6 +14,7 @@ use YlsIdeas\FeatureFlags\Contracts\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use YlsIdeas\FeatureFlags\Commands\SwitchOnFeature;
 use YlsIdeas\FeatureFlags\Commands\SwitchOffFeature;
+use YlsIdeas\FeatureFlags\Commands\CheckFeatureState;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
 use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
@@ -40,6 +41,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             // Registering package commands.
             if (Features::usesCommands()) {
                 $this->commands([
+                    CheckFeatureState::class,
                     SwitchOnFeature::class,
                     SwitchOffFeature::class,
                 ]);

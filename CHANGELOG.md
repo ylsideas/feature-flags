@@ -2,6 +2,10 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 1.2.0 - 2019-10-25
+
+- Adds a new console command `feature:state` to report the current state of a feature flag.
+
 ## 1.1.0 - 2019-09-06
 
 - Fixes incorrect logic for handling features that are off and being check via the middleware or validations.

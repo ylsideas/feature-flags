@@ -48,4 +48,20 @@ class CommandsTest extends TestCase
 
         $this->assertFalse(Features::accessible('my-feature'));
     }
+
+    /** @test */
+    public function getFeatureState()
+    {
+        Features::turnOn('my-feature');
+
+        $this->artisan('feature:state', ['feature' => 'my-feature'])
+            ->expectsOutput('Feature `my-feature` is currently on')
+            ->assertExitCode(0);
+
+        Features::turnOff('my-feature');
+
+        $this->artisan('feature:state', ['feature' => 'my-feature'])
+            ->expectsOutput('Feature `my-feature` is currently off')
+            ->assertExitCode(0);
+    }
 }

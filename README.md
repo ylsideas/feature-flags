@@ -136,6 +136,13 @@ php artisan feature:on my-feature
 php artisan feature:off my-feature
 ```
 
+To find out the current state of the feature within the context of a
+console command, run the following:
+
+```bash
+php artisan feature:state my-feature
+```
+
 ### Testing
 
 ``` bash

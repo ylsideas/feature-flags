@@ -94,7 +94,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             return new ChainRepository(
                 $this->app->make(Manager::class),
                 config('features.repositories.chain.drivers'),
-                config('features.repositories.chain.store')
+                config('features.repositories.chain.store'),
+                config('features.repositories.chain.update_on_resolve')
             );
         });
     }

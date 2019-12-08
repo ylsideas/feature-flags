@@ -2,16 +2,16 @@
 
 namespace YlsIdeas\FeatureFlags;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Manager as BaseManager;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
-use Illuminate\Contracts\Foundation\Application;
-use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Controllers\FeaturesController;
+use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 
 class Manager extends BaseManager implements Repository
 {

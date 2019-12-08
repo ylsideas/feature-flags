@@ -2,20 +2,20 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Illuminate\Events\Dispatcher;
-use YlsIdeas\FeatureFlags\Manager;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Events\Dispatcher;
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessed;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
-use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
+use YlsIdeas\FeatureFlags\Manager;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
+use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 
 /**
  * @covers \YlsIdeas\FeatureFlags\Manager

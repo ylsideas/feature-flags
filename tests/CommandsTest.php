@@ -2,8 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Facades\Config;
+use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 

@@ -3,8 +3,8 @@
 namespace YlsIdeas\FeatureFlags\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
 use YlsIdeas\FeatureFlags\Support\StateChecking;
 

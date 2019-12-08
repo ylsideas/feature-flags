@@ -2,13 +2,13 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Middlewares;
 
-use Illuminate\Http\Request;
-use PHPUnit\Framework\TestCase;
 use Illuminate\Foundation\Application;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
+use Illuminate\Http\Request;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-use YlsIdeas\FeatureFlags\Middleware\FeatureFlagState;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use YlsIdeas\FeatureFlags\Contracts\Repository;
+use YlsIdeas\FeatureFlags\Middleware\FeatureFlagState;
 
 class FeatureFlagStateTest extends TestCase
 {

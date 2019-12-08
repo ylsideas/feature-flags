@@ -2,9 +2,9 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Repositories;
 
-use PHPUnit\Framework\TestCase;
 use Illuminate\Redis\Connections\Connection;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 
 class RedisRepositoryTest extends TestCase

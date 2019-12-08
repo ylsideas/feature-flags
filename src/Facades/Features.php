@@ -2,8 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Facades;
 
-use YlsIdeas\FeatureFlags\Manager;
 use Illuminate\Support\Facades\Facade;
+use YlsIdeas\FeatureFlags\Manager;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Manager

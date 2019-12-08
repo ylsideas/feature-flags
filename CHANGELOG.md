@@ -2,6 +2,10 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 1.2.1 - 2019-12-08
+
+- Fixes a mistake with the `update_on_resolve` config option not being used for the Chain repository.
+
 ## 1.2.0 - 2019-10-25
 
 - Adds a new console command `feature:state` to report the current state of a feature flag.

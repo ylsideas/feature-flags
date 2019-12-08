@@ -2,8 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Repositories;
 
-use YlsIdeas\FeatureFlags\Manager;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
+use YlsIdeas\FeatureFlags\Manager;
 
 class ChainRepository implements Repository
 {

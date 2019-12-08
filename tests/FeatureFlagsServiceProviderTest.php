@@ -2,18 +2,18 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
+use Illuminate\Redis\Connections\Connection;
+use Illuminate\Redis\RedisManager;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
-use Illuminate\Redis\RedisManager;
-use YlsIdeas\FeatureFlags\Manager;
-use Illuminate\Support\Facades\File;
-use Illuminate\Redis\Connections\Connection;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
+use YlsIdeas\FeatureFlags\Manager;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
+use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 
 class FeatureFlagsServiceProviderTest extends TestCase
 {

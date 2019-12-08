@@ -2,23 +2,22 @@
 
 namespace YlsIdeas\FeatureFlags;
 
-use Illuminate\Redis\RedisManager;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Redis\RedisManager;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
-use YlsIdeas\FeatureFlags\Facades\Features;
-use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
-use Illuminate\Contracts\Foundation\Application;
-use YlsIdeas\FeatureFlags\Commands\SwitchOnFeature;
-use YlsIdeas\FeatureFlags\Commands\SwitchOffFeature;
+use Illuminate\Support\ServiceProvider;
 use YlsIdeas\FeatureFlags\Commands\CheckFeatureState;
+use YlsIdeas\FeatureFlags\Commands\SwitchOffFeature;
+use YlsIdeas\FeatureFlags\Commands\SwitchOnFeature;
+use YlsIdeas\FeatureFlags\Contracts\Repository;
+use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
+use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
+use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
 
 class FeatureFlagsServiceProvider extends ServiceProvider
 {

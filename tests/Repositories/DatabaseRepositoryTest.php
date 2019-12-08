@@ -2,11 +2,11 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Repositories;
 
-use Illuminate\Support\Carbon;
-use PHPUnit\Framework\TestCase;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 
 class DatabaseRepositoryTest extends TestCase

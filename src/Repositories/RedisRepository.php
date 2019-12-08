@@ -2,8 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Repositories;
 
-use Illuminate\Support\Str;
 use Illuminate\Redis\Connections\Connection;
+use Illuminate\Support\Str;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
 
 class RedisRepository implements Repository

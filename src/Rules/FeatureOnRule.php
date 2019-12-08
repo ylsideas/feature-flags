@@ -2,9 +2,9 @@
 
 namespace YlsIdeas\FeatureFlags\Rules;
 
+use Illuminate\Validation\Concerns\ValidatesAttributes;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Support\StateChecking;
-use Illuminate\Validation\Concerns\ValidatesAttributes;
 
 class FeatureOnRule
 {

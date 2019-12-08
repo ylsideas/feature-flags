@@ -2,9 +2,9 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Repositories;
 
+use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Manager;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
 use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
 use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;

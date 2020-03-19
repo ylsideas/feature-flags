@@ -18,6 +18,16 @@ class InMemoryRepositoryTest extends TestCase
     }
 
     /** @test */
+    public function itReturnsTrueIfDotNotatedFeaturesAreAccessible()
+    {
+        $repository = new InMemoryRepository([
+            'my.feature' => true,
+        ]);
+
+        $this->assertTrue($repository->accessible('my.feature'));
+    }
+
+    /** @test */
     public function itReturnsFalseIfFeaturesAreNotAccessible()
     {
         $repository = new InMemoryRepository([
@@ -25,6 +35,16 @@ class InMemoryRepositoryTest extends TestCase
         ]);
 
         $this->assertFalse($repository->accessible('my-feature'));
+    }
+
+    /** @test */
+    public function itReturnsFalseIfDotNotatedFeaturesAreNotAccessible()
+    {
+        $repository = new InMemoryRepository([
+            'my.feature' => false,
+        ]);
+
+        $this->assertFalse($repository->accessible('my.feature'));
     }
 
     /** @test */

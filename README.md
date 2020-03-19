@@ -71,6 +71,12 @@ You can use the accessible method to check if a feature is on or off.
 Features::accessible('my-feature') // returns true or false
 ```
 
+Dot notation can also be used if e.g. memory based driver uses multidimensional configuration. 
+
+```php
+Features::accessible('my.feature') // returns true or false
+```
+
 ### Blade Views
 
 the `@feature` blade directive is a simple `@if` shortcut to hide or display certain parts of the view

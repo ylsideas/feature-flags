@@ -2,6 +2,7 @@
 
 namespace YlsIdeas\FeatureFlags\Repositories;
 
+use Illuminate\Support\Arr;
 use YlsIdeas\FeatureFlags\Contracts\Repository;
 
 class InMemoryRepository implements Repository
@@ -13,11 +14,9 @@ class InMemoryRepository implements Repository
 
     public function __construct(array $config)
     {
-        $this->config = collect($config)
-            ->map(function ($item) {
-                return (bool) value($item);
-            })
-            ->toArray();
+        foreach (Arr::dot($config) as $key => $value) {
+            data_set($this->config, $key, (bool) value($value));
+        }
     }
 
     public function accessible(string $feature)

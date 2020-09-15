@@ -37,18 +37,18 @@ class Manager extends BaseManager implements Repository
 
     /**
      * Manager constructor.
-     * @param Application $app
-     * @throws BindingResolutionException
+     * @param Application $container
+     * @param Dispatcher $dispatcher
      */
-    public function __construct(Application $app, Dispatcher $dispatcher)
+    public function __construct(Application $container, Dispatcher $dispatcher)
     {
-        parent::__construct($app);
+        parent::__construct($container);
         $this->dispatcher = $dispatcher;
     }
 
     public function routes($path = 'features', $router = null)
     {
-        $router = $router ?? $this->app->make('router');
+        $router = $router ?? $this->getContainer()->make('router');
         $router->get(
             $path,
             FeaturesController::class
@@ -65,7 +65,7 @@ class Manager extends BaseManager implements Repository
      */
     public function getDefaultDriver()
     {
-        return $this->app
+        return $this->getContainer()
             ->make(\Illuminate\Contracts\Config\Repository::class)
             ->get('features.default');
     }
@@ -117,7 +117,7 @@ class Manager extends BaseManager implements Repository
      */
     protected function createConfigDriver()
     {
-        return $this->app->make(InMemoryRepository::class);
+        return $this->getContainer()->make(InMemoryRepository::class);
     }
 
     /**
@@ -126,7 +126,7 @@ class Manager extends BaseManager implements Repository
      */
     protected function createRedisDriver()
     {
-        return $this->app->make(RedisRepository::class);
+        return $this->getContainer()->make(RedisRepository::class);
     }
 
     /**
@@ -135,7 +135,7 @@ class Manager extends BaseManager implements Repository
      */
     protected function createDatabaseDriver()
     {
-        return $this->app->make(DatabaseRepository::class);
+        return $this->getContainer()->make(DatabaseRepository::class);
     }
 
     /**
@@ -144,7 +144,7 @@ class Manager extends BaseManager implements Repository
      */
     protected function createChainDriver()
     {
-        return $this->app->make(ChainRepository::class);
+        return $this->getContainer()->make(ChainRepository::class);
     }
 
     public function noBlade()
@@ -205,5 +205,10 @@ class Manager extends BaseManager implements Repository
     public function usesCommands(): bool
     {
         return $this->useCommands;
+    }
+
+    protected function getContainer()
+    {
+        return $this->app ?? $this->container;
     }
 }

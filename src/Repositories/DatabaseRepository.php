@@ -29,8 +29,10 @@ class DatabaseRepository implements Repository
         $row = $this->getTable()->where('feature', $feature)->first();
 
         if ($row) {
-            return (bool) $row->{$this->field} ?? false;
+            return (bool) ($row->{$this->field} ?? false);
         }
+
+        return null;
     }
 
     /**

@@ -104,7 +104,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     {
         if (! Event::hasMacro('skipWithoutFeature')) {
             Event::macro('skipWithoutFeature', function ($feature) {
-                return $this->/* @scrutinizer ignore-call */ skip(function () use ($feature) {
+                /** @var Event $this */
+                return $this->skip(function () use ($feature) {
                     return ! Features::accessible($feature);
                 });
             });
@@ -112,7 +113,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
 
         if (! Event::hasMacro('skipWithFeature')) {
             Event::macro('skipWithFeature', function ($feature) {
-                return $this->/* @scrutinizer ignore-call */ skip(function () use ($feature) {
+                /** @var Event $this */
+                return $this->skip(function () use ($feature) {
                     return Features::accessible($feature);
                 });
             });

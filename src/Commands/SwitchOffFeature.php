@@ -34,7 +34,7 @@ class SwitchOffFeature extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      * @throws \ErrorException
      */
     public function handle()

@@ -17,13 +17,15 @@
     ],
     "require": {
         "php": "^7.2.5",
-        "illuminate/support": "7.*|6.*|5.8.*"
+        "illuminate/support": "^8.0|^7.0|^6.0|^5.8.0"
     },
     "require-dev": {
-        "orchestra/testbench": "5.*|4.*|3.9.*|3.8.*",
-        "phpunit/phpunit": "^8.3.4",
-        "mockery/mockery": "^1.2.3",
-        "scrutinizer/ocular": "master-dev"
+        "orchestra/testbench": "^6.0|^5.0|^4.0|^3.9.0|^3.8.0",
+        "phpunit/phpunit": "^9.0|^8.3",
+        "vimeo/psalm": "^3.11",
+        "psalm/plugin-laravel": "^1.4",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "mockery/mockery": "^1.2.3"
     },
     "autoload": {
         "psr-4": {
@@ -36,9 +38,10 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit --no-coverage",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
     },
     "config": {
         "sort-packages": true
@@ -52,5 +55,7 @@
                 "FeatureFlags": "YlsIdeas\\FeatureFlags\\Facades\\Features"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

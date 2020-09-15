@@ -17,13 +17,13 @@ interface Repository
 
     /**
      * @param string $feature
-     * @return bool
+     * @return void
      */
     public function turnOn(string $feature);
 
     /**
      * @param string $feature
-     * @return bool
+     * @return void
      */
     public function turnOff(string $feature);
 }

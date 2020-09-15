@@ -34,7 +34,7 @@ class CheckFeatureState extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      * @throws \ErrorException
      */
     public function handle()
@@ -50,7 +50,8 @@ class CheckFeatureState extends Command
         $this->line(
             sprintf(
                 'Feature `%s` is currently %s',
-                $feature, $state ? 'on' : 'off'
+                $feature,
+                $state ? 'on' : 'off'
             )
         );
     }

@@ -1,14 +1,11 @@
 # Feature Flags for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
-[![Build Status](https://img.shields.io/travis/ylsideas/feature-flags/master.svg?style=flat-square)](https://travis-ci.org/ylsideas/feature-flags)
-[![Quality Score](https://img.shields.io/scrutinizer/g/ylsideas/feature-flags.svg?style=flat-square)](https://scrutinizer-ci.com/g/ylsideas/feature-flags)
-[![Code Coverage](https://scrutinizer-ci.com/g/ylsideas/feature-flags/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ylsideas/feature-flags/?branch=master)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/Tests?label=tests)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
-[![StyleCI](https://github.styleci.io/repos/196839364/shield?branch=master)](https://github.styleci.io/repos/196839364)
 
-A Feature flag is sometimes also referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 
-to be used along with source control to make it easier to continuous integrate and continuous deployment. The idea of 
+A Feature flag is at times referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 
+to be used along with source control to make it easier to continuously integrate and deploy. The idea of 
 the flags works by essentially safe guarding sections of code from executing if a feature flag isn't in a switched 
 on state.
 

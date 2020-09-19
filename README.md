@@ -2,6 +2,8 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/Tests?label=tests)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3ATests+branch%3Amaster)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ylsideas/feature-flags/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ylsideas/feature-flags/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/ylsideas/feature-flags/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/ylsideas/feature-flags/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
 
 A Feature flag is at times referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 

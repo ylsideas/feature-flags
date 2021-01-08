@@ -16,13 +16,13 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
-        "illuminate/support": "^8.0|^7.0|^6.0|^5.8.0"
+        "php": "^7.3|^8.0",
+        "illuminate/support": "^8.0|^7.0|^6.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0|^5.0|^4.0|^3.9.0|^3.8.0",
+        "orchestra/testbench": "^6.0|^5.0|^4.0",
         "phpunit/phpunit": "^9.0|^8.3",
-        "vimeo/psalm": "^3.11",
+        "vimeo/psalm": "^4.3",
         "psalm/plugin-laravel": "^1.4",
         "friendsofphp/php-cs-fixer": "^2.16",
         "mockery/mockery": "^1.2.3"

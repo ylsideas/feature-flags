@@ -207,7 +207,7 @@ class Manager extends BaseManager implements Repository
         return $this->useCommands;
     }
 
-    protected function getContainer()
+    public function getContainer()
     {
         return $this->app ?? $this->container;
     }

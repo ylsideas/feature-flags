@@ -70,12 +70,13 @@ class ChainRepository implements Repository
      */
     public function all()
     {
-        $features = collect();
+        $features = [];
+
         foreach ($this->repositories as $driver) {
-            $features = $features->merge($this->manager->driver($driver)->all());
+            $features = array_merge($this->manager->driver($driver)->all(), $features);
         }
 
-        return $features->toArray();
+        return $features;
     }
 
     /**

@@ -209,11 +209,48 @@ class ChainRepositoryTest extends TestCase
         );
 
         $this->assertSame($repository->all(), [
-            'my-feature' => true,
-
-            'my-third-feature' => true,
-            'my-fourth-feature' => false,
+            'my-feature' => false,
             'my-second-feature' => true,
+            'my-fourth-feature' => true,
+            'my-third-feature' => true,
+        ]);
+    }
+
+    public function itRespectsTheChainOrder() {
+        $manager = \Mockery::mock(Manager::class);
+        $databaseRepository = \Mockery::mock(DatabaseRepository::class);
+        $inMemoryRepository = \Mockery::mock(InMemoryRepository::class);
+
+        $manager->shouldReceive('driver')
+            ->with('database')
+            ->once()
+            ->andReturn($databaseRepository);
+
+        $manager->shouldReceive('driver')
+            ->with('config')
+            ->once()
+            ->andReturn($inMemoryRepository);
+
+        $inMemoryRepository->shouldReceive('all')
+            ->once()
+            ->andReturn([
+                'my-feature' => false,
+            ]);
+
+        $databaseRepository->shouldReceive('all')
+            ->once()
+            ->andReturn([
+                'my-feature' => true,
+            ]);
+
+        $repository = new ChainRepository(
+            $manager,
+            ['config', 'database'],
+            'database'
+        );
+
+        $this->assertSame($repository->all(), [
+            'my-feature' => false,
         ]);
     }
 

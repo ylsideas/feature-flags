@@ -25,7 +25,7 @@ composer require ylsideas/feature-flags
 Once installed you should publish the config with the following command.
 
 ```bash
-php artisan vendor:publish --provider=YlsIdeas\\FeatureFlags\\FeatureFlagsServiceProvider --tag=config
+php artisan vendor:publish --provider="YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider" --tag=config
 ```
 
 You can customise the `features.php` config in a number of ways. By default four storage drivers

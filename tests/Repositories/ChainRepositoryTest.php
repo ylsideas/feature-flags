@@ -216,7 +216,8 @@ class ChainRepositoryTest extends TestCase
         ]);
     }
 
-    public function itRespectsTheChainOrder() {
+    public function itRespectsTheChainOrder()
+    {
         $manager = \Mockery::mock(Manager::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
         $inMemoryRepository = \Mockery::mock(InMemoryRepository::class);

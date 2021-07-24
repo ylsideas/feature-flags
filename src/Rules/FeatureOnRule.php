@@ -8,7 +8,8 @@ use YlsIdeas\FeatureFlags\Support\StateChecking;
 
 class FeatureOnRule
 {
-    use ValidatesAttributes, StateChecking;
+    use ValidatesAttributes;
+    use StateChecking;
 
     public function validate($attribute, $value, $parameters)
     {

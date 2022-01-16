@@ -302,7 +302,7 @@ class ChainRepositoryTest extends TestCase
             ->andReturn($databaseRepository);
 
         $manager->shouldReceive('driver')
-            ->with('database')
+            ->with('config')
             ->once()
             ->andReturn($inMemoryRepository);
 

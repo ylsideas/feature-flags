@@ -260,13 +260,23 @@ class ChainRepositoryTest extends TestCase
     {
         $manager = \Mockery::mock(Manager::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
+        $inMemoryRepository = \Mockery::mock(InMemoryRepository::class);
 
         $manager->shouldReceive('driver')
             ->with('database')
             ->once()
             ->andReturn($databaseRepository);
 
+        $manager->shouldReceive('driver')
+            ->with('config')
+            ->once()
+            ->andReturn($inMemoryRepository);
+
         $databaseRepository->shouldReceive('turnOn')
+            ->with('my-feature')
+            ->once();
+
+        $inMemoryRepository->shouldReceive('turnOn')
             ->with('my-feature')
             ->once();
 
@@ -284,13 +294,23 @@ class ChainRepositoryTest extends TestCase
     {
         $manager = \Mockery::mock(Manager::class);
         $databaseRepository = \Mockery::mock(DatabaseRepository::class);
+        $inMemoryRepository = \Mockery::mock(InMemoryRepository::class);
 
         $manager->shouldReceive('driver')
             ->with('database')
             ->once()
             ->andReturn($databaseRepository);
 
+        $manager->shouldReceive('driver')
+            ->with('database')
+            ->once()
+            ->andReturn($inMemoryRepository);
+
         $databaseRepository->shouldReceive('turnOff')
+            ->with('my-feature')
+            ->once();
+
+        $inMemoryRepository->shouldReceive('turnOff')
             ->with('my-feature')
             ->once();
 

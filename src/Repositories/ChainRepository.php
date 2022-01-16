@@ -85,7 +85,9 @@ class ChainRepository implements Repository
      */
     public function turnOn(string $feature)
     {
-        $this->manager->driver($this->stateDriver)->turnOn($feature);
+        foreach ($this->repositories as $driver) {
+            $this->manager->driver($driver)->turnOn($feature);
+        }
     }
 
     /**
@@ -94,6 +96,8 @@ class ChainRepository implements Repository
      */
     public function turnOff(string $feature)
     {
-        $this->manager->driver($this->stateDriver)->turnOff($feature);
+        foreach ($this->repositories as $driver) {
+            $this->manager->driver($driver)->turnOff($feature);
+        }
     }
 }

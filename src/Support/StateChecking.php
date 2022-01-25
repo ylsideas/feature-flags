@@ -7,7 +7,7 @@ trait StateChecking
     /**
      * Returns true for 'on' and false for 'off'.
      *
-     * @param $state
+     * @param string $state
      * @return bool
      */
     protected function check(string $state)

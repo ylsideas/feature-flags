@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Blade;
@@ -68,31 +69,35 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'features');
 
-        $this->app->singleton(Repository::class, Manager::class);
+        if (method_exists($this->app, 'scoped')) {
+            $this->app->scoped(Repository::class, Manager::class);
+        } else {
+            $this->app->singleton(Repository::class, Manager::class);
+        }
 
-        $this->app->singleton(InMemoryRepository::class, function () {
+        $this->app->bind(InMemoryRepository::class, function () {
             return new InMemoryRepository(config(config('features.repositories.config.key')));
         });
 
-        $this->app->singleton(RedisRepository::class, function () {
+        $this->app->bind(RedisRepository::class, function (Container $container) {
             return new RedisRepository(
-                $this->app->make(RedisManager::class)
+                $container->make(RedisManager::class)
                     ->connection(config('features.repositories.redis.connection')),
                 config('features.repositories.redis.prefix')
             );
         });
 
-        $this->app->singleton(DatabaseRepository::class, function () {
+        $this->app->bind(DatabaseRepository::class, function (Container $container) {
             return new DatabaseRepository(
-                $this->app->make(DatabaseManager::class)
+                $container->make(DatabaseManager::class)
                     ->connection(config('features.repositories.database.connection')),
                 config('features.repositories.database.table')
             );
         });
 
-        $this->app->singleton(ChainRepository::class, function () {
+        $this->app->bind(ChainRepository::class, function (Container $container) {
             return new ChainRepository(
-                $this->app->make(Manager::class),
+                $container->make(Manager::class),
                 config('features.repositories.chain.drivers'),
                 config('features.repositories.chain.store'),
                 config('features.repositories.chain.update_on_resolve')

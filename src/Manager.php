@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Manager as BaseManager;
@@ -207,8 +208,8 @@ class Manager extends BaseManager implements Repository
         return $this->useCommands;
     }
 
-    public function getContainer()
+    public function getContainer(): Container
     {
-        return $this->app ?? $this->container;
+        return property_exists($this, 'app') ? $this->app : $this->container;
     }
 }

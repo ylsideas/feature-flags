@@ -1,13 +1,10 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
+$finder = Symfony\Component\Finder\Finder::create()
     ->in([
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
-    ->notPath('bootstrap/*')
-    ->notPath('storage/*')
-    ->notPath('resources/view/mail/*')
     ->name('*.php')
     ->notName('*.blade.php')
     ->ignoreDotFiles(true)

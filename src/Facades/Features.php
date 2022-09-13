@@ -10,25 +10,22 @@ use YlsIdeas\FeatureFlags\Manager;
  *
  * @method static array all()
  * @method static bool accessible(string $feature)
- * @method static turnOn(string $feature)
- * @method static turnOff(string $feature)
+ * @method static turnOn(string $gateway, string $feature)
+ * @method static turnOff(string $gateway, string $feature)
  * @method static bool usesValidations()
  * @method static bool usesScheduling()
  * @method static bool usesBlade()
  * @method static bool usesCommands()
+ * @method static bool usesMiddlewares()
  * @method static Manager noValidations()
  * @method static Manager noScheduling()
  * @method static Manager noBlade()
  * @method static Manager noCommands()
+ * @method static Manager noMiddleware()
  */
 class Features extends Facade
 {
-    /**
-     * Get the registered name of the component.
-     *
-     * @return string
-     */
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return Manager::class;
     }

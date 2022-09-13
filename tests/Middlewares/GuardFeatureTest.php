@@ -7,15 +7,14 @@ use Illuminate\Http\Request;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
-use YlsIdeas\FeatureFlags\Middleware\FeatureFlagState;
+use YlsIdeas\FeatureFlags\Manager;
+use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
 
-class FeatureFlagStateTest extends TestCase
+class GuardFeatureTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @test */
-    public function itCanAbortRequestsWhenFeaturesAreNotAccessible()
+    public function test_it_can_abort_requests_when_features_are_not_accessible(): void
     {
         $exception = new HttpException(403);
 
@@ -27,23 +26,22 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(false);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on');
     }
 
-    /** @test */
-    public function itCanAbortRequestsWhenFeaturesAreNotAccessibleAndExpectingToBeOff()
+    public function test_it_can_abort_requests_when_features_are_not_accessible_and_expecting_to_be_off(): void
     {
         $exception = new HttpException(404);
 
@@ -55,23 +53,22 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(true);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'off');
     }
 
-    /** @test */
-    public function itContinuesTheChainIfFeaturesAreAccessible()
+    public function test_it_continues_the_chain_if_features_are_accessible(): void
     {
         $app = \Mockery::mock(Application::class);
 
@@ -79,16 +76,16 @@ class FeatureFlagStateTest extends TestCase
             ->with(403)
             ->never();
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(true);
 
         $expectedRequest = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $this->assertTrue($middleware->handle(
             $expectedRequest,
@@ -101,8 +98,7 @@ class FeatureFlagStateTest extends TestCase
         ));
     }
 
-    /** @test */
-    public function itCanAbortRequestsWithASpecifiedHttpStatusCode()
+    public function test_it_can_abort_requests_with_a_specified_http_status_code(): void
     {
         $exception = new HttpException(404);
 
@@ -114,16 +110,16 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(false);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on', 404);

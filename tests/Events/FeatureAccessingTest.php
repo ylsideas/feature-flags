@@ -7,8 +7,7 @@ use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
 
 class FeatureAccessingTest extends TestCase
 {
-    /** @test */
-    public function itCanBeInitialised()
+    public function test_it_can_be_initialised(): void
     {
         $event = new FeatureAccessing('my-feature');
 

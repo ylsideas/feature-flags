@@ -2,7 +2,6 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
@@ -10,24 +9,18 @@ use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class ValidatorsTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
         ];
     }
 
-    public function setUp(): void
+    public function test_validation_rule_with_feature_on_and_attribute_included(): void
     {
-        parent::setUp();
-
-        Config::set('features.default', 'config');
-    }
-
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeIncluded()
-    {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         $validator = Validator::make([
             'exists' => 'yes',
@@ -38,10 +31,12 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissing()
+    public function test_validation_rule_with_feature_on_and_attribute_missing(): void
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
+
 
         $validator = Validator::make([
         ], [
@@ -52,10 +47,12 @@ class ValidatorsTest extends TestCase
         $this->assertTrue($validator->errors()->has('exists'));
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOffAndAttributeMissing()
+    public function test_validation_rule_with_feature_off_and_attribute_missing(): void
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
         ], [
@@ -65,10 +62,12 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOn()
+    public function test_validation_rule_with_feature_on_and_attribute_missing_while_expecting_on(): void
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
         ], [
@@ -78,10 +77,12 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOffAndAttributeIncludedWhileExpectingOff()
+    public function test_validation_rule_with_feature_off_and_attribute_included_while_expecting_off(): void
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
             'exists' => 'yes',
@@ -92,10 +93,12 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOff()
+    public function test_validation_rule_with_feature_on_and_attribute_missing_while_expecting_off(): void
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
+
 
         $validator = Validator::make([
         ], [
@@ -105,8 +108,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function ruleMustBeUsedWithFeatureNameParameter()
+    public function test_rule_must_be_used_with_feature_name_parameter(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 

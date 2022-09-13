@@ -2,20 +2,12 @@
 
 namespace YlsIdeas\FeatureFlags\Events;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Events\FeatureSwitchedOnTest
+ */
 class FeatureSwitchedOn
 {
-    /**
-     * @var string
-     */
-    public $feature;
-
-    /**
-     * Create a new event instance.
-     *
-     * @param string $feature
-     */
-    public function __construct(string $feature)
+    public function __construct(public string $feature, public string $gateway)
     {
-        $this->feature = $feature;
     }
 }

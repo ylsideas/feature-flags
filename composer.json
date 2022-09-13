@@ -16,19 +16,21 @@
         }
     ],
     "require": {
-        "php": "^8.0|^7.4",
-        "illuminate/contracts": "9.*|8.*|7.*"
+        "php": "^8.0",
+        "illuminate/contracts": "9.*"
     },
     "require-dev": {
+        "laravel/pint": "^1.2",
         "nunomaduro/collision": "^6.0|^5.0",
         "nunomaduro/larastan": "^2.0|^1.0",
-        "orchestra/testbench": "^7.0|^6.24.1|^v5.20.0",
+        "orchestra/testbench": "^7.0",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.1",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
-        "phpunit/phpunit": "^9.5.13|^8.3",
+        "phpunit/phpunit": "^9.5.13",
+        "rector/rector": "^0.14.2",
         "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
@@ -44,7 +46,8 @@
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest coverage"
+        "test-coverage": "vendor/bin/pest coverage",
+        "mod": "vendor/bin/rector"
     },
     "config": {
         "sort-packages": true,
@@ -59,7 +62,7 @@
                 "YlsIdeas\\FeatureFlags\\FeatureFlagsServiceProvider"
             ],
             "aliases": {
-                "FeatureFlags": "YlsIdeas\\FeatureFlags\\Facades\\Features"
+                "Features": "YlsIdeas\\FeatureFlags\\Facades\\Features"
             }
         }
     },

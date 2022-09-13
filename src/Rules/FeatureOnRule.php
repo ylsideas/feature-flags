@@ -11,7 +11,7 @@ class FeatureOnRule
     use ValidatesAttributes;
     use StateChecking;
 
-    public function validate($attribute, $value, $parameters)
+    public function validate($attribute, $value, $parameters): bool
     {
         if (! is_string($parameters[0] ?? null)) {
             throw new \InvalidArgumentException(

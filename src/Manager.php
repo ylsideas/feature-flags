@@ -2,207 +2,151 @@
 
 namespace YlsIdeas\FeatureFlags;
 
+use Illuminate\Auth\Access\Gate;
+use Illuminate\Auth\AuthManager;
+use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Manager as BaseManager;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
-use YlsIdeas\FeatureFlags\Controllers\FeaturesController;
-use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
-use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
+use Illuminate\Database\DatabaseManager;
+use Illuminate\Pipeline\Pipeline;
+use Illuminate\Redis\RedisManager;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use YlsIdeas\FeatureFlags\Contracts\Cacheable;
+use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Contracts\Toggleable;
+use YlsIdeas\FeatureFlags\Events\FeatureAccessed;
+use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
+use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
+use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
+use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
+use YlsIdeas\FeatureFlags\Gateways\GateGateway;
+use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
+use YlsIdeas\FeatureFlags\Gateways\RedisGateway;
+use YlsIdeas\FeatureFlags\Support\GatewayCache;
+use YlsIdeas\FeatureFlags\Support\FeatureFilter;
+use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
+use YlsIdeas\FeatureFlags\Support\FileLoader;
+use YlsIdeas\FeatureFlags\Support\InspectGateway;
 
-class Manager extends BaseManager implements Repository
+class Manager
 {
-    /**
-     * @var bool
-     */
-    protected $useCommands = true;
-    /**
-     * @var bool
-     */
-    protected $useBlade = true;
-    /**
-     * @var bool
-     */
-    protected $useValidations = true;
-    /**
-     * @var bool
-     */
-    protected $useScheduling = true;
+    protected bool $useCommands = true;
+    protected bool $useBlade = true;
+    protected bool $useValidations = true;
+    protected bool $useScheduling = true;
 
-    /** @var Dispatcher */
-    protected $dispatcher;
+    protected array $gatewayDrivers = [];
 
-    /**
-     * Manager constructor.
-     * @param Application $container
-     * @param Dispatcher $dispatcher
-     */
-    public function __construct(Application $container, Dispatcher $dispatcher)
+    public function __construct(protected Container $container, protected Dispatcher $dispatcher)
     {
-        parent::__construct($container);
-        $this->dispatcher = $dispatcher;
-    }
-
-    public function routes($path = 'features', $router = null)
-    {
-        $router = $router ?? $this->getContainer()->make('router');
-        $router->get(
-            $path,
-            FeaturesController::class
-        )
-            ->name('features');
     }
 
     /**
-     * Get the default driver name.
-     *
      * @throws BindingResolutionException
-     *
-     * @return string
      */
-    public function getDefaultDriver()
+    public function pipeline(): Pipeline
     {
-        return $this->getContainer()
-            ->make(\Illuminate\Contracts\Config\Repository::class)
-            ->get('features.default');
+        return (new Pipeline($this->container))
+            ->through($this->pipes());
     }
 
     /**
-     * @param string $feature
-     * @return bool
+     * @throws BindingResolutionException
      */
-    public function accessible(string $feature)
+    public function accessible(string $feature): bool
     {
-        $this->dispatcher->dispatch(new Events\FeatureAccessing($feature));
-        $result = $this->driver()->accessible($feature) ?? false;
-        if ($result) {
-            $this->dispatcher->dispatch(new Events\FeatureAccessed($feature));
+        $flagAction = new ActionableFlag();
+        $flagAction->feature = $feature;
+
+        $this->dispatcher->dispatch(new FeatureAccessing($feature));
+
+        /** @var \YlsIdeas\FeatureFlags\Contracts\ActionableFlag $flagAction */
+        $flagAction = $this->pipeline()->send($flagAction)->thenReturn();
+
+        $this->dispatcher->dispatch(new FeatureAccessed($feature, $flagAction->getResult()));
+
+        return (bool) $flagAction->getResult();
+    }
+
+    public function turnOn(string $gateway, string $feature): void
+    {
+        $toggleable = $this->resolve($gateway)->gateway();
+
+        if (! $toggleable instanceof Toggleable) {
+            throw new \InvalidArgumentException(sprintf(
+                'Gateway `%s` is not a toggleable gateway.',
+                $gateway
+            ));
         }
 
-        return $result;
+        $toggleable->turnOn($feature);
+
+        $this->dispatcher->dispatch(new FeatureSwitchedOn($feature, $gateway));
     }
 
-    /**
-     * @return array<string, bool>
-     */
-    public function all()
+    public function turnOff(string $gateway, string $feature): void
     {
-        return $this->driver()->all();
+        $toggleable = $this->resolve($gateway)->gateway();
+
+        if (! $toggleable instanceof Toggleable) {
+            throw new \InvalidArgumentException(sprintf(
+                'Gateway `%s` is not a toggleable gateway.',
+                $gateway
+            ));
+        }
+
+        $toggleable->turnOff($feature);
+
+        $this->dispatcher->dispatch(new FeatureSwitchedOff($feature, $gateway));
     }
 
-    /**
-     * @param string $feature
-     */
-    public function turnOn(string $feature)
-    {
-        $this->driver()->turnOn($feature);
-        $this->dispatcher->dispatch(new Events\FeatureSwitchedOn($feature));
-    }
-
-    /**
-     * @param string $feature
-     */
-    public function turnOff(string $feature)
-    {
-        $this->driver()->turnOff($feature);
-        $this->dispatcher->dispatch(new Events\FeatureSwitchedOff($feature));
-    }
-
-    /**
-     * @return Repository
-     * @throws BindingResolutionException
-     */
-    protected function createConfigDriver()
-    {
-        return $this->getContainer()->make(InMemoryRepository::class);
-    }
-
-    /**
-     * @return Repository
-     * @throws BindingResolutionException
-     */
-    protected function createRedisDriver()
-    {
-        return $this->getContainer()->make(RedisRepository::class);
-    }
-
-    /**
-     * @return Repository
-     * @throws BindingResolutionException
-     */
-    protected function createDatabaseDriver()
-    {
-        return $this->getContainer()->make(DatabaseRepository::class);
-    }
-
-    /**
-     * @return Repository
-     * @throws BindingResolutionException
-     */
-    protected function createChainDriver()
-    {
-        return $this->getContainer()->make(ChainRepository::class);
-    }
-
-    public function noBlade()
+    public function noBlade(): static
     {
         $this->useBlade = false;
 
         return $this;
     }
 
-    public function noScheduling()
+    public function noScheduling(): static
     {
         $this->useScheduling = false;
 
         return $this;
     }
 
-    public function noValidations()
+    public function noValidations(): static
     {
         $this->useValidations = false;
 
         return $this;
     }
 
-    public function noCommands()
+    public function noCommands(): static
     {
         $this->useCommands = false;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function usesBlade(): bool
     {
         return $this->useBlade;
     }
 
-    /**
-     * @return bool
-     */
     public function usesValidations(): bool
     {
         return $this->useValidations;
     }
 
-    /**
-     * @return bool
-     */
     public function usesScheduling(): bool
     {
         return $this->useScheduling;
     }
 
-    /**
-     * @return bool
-     */
     public function usesCommands(): bool
     {
         return $this->useCommands;
@@ -210,6 +154,123 @@ class Manager extends BaseManager implements Repository
 
     public function getContainer(): Container
     {
-        return property_exists($this, 'app') ? $this->app : $this->container;
+        return $this->container;
+    }
+
+    protected function resolve($name)
+    {
+        $config = $this->getConfig($name);
+
+        if (is_null($config)) {
+            throw new \InvalidArgumentException("The [{$name}] feature gateway has not been configured.");
+        }
+
+        $gateway = $this->getGateway($config['driver'], $config, $name);
+        if (($config['cache'] ?? null) && $gateway instanceof Cacheable) {
+            $cache = $this->buildCache($name, $config['cache'], $gateway);
+        }
+        if (($config['filter'] ?? null) ) {
+            if (Str::contains($config['filter'], '|')) {
+                $config['filter'] = explode('|', $config['filter']);
+            }
+            $config['filter'] = Arr::wrap($config['filter']);
+            $filter = new FeatureFilter($config['filter']);
+        }
+
+        return new InspectGateway($gateway, $filter ?? null, $cache ?? null);
+    }
+
+    protected function getConfig($name): ?array
+    {
+        return $this->container->make(Repository::class)->get("features.gateways.{$name}");
+    }
+
+    protected function getGateway(string $driver, array $config, string $name): Gateway
+    {
+        if (! $this->driverIsNative($driver) &&
+            ! isset($this->gatewayDrivers[$driver])
+        ) {
+            throw new \InvalidArgumentException("No gateway for [$driver].");
+        }
+
+        if ($this->driverIsNative($driver)) {
+            return call_user_func([$this, 'build' . Str::ucfirst(Str::camel($driver)) . 'Gateway'], $config, $name);
+        }
+
+        return call_user_func($this->gatewayDrivers[$driver], $config, $name);
+    }
+
+    /**
+     * @throws BindingResolutionException
+     */
+    protected function pipes(): array
+    {
+        $pipes = $this->container->make(Repository::class)->get('features.pipeline');
+
+        return collect($pipes)
+            ->map(function (string $pipe) {
+                return $this->resolve($pipe);
+            })
+            ->all();
+    }
+
+    public function buildCache(string $namespace, array $config, Cacheable $cacheable): GatewayCache
+    {
+        $cache = $this->getContainer()->make(CacheManager::class)->driver($config['store'] ?? null);
+
+        return (new GatewayCache($cache, $namespace, $cacheable))
+            ->configureTtl($config['ttl']);
+    }
+
+    public function buildDatabaseGateway(array $config): DatabaseGateway
+    {
+        return new DatabaseGateway(
+            connection: $this->getContainer()->make(DatabaseManager::class)->connection(
+                $config['connection'] ?? null
+            ),
+            table: $config['table'] ?? null,
+            field: $config['field'] ?? null,
+        );
+    }
+
+    public function buildRedisGateway(array $config): RedisGateway
+    {
+        return new RedisGateway(
+            connection: $this->getContainer()->make(RedisManager::class)->connection($config['connection'] ?? null),
+            prefix: $config['prefix'] ?? null,
+        );
+    }
+
+    public function buildGateGateway(array $config, string $name): GateGateway
+    {
+        if ($config['gate'] ?? false) {
+            throw new \RuntimeException(sprintf('No gate is configured for connection `%s`', $name));
+        }
+
+        return new GateGateway(
+            $this->getContainer()->make(AuthManager::class)->guard($config['guard'] ?? null),
+            $this->getContainer()->make(Gate::class),
+            $config['gate']
+        );
+    }
+
+    public function buildInmemoryGate(array $config): InMemoryGateway
+    {
+        return new InMemoryGateway(
+            loader: new FileLoader(new FeaturesFileDiscoverer(
+                application: $this->getContainer()->make(Application::class),
+                file: $config['file'] ?? null,
+            ), container: $this->getContainer()),
+        );
+    }
+
+    public function extend(string $driver, callable $builder): void
+    {
+        $this->gatewayDrivers[$driver] = $builder;
+    }
+
+    private function driverIsNative(string $driver): bool
+    {
+        return method_exists($this, 'build' . Str::ucfirst(Str::camel($driver)) . 'Gateway');
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace YlsIdeas\FeatureFlags\Tests\Repositories;
+namespace YlsIdeas\FeatureFlags\Tests\Gateways;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
+use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
 
-class DatabaseRepositoryTest extends TestCase
+class DatabaseGatewayTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -18,11 +18,11 @@ class DatabaseRepositoryTest extends TestCase
     {
         $connection = \Mockery::mock(Connection::class);
 
-        $repository = new DatabaseRepository(
+        $gateway = new DatabaseGateway(
             $connection
         );
 
-        $this->assertInstanceOf(DatabaseRepository::class, $repository);
+        $this->assertInstanceOf(DatabaseGateway::class, $gateway);
     }
 
     /** @test */
@@ -47,9 +47,9 @@ class DatabaseRepositoryTest extends TestCase
                 'active_at' => now(),
             ]);
 
-        $repository = new DatabaseRepository($connection);
+        $gateway = new DatabaseGateway($connection);
 
-        $this->assertTrue($repository->accessible('my-feature'));
+        $this->assertTrue($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -74,9 +74,9 @@ class DatabaseRepositoryTest extends TestCase
                 'active_at' => null,
             ]);
 
-        $repository = new DatabaseRepository($connection);
+        $gateway = new DatabaseGateway($connection);
 
-        $this->assertFalse($repository->accessible('my-feature'));
+        $this->assertFalse($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -99,45 +99,9 @@ class DatabaseRepositoryTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        $repository = new DatabaseRepository($connection);
+        $gateway = new DatabaseGateway($connection);
 
-        $this->assertNull($repository->accessible('my-feature'));
-    }
-
-    /** @test */
-    public function itCanFetchAllTheFeaturesAndTheirCurrentState()
-    {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
-
-        $connection->shouldReceive('table')
-            ->with('features')
-            ->once()
-            ->andReturn($query);
-
-        $query->shouldReceive('get')
-            ->with(['feature', 'active_at'])
-            ->once()
-            ->andReturn(collect([
-                (object) [
-                    'feature' => 'my-feature',
-                    'active_at' => now(),
-                ],
-                (object) [
-                    'feature' => 'my-second-feature',
-                    'active_at' => null,
-                ],
-            ]));
-
-        $repository = new DatabaseRepository($connection);
-
-        $this->assertSame(
-            [
-                'my-feature' => true,
-                'my-second-feature' => false,
-            ],
-            $repository->all()
-        );
+        $this->assertNull($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -163,9 +127,9 @@ class DatabaseRepositoryTest extends TestCase
             })
             ->once();
 
-        $repository = new DatabaseRepository($connection);
+        $gateway = new DatabaseGateway($connection);
 
-        $repository->turnOn('my-feature');
+        $gateway->turnOn('my-feature');
     }
 
     /** @test */
@@ -187,8 +151,8 @@ class DatabaseRepositoryTest extends TestCase
             ])
             ->once();
 
-        $repository = new DatabaseRepository($connection);
+        $gateway = new DatabaseGateway($connection);
 
-        $repository->turnOff('my-feature');
+        $gateway->turnOff('my-feature');
     }
 }

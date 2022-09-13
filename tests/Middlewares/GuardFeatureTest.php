@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
-use YlsIdeas\FeatureFlags\Middleware\FeatureFlagState;
+use YlsIdeas\FeatureFlags\Manager;
+use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
 
-class FeatureFlagStateTest extends TestCase
+class GuardFeatureTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -27,16 +27,16 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(false);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on');
@@ -55,16 +55,16 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(true);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'off');
@@ -79,16 +79,16 @@ class FeatureFlagStateTest extends TestCase
             ->with(403)
             ->never();
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(true);
 
         $expectedRequest = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $this->assertTrue($middleware->handle(
             $expectedRequest,
@@ -114,16 +114,16 @@ class FeatureFlagStateTest extends TestCase
             ->once()
             ->andThrow($exception);
 
-        $repository = \Mockery::mock(Repository::class);
+        $manager = \Mockery::mock(Manager::class);
 
-        $repository->shouldReceive('accessible')
+        $manager->shouldReceive('accessible')
             ->with('my-feature')
             ->once()
             ->andReturn(false);
 
         $request = new Request();
 
-        $middleware = new FeatureFlagState($repository, $app);
+        $middleware = new GuardFeature($manager, $app);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on', 404);

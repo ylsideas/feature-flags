@@ -2,66 +2,39 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Illuminate\Support\Facades\Config;
+use Mockery\MockInterface;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class CommandsTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
         ];
     }
 
-    public function setUp(): void
+    /** @test */
+    public function turnFeaturesOn(): void
     {
-        parent::setUp();
+        Features::shouldReceive('turnOn')
+            ->with('test', 'my-feature')
+            ->once();
 
-        Config::set('features.default', 'config');
+        $this->artisan('feature:on', ['gateway' => 'test', 'feature' => 'my-feature'])
+            ->assertExitCode(0);
     }
 
     /** @test */
-    public function turnFeaturesOn()
+    public function turnFeaturesOff(): void
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('turnOff')
+            ->with('test', 'my-feature')
+            ->once();
 
-        $this->assertFalse(Features::accessible('my-feature'));
-
-        $this->artisan('feature:on', ['feature' => 'my-feature'])
-            ->assertExitCode(0);
-
-        $this->assertTrue(Features::accessible('my-feature'));
-    }
-
-    /** @test */
-    public function turnFeaturesOff()
-    {
-        Features::turnOn('my-feature');
-
-        $this->assertTrue(Features::accessible('my-feature'));
-
-        $this->artisan('feature:off', ['feature' => 'my-feature'])
-            ->assertExitCode(0);
-
-        $this->assertFalse(Features::accessible('my-feature'));
-    }
-
-    /** @test */
-    public function getFeatureState()
-    {
-        Features::turnOn('my-feature');
-
-        $this->artisan('feature:state', ['feature' => 'my-feature'])
-            ->expectsOutput('Feature `my-feature` is currently on')
-            ->assertExitCode(0);
-
-        Features::turnOff('my-feature');
-
-        $this->artisan('feature:state', ['feature' => 'my-feature'])
-            ->expectsOutput('Feature `my-feature` is currently off')
+        $this->artisan('feature:off', ['gateway' => 'test', 'feature' => 'my-feature'])
             ->assertExitCode(0);
     }
 }

@@ -4,7 +4,6 @@ namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
@@ -21,14 +20,14 @@ class SchedulingEventsMacroTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Config::set('features.default', 'config');
     }
 
     /** @test */
     public function scheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithFeature()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         /** @var Event $event */
         $event = (new Schedule())->command('list')
@@ -41,7 +40,9 @@ class SchedulingEventsMacroTest extends TestCase
     /** @test */
     public function scheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithFeature()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
 
         /** @var Event $event */
         $event = (new Schedule())->command('list')
@@ -54,7 +55,9 @@ class SchedulingEventsMacroTest extends TestCase
     /** @test */
     public function scheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithoutFeature()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         /** @var Event $event */
         $event = (new Schedule())->command('list')
@@ -67,7 +70,9 @@ class SchedulingEventsMacroTest extends TestCase
     /** @test */
     public function scheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithoutFeature()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
 
         /** @var Event $event */
         $event = (new Schedule())->command('list')

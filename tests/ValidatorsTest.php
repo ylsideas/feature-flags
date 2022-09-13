@@ -10,24 +10,19 @@ use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class ValidatorsTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
         ];
     }
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        Config::set('features.default', 'config');
-    }
-
     /** @test */
     public function validationRuleWithFeatureOnAndAttributeIncluded()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         $validator = Validator::make([
             'exists' => 'yes',
@@ -41,7 +36,10 @@ class ValidatorsTest extends TestCase
     /** @test */
     public function validationRuleWithFeatureOnAndAttributeMissing()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
+
 
         $validator = Validator::make([
         ], [
@@ -55,7 +53,10 @@ class ValidatorsTest extends TestCase
     /** @test */
     public function validationRuleWithFeatureOffAndAttributeMissing()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
         ], [
@@ -68,7 +69,10 @@ class ValidatorsTest extends TestCase
     /** @test */
     public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOn()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
         ], [
@@ -81,7 +85,10 @@ class ValidatorsTest extends TestCase
     /** @test */
     public function validationRuleWithFeatureOffAndAttributeIncludedWhileExpectingOff()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
+
 
         $validator = Validator::make([
             'exists' => 'yes',
@@ -95,7 +102,10 @@ class ValidatorsTest extends TestCase
     /** @test */
     public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOff()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
+
 
         $validator = Validator::make([
         ], [

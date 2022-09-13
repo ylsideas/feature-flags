@@ -10,9 +10,10 @@ class FeatureAccessedTest extends TestCase
     /** @test */
     public function itCanBeInitialised()
     {
-        $event = new FeatureAccessed('my-feature');
+        $event = new FeatureAccessed('my-feature', true);
 
         $this->assertInstanceOf(FeatureAccessed::class, $event);
         $this->assertSame('my-feature', $event->feature);
+        $this->assertTrue($event->result);
     }
 }

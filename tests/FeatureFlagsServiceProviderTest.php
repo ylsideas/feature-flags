@@ -2,18 +2,11 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Illuminate\Redis\Connections\Connection;
-use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 use YlsIdeas\FeatureFlags\Manager;
-use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
-use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 
 class FeatureFlagsServiceProviderTest extends TestCase
 {
@@ -37,59 +30,11 @@ class FeatureFlagsServiceProviderTest extends TestCase
     }
 
     /** @test */
-    public function addsTheDatabaseRepositoryToTheContainer()
-    {
-        $repository = $this->app->make(DatabaseRepository::class);
-
-        $this->assertInstanceOf(Repository::class, $repository);
-        $this->assertInstanceOf(DatabaseRepository::class, $repository);
-    }
-
-    /** @test */
-    public function addsTheInMemoryRepositoryToTheContainer()
-    {
-        $repository = $this->app->make(InMemoryRepository::class);
-
-        $this->assertInstanceOf(Repository::class, $repository);
-        $this->assertInstanceOf(InMemoryRepository::class, $repository);
-    }
-
-    /** @test */
-    public function addsTheChainRepositoryToTheContainer()
-    {
-        $repository = $this->app->make(ChainRepository::class);
-
-        $this->assertInstanceOf(Repository::class, $repository);
-        $this->assertInstanceOf(ChainRepository::class, $repository);
-    }
-
-    /** @test */
-    public function addsTheRedisRepositoryToTheContainer()
-    {
-        $this->app->extend(RedisManager::class, function () {
-            $connection = $this->mock(Connection::class);
-            $redis = $this->mock(RedisManager::class);
-
-            $redis->shouldReceive('connection')
-                ->with('default')
-                ->once()
-                ->andReturn($connection);
-
-            return $redis;
-        });
-
-        $repository = $this->app->make(RedisRepository::class);
-
-        $this->assertInstanceOf(Repository::class, $repository);
-        $this->assertInstanceOf(RedisRepository::class, $repository);
-    }
-
-    /** @test */
     public function addsManagerToTheContainer()
     {
-        $repository = $this->app->make(Manager::class);
+        $gateway = $this->app->make(Manager::class);
 
-        $this->assertInstanceOf(Manager::class, $repository);
+        $this->assertInstanceOf(Manager::class, $gateway);
     }
 
     /** @test */

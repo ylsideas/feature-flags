@@ -55,7 +55,7 @@ To install the middleware you'll have to add it to your `$routeMiddleware` insid
 
 ```php
 protected $routeMiddleware = [
-    'feature' => \YlsIdeas\FeatureFlags\Middleware\FeatureFlagState::class,
+    'feature' => \YlsIdeas\FeatureFlags\Middlewares\GuardFeature::class,
 ];
 ```
 

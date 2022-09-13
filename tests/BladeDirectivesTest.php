@@ -21,15 +21,15 @@ class BladeDirectivesTest extends TestCase
     {
         parent::setUp();
 
-        Config::set('features.default', 'config');
-
         View::addNamespace('testing', __DIR__.'/views');
     }
 
     /** @test */
     public function bladeDirectiveIncludesWhenFeatureIsOnAndExpectedOn()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         $page = View::make('testing::features-on');
 
@@ -39,7 +39,9 @@ class BladeDirectivesTest extends TestCase
     /** @test */
     public function bladeDirectiveExcludesWhenFeatureIsOffAndExpectedOn()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
 
         $page = View::make('testing::features-on');
 
@@ -49,7 +51,9 @@ class BladeDirectivesTest extends TestCase
     /** @test */
     public function bladeDirectiveIncludesWhenFeatureIsOffAndExpectedOff()
     {
-        Features::turnOff('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(false);
 
         $page = View::make('testing::features-off');
 
@@ -59,7 +63,9 @@ class BladeDirectivesTest extends TestCase
     /** @test */
     public function bladeDirectiveExcludesWhenFeatureIsOnAndExpectedOff()
     {
-        Features::turnOn('my-feature');
+        Features::shouldReceive('accessible')
+            ->with('my-feature')
+            ->andReturn(true);
 
         $page = View::make('testing::features-off');
 

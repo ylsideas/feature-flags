@@ -1,13 +1,13 @@
 <?php
 
-namespace YlsIdeas\FeatureFlags\Tests\Repositories;
+namespace YlsIdeas\FeatureFlags\Tests\Gateways;
 
 use Illuminate\Redis\Connections\Connection;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
+use YlsIdeas\FeatureFlags\Gateways\RedisGateway;
 
-class RedisRepositoryTest extends TestCase
+class RedisGatewayTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
@@ -16,9 +16,9 @@ class RedisRepositoryTest extends TestCase
     {
         $connection = \Mockery::mock(Connection::class);
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $this->assertInstanceOf(RedisRepository::class, $repository);
+        $this->assertInstanceOf(RedisGateway::class, $gateway);
     }
 
     /** @test */
@@ -31,9 +31,9 @@ class RedisRepositoryTest extends TestCase
             ->once()
             ->andReturn(true);
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $this->assertTrue($repository->accessible('my-feature'));
+        $this->assertTrue($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -46,9 +46,9 @@ class RedisRepositoryTest extends TestCase
             ->once()
             ->andReturn(false);
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $this->assertFalse($repository->accessible('my-feature'));
+        $this->assertFalse($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -61,34 +61,9 @@ class RedisRepositoryTest extends TestCase
             ->once()
             ->andReturn(null);
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $this->assertNull($repository->accessible('my-feature'));
-    }
-
-    /** @test */
-    public function itCanFetchAllTheFeaturesAndTheirCurrentState()
-    {
-        $connection = \Mockery::mock(Connection::class);
-
-        $connection->shouldReceive('keys')
-            ->with('features:*')
-            ->once()
-            ->andReturn(['features:my-feature']);
-
-        $connection->shouldReceive('mget')
-            ->with(['features:my-feature'])
-            ->once()
-            ->andReturn([true]);
-
-        $repository = new RedisRepository($connection);
-
-        $this->assertSame(
-            [
-                'my-feature' => true,
-            ],
-            $repository->all()
-        );
+        $this->assertNull($gateway->accessible('my-feature'));
     }
 
     /** @test */
@@ -100,9 +75,9 @@ class RedisRepositoryTest extends TestCase
             ->with('features:my-feature', true)
             ->once();
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $repository->turnOn('my-feature');
+        $gateway->turnOn('my-feature');
     }
 
     /** @test */
@@ -114,8 +89,8 @@ class RedisRepositoryTest extends TestCase
             ->with('features:my-feature', false)
             ->once();
 
-        $repository = new RedisRepository($connection);
+        $gateway = new RedisGateway($connection);
 
-        $repository->turnOff('my-feature');
+        $gateway->turnOff('my-feature');
     }
 }

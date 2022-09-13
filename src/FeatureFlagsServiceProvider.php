@@ -3,21 +3,12 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Database\DatabaseManager;
-use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use YlsIdeas\FeatureFlags\Commands\CheckFeatureState;
-use YlsIdeas\FeatureFlags\Commands\SwitchOffFeature;
-use YlsIdeas\FeatureFlags\Commands\SwitchOnFeature;
-use YlsIdeas\FeatureFlags\Contracts\Repository;
+use YlsIdeas\FeatureFlags\Commands;
+use YlsIdeas\FeatureFlags\Contracts\Gateway;
 use YlsIdeas\FeatureFlags\Facades\Features;
-use YlsIdeas\FeatureFlags\Repositories\ChainRepository;
-use YlsIdeas\FeatureFlags\Repositories\DatabaseRepository;
-use YlsIdeas\FeatureFlags\Repositories\InMemoryRepository;
-use YlsIdeas\FeatureFlags\Repositories\RedisRepository;
 use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
 
 class FeatureFlagsServiceProvider extends ServiceProvider
@@ -29,7 +20,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('features.php'),
+                __DIR__.'/../config/features.php' => config_path('features.php'),
             ], 'config');
 
             // Publishing the migrations.
@@ -41,9 +32,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             // Registering package commands.
             if (Features::usesCommands()) {
                 $this->commands([
-                    CheckFeatureState::class,
-                    SwitchOnFeature::class,
-                    SwitchOffFeature::class,
+                    Commands\SwitchOnFeature::class,
+                    Commands\SwitchOffFeature::class,
                 ]);
             }
         }
@@ -67,42 +57,13 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'features');
+        $this->mergeConfigFrom(__DIR__.'/../config/features.php', 'features');
 
         if (method_exists($this->app, 'scoped')) {
-            $this->app->scoped(Repository::class, Manager::class);
+            $this->app->scoped(Gateway::class, Manager::class);
         } else {
-            $this->app->singleton(Repository::class, Manager::class);
+            $this->app->singleton(Gateway::class, Manager::class);
         }
-
-        $this->app->bind(InMemoryRepository::class, function () {
-            return new InMemoryRepository(config(config('features.repositories.config.key')));
-        });
-
-        $this->app->bind(RedisRepository::class, function (Container $container) {
-            return new RedisRepository(
-                $container->make(RedisManager::class)
-                    ->connection(config('features.repositories.redis.connection')),
-                config('features.repositories.redis.prefix')
-            );
-        });
-
-        $this->app->bind(DatabaseRepository::class, function (Container $container) {
-            return new DatabaseRepository(
-                $container->make(DatabaseManager::class)
-                    ->connection(config('features.repositories.database.connection')),
-                config('features.repositories.database.table')
-            );
-        });
-
-        $this->app->bind(ChainRepository::class, function (Container $container) {
-            return new ChainRepository(
-                $container->make(Manager::class),
-                config('features.repositories.chain.drivers'),
-                config('features.repositories.chain.store'),
-                config('features.repositories.chain.update_on_resolve')
-            );
-        });
     }
 
     protected function schedulingMacros()

@@ -14,8 +14,7 @@ class GuardFeatureTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @test */
-    public function itCanAbortRequestsWhenFeaturesAreNotAccessible()
+    public function testItCanAbortRequestsWhenFeaturesAreNotAccessible()
     {
         $exception = new HttpException(403);
 
@@ -42,8 +41,7 @@ class GuardFeatureTest extends TestCase
         }, 'my-feature', 'on');
     }
 
-    /** @test */
-    public function itCanAbortRequestsWhenFeaturesAreNotAccessibleAndExpectingToBeOff()
+    public function testItCanAbortRequestsWhenFeaturesAreNotAccessibleAndExpectingToBeOff()
     {
         $exception = new HttpException(404);
 
@@ -70,8 +68,7 @@ class GuardFeatureTest extends TestCase
         }, 'my-feature', 'off');
     }
 
-    /** @test */
-    public function itContinuesTheChainIfFeaturesAreAccessible()
+    public function testItContinuesTheChainIfFeaturesAreAccessible()
     {
         $app = \Mockery::mock(Application::class);
 
@@ -101,8 +98,7 @@ class GuardFeatureTest extends TestCase
         ));
     }
 
-    /** @test */
-    public function itCanAbortRequestsWithASpecifiedHttpStatusCode()
+    public function testItCanAbortRequestsWithASpecifiedHttpStatusCode()
     {
         $exception = new HttpException(404);
 

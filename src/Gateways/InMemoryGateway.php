@@ -6,6 +6,9 @@ use YlsIdeas\FeatureFlags\Contracts\Cacheable;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 use YlsIdeas\FeatureFlags\Contracts\InMemoryLoader;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Gateways\InMemoryGatewayTest
+ */
 class InMemoryGateway implements Gateway, Cacheable
 {
     protected array $flags;

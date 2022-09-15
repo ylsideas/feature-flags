@@ -31,6 +31,6 @@ class GateGateway implements Gateway, Cacheable
             return md5($feature);
         }
 
-        return implode(':', array_filter([md5($feature), $this->model ?? null, $model?->getKey()]));
+        return implode(':', [md5($feature), get_class($model), $model->getKey()]);
     }
 }

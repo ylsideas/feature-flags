@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use YlsIdeas\FeatureFlags\Manager;
 use YlsIdeas\FeatureFlags\Support\StateChecking;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Middlewares\GuardFeatureTest
+ */
 class GuardFeature
 {
     use StateChecking;

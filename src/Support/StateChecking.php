@@ -6,11 +6,8 @@ trait StateChecking
 {
     /**
      * Returns true for 'on' and false for 'off'.
-     *
-     * @param string $state
-     * @return bool
      */
-    protected function check(string $state)
+    protected function check(string $state): bool
     {
         if ($state === 'on') {
             return true;

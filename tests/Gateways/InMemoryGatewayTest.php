@@ -8,8 +8,7 @@ use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
 
 class InMemoryGatewayTest extends TestCase
 {
-    /** @test */
-    public function itReturnsTrueIfFeaturesAreAccessible()
+    public function testItReturnsTrueIfFeaturesAreAccessible()
     {
         $gateway = new InMemoryGateway($this->getLoader([
             'my-feature' => true,
@@ -18,8 +17,7 @@ class InMemoryGatewayTest extends TestCase
         $this->assertTrue($gateway->accessible('my-feature'));
     }
 
-    /** @test */
-    public function itReturnsFalseIfFeaturesAreNotAccessible()
+    public function testItReturnsFalseIfFeaturesAreNotAccessible()
     {
         $gateway = new InMemoryGateway($this->getLoader([
             'my-feature' => false,
@@ -28,8 +26,7 @@ class InMemoryGatewayTest extends TestCase
         $this->assertFalse($gateway->accessible('my-feature'));
     }
 
-    /** @test */
-    public function itReturnsNullIfFeaturesAreNotDefined()
+    public function testItReturnsNullIfFeaturesAreNotDefined()
     {
         $gateway = new InMemoryGateway($this->getLoader([
         ]));
@@ -37,13 +34,12 @@ class InMemoryGatewayTest extends TestCase
         $this->assertNull($gateway->accessible('my-feature'));
     }
 
-
     protected function getLoader($contents): InMemoryLoader
     {
-        return new class($contents) implements InMemoryLoader {
-
+        return new class ($contents) implements InMemoryLoader {
             public function __construct(protected array $contents)
-            {}
+            {
+            }
 
             public function load(): array
             {

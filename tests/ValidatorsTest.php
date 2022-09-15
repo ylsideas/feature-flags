@@ -2,7 +2,6 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
@@ -17,8 +16,7 @@ class ValidatorsTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeIncluded()
+    public function testValidationRuleWithFeatureOnAndAttributeIncluded()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -33,8 +31,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissing()
+    public function testValidationRuleWithFeatureOnAndAttributeMissing()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -50,8 +47,7 @@ class ValidatorsTest extends TestCase
         $this->assertTrue($validator->errors()->has('exists'));
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOffAndAttributeMissing()
+    public function testValidationRuleWithFeatureOffAndAttributeMissing()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -66,8 +62,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOn()
+    public function testValidationRuleWithFeatureOnAndAttributeMissingWhileExpectingOn()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -82,8 +77,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOffAndAttributeIncludedWhileExpectingOff()
+    public function testValidationRuleWithFeatureOffAndAttributeIncludedWhileExpectingOff()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -99,8 +93,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function validationRuleWithFeatureOnAndAttributeMissingWhileExpectingOff()
+    public function testValidationRuleWithFeatureOnAndAttributeMissingWhileExpectingOff()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -115,8 +108,7 @@ class ValidatorsTest extends TestCase
         $this->assertFalse($validator->fails());
     }
 
-    /** @test */
-    public function ruleMustBeUsedWithFeatureNameParameter()
+    public function testRuleMustBeUsedWithFeatureNameParameter()
     {
         $this->expectException(\InvalidArgumentException::class);
 

@@ -26,9 +26,7 @@ class FileLoaderTest extends TestCase
             ->andReturn(__DIR__ . '/../fixtures/features.php');
 
         $container->shouldReceive('call')
-            ->with(\Mockery::on(function ($callable) {
-                return is_callable($callable);
-            }))
+            ->with(\Mockery::on(fn ($callable) => is_callable($callable)))
             ->once()
             ->andReturn($features);
 

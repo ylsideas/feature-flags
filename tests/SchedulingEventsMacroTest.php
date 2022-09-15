@@ -22,8 +22,7 @@ class SchedulingEventsMacroTest extends TestCase
         parent::setUp();
     }
 
-    /** @test */
-    public function scheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithFeature()
+    public function testScheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithFeature()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -37,8 +36,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertTrue($event->filtersPass($this->app));
     }
 
-    /** @test */
-    public function scheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithFeature()
+    public function testScheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithFeature()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -52,8 +50,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertFalse($event->filtersPass($this->app));
     }
 
-    /** @test */
-    public function scheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithoutFeature()
+    public function testScheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithoutFeature()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -67,8 +64,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertFalse($event->filtersPass($this->app));
     }
 
-    /** @test */
-    public function scheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithoutFeature()
+    public function testScheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithoutFeature()
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')

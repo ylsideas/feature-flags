@@ -2,7 +2,6 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
-use Mockery\MockInterface;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
@@ -16,8 +15,7 @@ class CommandsTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function turnFeaturesOn(): void
+    public function testTurnFeaturesOn(): void
     {
         Features::shouldReceive('turnOn')
             ->with('test', 'my-feature')
@@ -27,8 +25,7 @@ class CommandsTest extends TestCase
             ->assertExitCode(0);
     }
 
-    /** @test */
-    public function turnFeaturesOff(): void
+    public function testTurnFeaturesOff(): void
     {
         Features::shouldReceive('turnOff')
             ->with('test', 'my-feature')

@@ -1,5 +1,3 @@
 <?php
 
-return static function () {
-    return [];
-};
+return static fn () => [];

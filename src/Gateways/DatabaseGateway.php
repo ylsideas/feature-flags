@@ -5,23 +5,16 @@ namespace YlsIdeas\FeatureFlags\Gateways;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use YlsIdeas\FeatureFlags\Contracts\Cacheable;
-use YlsIdeas\FeatureFlags\Contracts\Toggleable;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Contracts\Toggleable;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Gateways\DatabaseGatewayTest
+ */
 class DatabaseGateway implements Gateway, Toggleable, Cacheable
 {
-    protected Connection $connection;
-    protected string $table;
-    /**
-     * @var string
-     */
-    protected $field;
-
-    public function __construct(Connection $connection, string $table = 'features', string $field = 'active_at')
+    public function __construct(protected Connection $connection, protected string $table = 'features', protected string $field = 'active_at')
     {
-        $this->connection = $connection;
-        $this->table = $table;
-        $this->field = $field;
     }
 
     public function accessible(string $feature): ?bool

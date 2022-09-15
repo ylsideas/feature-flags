@@ -12,21 +12,21 @@ class GateGatewayTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    /** @test */
-    public function itCanBeInitialised()
+    public function testItCanBeInitialised()
     {
         $guard = \Mockery::mock(Guard::class);
         $gate = \Mockery::mock(Gate::class);
 
         $gateway = new GateGateway(
-            $guard, $gate, 'access.gate'
+            $guard,
+            $gate,
+            'access.gate'
         );
 
         $this->assertInstanceOf(GateGateway::class, $gateway);
     }
 
-    /** @test */
-    public function itReturnsTrueIfFeaturesAreAccessible()
+    public function testItReturnsTrueIfFeaturesAreAccessible()
     {
         $guard = \Mockery::mock(Guard::class);
         $gate = \Mockery::mock(Gate::class);
@@ -45,14 +45,15 @@ class GateGatewayTest extends TestCase
             ->andReturn(true);
 
         $gateway = new GateGateway(
-            $guard, $gate, 'access.gate'
+            $guard,
+            $gate,
+            'access.gate'
         );
 
         $this->assertTrue($gateway->accessible('my-feature'));
     }
 
-    /** @test */
-    public function itReturnsFalseIfFeaturesAreNotAccessible()
+    public function testItReturnsFalseIfFeaturesAreNotAccessible()
     {
         $guard = \Mockery::mock(Guard::class);
         $gate = \Mockery::mock(Gate::class);
@@ -71,7 +72,9 @@ class GateGatewayTest extends TestCase
             ->andReturn(false);
 
         $gateway = new GateGateway(
-            $guard, $gate, 'access.gate'
+            $guard,
+            $gate,
+            'access.gate'
         );
 
         $this->assertFalse($gateway->accessible('my-feature'));

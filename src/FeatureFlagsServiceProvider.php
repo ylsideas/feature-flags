@@ -6,11 +6,13 @@ use Illuminate\Console\Scheduling\Event;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use YlsIdeas\FeatureFlags\Commands;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\FeatureFlagsServiceProviderTest
+ */
 class FeatureFlagsServiceProvider extends ServiceProvider
 {
     /**
@@ -73,31 +75,21 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     protected function schedulingMacros()
     {
         if (! Event::hasMacro('skipWithoutFeature')) {
-            Event::macro('skipWithoutFeature', function ($feature) {
-                /** @var Event $this */
-                return $this->skip(function () use ($feature) {
-                    return ! Features::accessible($feature);
-                });
-            });
+            Event::macro('skipWithoutFeature', fn ($feature) => /** @var Event $this */
+$this->skip(fn () => ! Features::accessible($feature)));
         }
 
         if (! Event::hasMacro('skipWithFeature')) {
-            Event::macro('skipWithFeature', function ($feature) {
-                /** @var Event $this */
-                return $this->skip(function () use ($feature) {
-                    return Features::accessible($feature);
-                });
-            });
+            Event::macro('skipWithFeature', fn ($feature) => /** @var Event $this */
+$this->skip(fn () => Features::accessible($feature)));
         }
     }
 
     protected function bladeDirectives()
     {
-        Blade::if('feature', function (string $feature, $applyIfOn = true) {
-            return $applyIfOn
-                ? Features::accessible($feature)
-                : ! Features::accessible($feature);
-        });
+        Blade::if('feature', fn (string $feature, $applyIfOn = true) => $applyIfOn
+            ? Features::accessible($feature)
+            : ! Features::accessible($feature));
     }
 
     protected function validator()

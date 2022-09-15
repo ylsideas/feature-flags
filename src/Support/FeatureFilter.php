@@ -4,6 +4,9 @@ namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Support\Str;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Support\FeatureFilterTest
+ */
 class FeatureFilter
 {
     /**
@@ -29,7 +32,7 @@ class FeatureFilter
         return false;
     }
 
-    protected function checkPattern(string $rule, string $feature): string
+    protected function checkPattern(string $rule, string $feature): bool
     {
         $negative = Str::startsWith($rule, '!');
 
@@ -41,6 +44,4 @@ class FeatureFilter
 
         return $negative xor Str::startsWith($feature, $rule);
     }
-
-
 }

@@ -26,12 +26,15 @@ use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
 use YlsIdeas\FeatureFlags\Gateways\GateGateway;
 use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
 use YlsIdeas\FeatureFlags\Gateways\RedisGateway;
-use YlsIdeas\FeatureFlags\Support\GatewayCache;
 use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 use YlsIdeas\FeatureFlags\Support\FileLoader;
+use YlsIdeas\FeatureFlags\Support\GatewayCache;
 use YlsIdeas\FeatureFlags\Support\GatewayInspector;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\ManagerTest
+ */
 class Manager
 {
     protected bool $useCommands = true;
@@ -169,7 +172,7 @@ class Manager
         if (($config['cache'] ?? null) && $gateway instanceof Cacheable) {
             $cache = $this->buildCache($name, $config['cache'], $gateway);
         }
-        if (($config['filter'] ?? null) ) {
+        if (($config['filter'] ?? null)) {
             if (Str::contains($config['filter'], '|')) {
                 $config['filter'] = explode('|', $config['filter']);
             }
@@ -208,9 +211,7 @@ class Manager
         $pipes = $this->container->make(Repository::class)->get('features.pipeline');
 
         return collect($pipes)
-            ->map(function (string $pipe) {
-                return $this->resolve($pipe);
-            })
+            ->map(fn (string $pipe) => $this->resolve($pipe))
             ->all();
     }
 

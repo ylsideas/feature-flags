@@ -29,16 +29,14 @@ class FeatureFlagsServiceProviderTest extends TestCase
         parent::tearDown();
     }
 
-    /** @test */
-    public function addsManagerToTheContainer()
+    public function testAddsManagerToTheContainer()
     {
         $gateway = $this->app->make(Manager::class);
 
         $this->assertInstanceOf(Manager::class, $gateway);
     }
 
-    /** @test */
-    public function publishesTheFeaturesConfig()
+    public function testPublishesTheFeaturesConfig()
     {
         $this->assertFalse(File::exists(config_path('features.php')));
 
@@ -50,14 +48,11 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertTrue(File::exists(config_path('features.php')));
     }
 
-    /** @test */
-    public function publishesTheFeaturesMigration()
+    public function testPublishesTheFeaturesMigration()
     {
         $this->assertNull(
             collect(File::files(database_path('migrations')))
-                ->first(function (\SplFileInfo $file) {
-                    return Str::endsWith($file->getFilename(), '_create_features_table.php');
-                })
+                ->first(fn (\SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'))
         );
 
         $this->artisan('vendor:publish', [
@@ -67,9 +62,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
 
         $filename =
             collect(File::files(database_path('migrations')))
-                ->first(function (\SplFileInfo $file) {
-                    return Str::endsWith($file->getFilename(), '_create_features_table.php');
-                });
+                ->first(fn (\SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'));
 
         $this->assertNotNull($filename);
     }
@@ -79,8 +72,6 @@ class FeatureFlagsServiceProviderTest extends TestCase
         File::delete(config_path('features.php'));
 
         collect(File::files(database_path('migrations')))
-            ->each(function (\SplFileInfo $file) {
-                return File::delete($file->getPathname());
-            });
+            ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));
     }
 }

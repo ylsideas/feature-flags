@@ -5,14 +5,16 @@ namespace YlsIdeas\FeatureFlags\Support;
 use YlsIdeas\FeatureFlags\Contracts\ActionableFlag;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Support\GatewayInspectorTest
+ */
 class GatewayInspector
 {
     public function __construct(
         protected Gateway $gateway,
         protected ?FeatureFilter $filter = null,
         protected ?GatewayCache $cache = null,
-    )
-    {
+    ) {
     }
 
     public function gateway(): Gateway
@@ -20,15 +22,13 @@ class GatewayInspector
         return $this->gateway;
     }
 
-    public function handle(ActionableFlag $action, callable $next) : ActionableFlag
+    public function handle(ActionableFlag $action, callable $next): ActionableFlag
     {
         if ($action->hasResult()) {
-
             return $next($action);
         }
 
         if ($this->filter && $this->filter->fails($action->feature())) {
-
             return $next($action);
         }
 

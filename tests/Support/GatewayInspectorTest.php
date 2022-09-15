@@ -37,9 +37,7 @@ class GatewayInspectorTest extends TestCase
 
         $gateway->shouldNotReceive('accessible');
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
     }
@@ -61,9 +59,7 @@ class GatewayInspectorTest extends TestCase
 
         $gateway->shouldNotReceive('accessible');
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
     }
@@ -89,9 +85,7 @@ class GatewayInspectorTest extends TestCase
 
         $gateway->shouldNotReceive('accessible');
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
         $this->assertTrue($action->getResult());
@@ -118,9 +112,7 @@ class GatewayInspectorTest extends TestCase
             ->with($action->feature)
             ->andReturn(null);
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
         $this->assertNull($action->getResult());
@@ -150,9 +142,7 @@ class GatewayInspectorTest extends TestCase
             ->with($action->feature)
             ->andReturn(true);
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
         $this->assertTrue($action->getResult());
@@ -172,9 +162,7 @@ class GatewayInspectorTest extends TestCase
             ->with($action->feature)
             ->andReturn(false);
 
-        $result = $inspector->handle($action, function (ActionableFlag $flag)  {
-            return $flag;
-        });
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
 
         $this->assertSame($action, $result);
         $this->assertFalse($action->getResult());

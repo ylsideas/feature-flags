@@ -7,8 +7,7 @@ use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
 
 class FeatureSwitchedOffTest extends TestCase
 {
-    /** @test */
-    public function itCanBeInitialised()
+    public function testItCanBeInitialised()
     {
         $event = new FeatureSwitchedOff('my-feature', 'database');
 

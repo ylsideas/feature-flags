@@ -5,6 +5,9 @@ namespace YlsIdeas\FeatureFlags\Support;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Str;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Support\FeaturesFileDiscovererTest
+ */
 class FeaturesFileDiscoverer
 {
     public function __construct(protected Application $application, protected string $file)

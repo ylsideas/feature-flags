@@ -30,7 +30,7 @@ use YlsIdeas\FeatureFlags\Support\GatewayCache;
 use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 use YlsIdeas\FeatureFlags\Support\FileLoader;
-use YlsIdeas\FeatureFlags\Support\InspectGateway;
+use YlsIdeas\FeatureFlags\Support\GatewayInspector;
 
 class Manager
 {
@@ -177,7 +177,7 @@ class Manager
             $filter = new FeatureFilter($config['filter']);
         }
 
-        return new InspectGateway($gateway, $filter ?? null, $cache ?? null);
+        return new GatewayInspector($gateway, $filter ?? null, $cache ?? null);
     }
 
     protected function getConfig($name): ?array

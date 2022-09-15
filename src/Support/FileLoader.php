@@ -13,9 +13,9 @@ class FileLoader implements InMemoryLoader
 
     public function load(): array
     {
-        $callable = require $this->discoverer->find();
+        $callable = require ($file = $this->discoverer->find());
         if (!is_callable($callable)) {
-            throw new \RuntimeException(sprintf('File `%s` does not return a callable'));
+            throw new \RuntimeException(sprintf('File `%s` does not return a callable', $file));
         }
         return $this->container->call($callable);
     }

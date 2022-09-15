@@ -23,6 +23,10 @@ class FeatureFlagsServiceProvider extends ServiceProvider
                 __DIR__.'/../config/features.php' => config_path('features.php'),
             ], 'config');
 
+            $this->publishes([
+                __DIR__.'/../config/.features.php' => base_path('.features.php'),
+            ], 'inmemory-config');
+
             // Publishing the migrations.
             $migration = date('Y_m_d_His').'_create_features_table.php';
             $this->publishes([

@@ -13,16 +13,20 @@ class FeaturesFileDiscoverer
 
     public function find(): string
     {
-        if (Str::startsWith($this->file, '/') && file_exists($this->file)) {
+        $files = $this->application->make('files');
+
+        if (Str::startsWith($this->file, '/') && $files->exists($this->file)) {
             return $this->file;
         }
 
-        if (file_exists($path = $this->application->basePath($this->file))) {
+        if ($files->exists($path = $this->application->basePath($this->file))) {
             return $path;
         }
 
-        if (file_exists($path = $this->application->basePath($this->file . '.dist'))) {
-            return $this->application->basePath($this->file);
+        if ($files->exists($path = $this->application->basePath($this->file . '.dist'))) {
+            return $path;
         }
+
+        throw new \RuntimeException(sprintf('Not `%s` file could be found.', $this->file));
     }
 }

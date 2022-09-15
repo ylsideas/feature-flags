@@ -5,7 +5,7 @@ namespace YlsIdeas\FeatureFlags\Support;
 use YlsIdeas\FeatureFlags\Contracts\ActionableFlag;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 
-class InspectGateway
+class GatewayInspector
 {
     public function __construct(
         protected Gateway $gateway,

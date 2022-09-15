@@ -48,6 +48,18 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertTrue(File::exists(config_path('features.php')));
     }
 
+    public function testPublishesTheInMemoryFeaturesConfig()
+    {
+        $this->assertFalse(File::exists(base_path('.features.php')));
+
+        $this->artisan('vendor:publish', [
+            '--tag' => 'inmemory-config',
+            '--force' => true,
+        ]);
+
+        $this->assertTrue(File::exists(base_path('.features.php')));
+    }
+
     public function testPublishesTheFeaturesMigration()
     {
         $this->assertNull(

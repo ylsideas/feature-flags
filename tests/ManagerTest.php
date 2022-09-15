@@ -141,23 +141,6 @@ class ManagerTest extends TestCase
         $manager->turnOff('test', 'my-feature');
     }
 
-//    /**
-    //     * @test
-    //     * @dataProvider drivers
-    //     */
-    //    public function itCanCreateDrivers($driver, $repository)
-    //    {
-    //        $instance = \Mockery::mock($repository);
-    //
-    //        $this->container->shouldReceive('make')
-    //            ->with($repository)
-    //            ->once()
-    //            ->andReturn($instance);
-    //
-    //        $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
-    //
-    //        $this->assertSame($instance, $manager->driver($driver));
-    //    }
     /**
      * @dataProvider services
      */
@@ -179,6 +162,7 @@ class ManagerTest extends TestCase
             ['Validations'],
             ['Commands'],
             ['Scheduling'],
+            ['Middlewares'],
         ];
     }
 }

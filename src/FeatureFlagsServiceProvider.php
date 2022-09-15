@@ -75,13 +75,19 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     protected function schedulingMacros()
     {
         if (! Event::hasMacro('skipWithoutFeature')) {
-            Event::macro('skipWithoutFeature', fn ($feature) => /** @var Event $this */
-$this->skip(fn () => ! Features::accessible($feature)));
+            /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
+            Event::macro('skipWithoutFeature', function (string $feature): Event {
+                /** @var Event $this */
+                return $this->skip(fn () => ! Features::accessible($feature));
+            });
         }
 
         if (! Event::hasMacro('skipWithFeature')) {
-            Event::macro('skipWithFeature', fn ($feature) => /** @var Event $this */
-$this->skip(fn () => Features::accessible($feature)));
+            /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
+            Event::macro('skipWithFeature', function ($feature): Event {
+                /** @var Event $this */
+                return $this->skip(fn () => Features::accessible($feature));
+            });
         }
     }
 

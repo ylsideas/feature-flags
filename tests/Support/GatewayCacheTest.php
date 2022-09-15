@@ -23,7 +23,7 @@ class GatewayCacheTest extends TestCase
             ->andReturn('key');
 
         $repository->shouldReceive('has')
-            ->with('key')
+            ->with('test:key')
             ->once()
             ->andReturn(true);
 
@@ -43,7 +43,7 @@ class GatewayCacheTest extends TestCase
             ->andReturn('key');
 
         $repository->shouldReceive('put')
-            ->with('key', true, 1000)
+            ->with('test:key', true, 1000)
             ->once()
             ->andReturn(true);
 

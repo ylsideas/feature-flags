@@ -17,9 +17,7 @@ class RedisGateway implements Gateway, Cacheable
 
     public function accessible(string $feature): ?bool
     {
-        if (($result = $this->connection->get($this->key($feature))) !== null) {
-            return (bool) $result;
-        }
+        return $this->connection->get($this->key($feature));
     }
 
     public function turnOn(string $feature): void
@@ -34,7 +32,7 @@ class RedisGateway implements Gateway, Cacheable
 
     protected function key(string $key): string
     {
-        return $this->prefix.':'.$key;
+        return $this->prefix . ':' . $key;
     }
 
     public function generateKey(string $feature): string

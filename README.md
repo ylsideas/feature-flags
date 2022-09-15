@@ -41,6 +41,8 @@ using the publish command.
 php artisan vendor:publish --tag=features-migration
 ```
 
+### Turning off functionality
+
 Everything is enabled by default but if you want to turn off several features add the following method calls 
 to the boot method of `app/Providers/AppServiceProvider.php` in your project.
 
@@ -49,14 +51,7 @@ Features::noBlade();
 Features::noScheduling();
 Features::noValidations();
 Features::noCommands();
-```
-
-To install the middleware you'll have to add it to your `$routeMiddleware` inside `app/Http/Kernel.php` file.
-
-```php
-protected $routeMiddleware = [
-    'feature' => \YlsIdeas\FeatureFlags\Middlewares\GuardFeature::class,
-];
+Features::noMiddlewares();
 ```
 
 ## Usage

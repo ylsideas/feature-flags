@@ -41,6 +41,7 @@ class Manager
     protected bool $useBlade = true;
     protected bool $useValidations = true;
     protected bool $useScheduling = true;
+    protected bool $useMiddlewares = true;
 
     protected array $gatewayDrivers = [];
 
@@ -135,6 +136,13 @@ class Manager
         return $this;
     }
 
+    public function noMiddlewares(): static
+    {
+        $this->useMiddlewares = false;
+
+        return $this;
+    }
+
     public function usesBlade(): bool
     {
         return $this->useBlade;
@@ -153,6 +161,11 @@ class Manager
     public function usesCommands(): bool
     {
         return $this->useCommands;
+    }
+
+    public function usesMiddlewares(): bool
+    {
+        return $this->useMiddlewares;
     }
 
     public function getContainer(): Container

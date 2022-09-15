@@ -16,10 +16,12 @@ use YlsIdeas\FeatureFlags\Manager;
  * @method static bool usesScheduling()
  * @method static bool usesBlade()
  * @method static bool usesCommands()
+ * @method static bool usesMiddlewares()
  * @method static Manager noValidations()
  * @method static Manager noScheduling()
  * @method static Manager noBlade()
  * @method static Manager noCommands()
+ * @method static Manager noMiddleware()
  */
 class Features extends Facade
 {

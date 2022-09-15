@@ -3,11 +3,13 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 use YlsIdeas\FeatureFlags\Facades\Features;
+use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
 use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
 
 /**
@@ -54,6 +56,11 @@ class FeatureFlagsServiceProvider extends ServiceProvider
 
         if (Features::usesBlade()) {
             $this->bladeDirectives();
+        }
+
+        if (Features::usesMiddlewares()) {
+            $this->app->make(Router::class)
+                ->aliasMiddleware('feature', GuardFeature::class);
         }
     }
 

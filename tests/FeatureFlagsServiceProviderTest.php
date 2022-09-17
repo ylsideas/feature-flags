@@ -82,6 +82,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
     protected function cleanUp()
     {
         File::delete(config_path('features.php'));
+        File::delete(base_path('.features.php'));
 
         collect(File::files(database_path('migrations')))
             ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));

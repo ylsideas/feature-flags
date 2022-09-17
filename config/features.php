@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'pipe' => ['model', 'database'],
+    'pipe' => ['in_memory', 'database'],
 
     /*
     |--------------------------------------------------------------------------
@@ -24,9 +24,7 @@ return [
     'gateways' => [
         'in_memory' => [
             'driver' => 'in_memory',
-            'file' => './features.php',
             'caching' => [
-                'store' => 'file',
                 'ttl' => 300,
             ],
         ],
@@ -34,20 +32,16 @@ return [
             'driver' => 'database',
             'cache' => [
                 'ttl' => 3600,
-                'store' => 'file',
             ],
-            'filter' => 'system.*',
             'connection' => env('FEATURE_FLAG_DATABASE_CONNECTION'),
             'table' => env('FEATURE_FLAG_DATABASE_TABLE', 'features'),
         ],
         'gate' => [
             'driver' => 'gate',
+            'gate' => 'feature-flag',
             'cache' => [
                 'ttl' => 3600,
-                'per_request' => 1000,
-                'store' => null,
             ],
-            'gate' => 'feature-flag',
         ],
         'redis' => [
             'driver' => 'redis',

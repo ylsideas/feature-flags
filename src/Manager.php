@@ -183,7 +183,8 @@ class Manager
 
         $gateway = $this->getGateway($config['driver'], $config, $name);
         if (($config['cache'] ?? null) && $gateway instanceof Cacheable) {
-            $cache = $this->buildCache($name, $config['cache'], $gateway);
+            $cache = $this->buildCache($name, $config['cache'], $gateway)
+                ->configureTtl($config['cache']['ttl'] ?? 300);
         }
         if (($config['filter'] ?? null)) {
             if (Str::contains($config['filter'], '|')) {
@@ -268,7 +269,7 @@ class Manager
         );
     }
 
-    public function buildInmemoryGate(array $config): InMemoryGateway
+    public function buildInMemoryGate(array $config): InMemoryGateway
     {
         return new InMemoryGateway(
             loader: new FileLoader(new FeaturesFileDiscoverer(

@@ -22,6 +22,16 @@ class GatewayInspector
         return $this->gateway;
     }
 
+    public function filter(): ?FeatureFilter
+    {
+        return $this->filter;
+    }
+
+    public function cache(): ?GatewayCache
+    {
+        return $this->cache;
+    }
+
     public function handle(ActionableFlag $action, callable $next): ActionableFlag
     {
         if ($action->hasResult()) {

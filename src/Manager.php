@@ -279,9 +279,11 @@ class Manager
         );
     }
 
-    public function extend(string $driver, callable $builder): void
+    public function extend(string $driver, callable $builder): self
     {
         $this->gatewayDrivers[$driver] = $builder;
+
+        return $this;
     }
 
     private function driverIsNative(string $driver): bool

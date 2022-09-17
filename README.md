@@ -13,7 +13,7 @@ on state.
 This package aims to make implementing such flags across your application a great deal easier by providing solutions
 that work with not only your code but your routes, blade files, task scheduling and validations.
 
-## Version 2
+## Upgrading
 
 This project is currently at version 2 and is somewhat different to version 1. If you are using Laravel 9 and PHP8
 you should aim to use version 2. Version 1 is no longer supported. There is an [upgrade guide for moving
@@ -224,7 +224,3 @@ If you discover any security related issues, please email peter.fox@ylsideas.co 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).

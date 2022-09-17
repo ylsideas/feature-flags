@@ -8,7 +8,7 @@ use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
 
 class InMemoryGatewayTest extends TestCase
 {
-    public function testItReturnsTrueIfFeaturesAreAccessible()
+    public function test_it_returns_true_if_features_are_accessible(): void
     {
         $gateway = new InMemoryGateway($this->getLoader([
             'my-feature' => true,
@@ -17,7 +17,7 @@ class InMemoryGatewayTest extends TestCase
         $this->assertTrue($gateway->accessible('my-feature'));
     }
 
-    public function testItReturnsFalseIfFeaturesAreNotAccessible()
+    public function test_it_returns_false_if_features_are_not_accessible(): void
     {
         $gateway = new InMemoryGateway($this->getLoader([
             'my-feature' => false,
@@ -26,7 +26,7 @@ class InMemoryGatewayTest extends TestCase
         $this->assertFalse($gateway->accessible('my-feature'));
     }
 
-    public function testItReturnsNullIfFeaturesAreNotDefined()
+    public function test_it_returns_null_if_features_are_not_defined(): void
     {
         $gateway = new InMemoryGateway($this->getLoader([
         ]));

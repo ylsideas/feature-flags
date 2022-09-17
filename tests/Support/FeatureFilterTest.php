@@ -7,7 +7,7 @@ use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 
 class FeatureFilterTest extends TestCase
 {
-    public function test_it_can_be_initialised()
+    public function test_it_can_be_initialised(): void
     {
         $component = new FeatureFilter([]);
 
@@ -17,7 +17,7 @@ class FeatureFilterTest extends TestCase
     /**
      * @dataProvider successfulPatterns
      */
-    public function test_it_fails_filters_correctly(string $feature, array $filters)
+    public function test_it_fails_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
 
@@ -27,7 +27,7 @@ class FeatureFilterTest extends TestCase
     /**
      * @dataProvider failurePatterns
      */
-    public function test_it_does_not_fail_filters_correctly(string $feature, array $filters)
+    public function test_it_does_not_fail_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
 

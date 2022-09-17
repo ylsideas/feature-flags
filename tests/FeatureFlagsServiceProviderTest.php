@@ -10,7 +10,7 @@ use YlsIdeas\FeatureFlags\Manager;
 
 class FeatureFlagsServiceProviderTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
@@ -29,14 +29,14 @@ class FeatureFlagsServiceProviderTest extends TestCase
         parent::tearDown();
     }
 
-    public function testAddsManagerToTheContainer()
+    public function test_adds_manager_to_the_container(): void
     {
         $gateway = $this->app->make(Manager::class);
 
         $this->assertInstanceOf(Manager::class, $gateway);
     }
 
-    public function testPublishesTheFeaturesConfig()
+    public function test_publishes_the_features_config(): void
     {
         $this->assertFalse(File::exists(config_path('features.php')));
 
@@ -48,7 +48,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertTrue(File::exists(config_path('features.php')));
     }
 
-    public function testPublishesTheInMemoryFeaturesConfig()
+    public function test_publishes_the_in_memory_features_config(): void
     {
         $this->assertFalse(File::exists(base_path('.features.php')));
 
@@ -60,7 +60,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertTrue(File::exists(base_path('.features.php')));
     }
 
-    public function testPublishesTheFeaturesMigration()
+    public function test_publishes_the_features_migration(): void
     {
         $this->assertNull(
             collect(File::files(database_path('migrations')))
@@ -79,7 +79,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertNotNull($filename);
     }
 
-    protected function cleanUp()
+    protected function cleanUp(): void
     {
         File::delete(config_path('features.php'));
         File::delete(base_path('.features.php'));

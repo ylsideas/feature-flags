@@ -10,7 +10,7 @@ use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class SchedulingEventsMacroTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
@@ -22,7 +22,7 @@ class SchedulingEventsMacroTest extends TestCase
         parent::setUp();
     }
 
-    public function testScheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithFeature()
+    public function test_schedule_tasks_will_skip_when_feature_is_on_and_skipping_with_feature(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -36,7 +36,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertTrue($event->filtersPass($this->app));
     }
 
-    public function testScheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithFeature()
+    public function test_schedule_tasks_will_skip_when_feature_is_off_and_skipping_with_feature(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -50,7 +50,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertFalse($event->filtersPass($this->app));
     }
 
-    public function testScheduleTasksWillSkipWhenFeatureIsOnAndSkippingWithoutFeature()
+    public function test_schedule_tasks_will_skip_when_feature_is_on_and_skipping_without_feature(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -64,7 +64,7 @@ class SchedulingEventsMacroTest extends TestCase
         $this->assertFalse($event->filtersPass($this->app));
     }
 
-    public function testScheduleTasksWillSkipWhenFeatureIsOffAndSkippingWithoutFeature()
+    public function test_schedule_tasks_will_skip_when_feature_is_off_and_skipping_without_feature(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')

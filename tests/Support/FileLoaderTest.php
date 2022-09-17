@@ -12,7 +12,7 @@ class FileLoaderTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function test_it_loads_features_from_php_file()
+    public function test_it_loads_features_from_php_file(): void
     {
         $discoverer = \Mockery::mock(FeaturesFileDiscoverer::class);
         $container = \Mockery::mock(Container::class);

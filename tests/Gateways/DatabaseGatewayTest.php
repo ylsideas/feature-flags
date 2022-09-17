@@ -13,7 +13,7 @@ class DatabaseGatewayTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function testItCanBeInitialised()
+    public function test_it_can_be_initialised(): void
     {
         $connection = \Mockery::mock(Connection::class);
 
@@ -24,7 +24,7 @@ class DatabaseGatewayTest extends TestCase
         $this->assertInstanceOf(DatabaseGateway::class, $gateway);
     }
 
-    public function testItReturnsTrueIfFeaturesAreAccessible()
+    public function test_it_returns_true_if_features_are_accessible(): void
     {
         $connection = \Mockery::mock(Connection::class);
         $query = \Mockery::mock(Builder::class);
@@ -50,7 +50,7 @@ class DatabaseGatewayTest extends TestCase
         $this->assertTrue($gateway->accessible('my-feature'));
     }
 
-    public function testItReturnsFalseIfFeaturesAreNotAccessible()
+    public function test_it_returns_false_if_features_are_not_accessible(): void
     {
         $connection = \Mockery::mock(Connection::class);
         $query = \Mockery::mock(Builder::class);
@@ -76,7 +76,7 @@ class DatabaseGatewayTest extends TestCase
         $this->assertFalse($gateway->accessible('my-feature'));
     }
 
-    public function testItReturnsNullIfFeaturesAreNotDefined()
+    public function test_it_returns_null_if_features_are_not_defined(): void
     {
         $connection = \Mockery::mock(Connection::class);
         $query = \Mockery::mock(Builder::class);
@@ -100,7 +100,7 @@ class DatabaseGatewayTest extends TestCase
         $this->assertNull($gateway->accessible('my-feature'));
     }
 
-    public function testItCanStoreTheStateOfFeaturesSwitchedOn()
+    public function test_it_can_store_the_state_of_features_switched_on(): void
     {
         $connection = \Mockery::mock(Connection::class);
         $query = \Mockery::mock(Builder::class);
@@ -127,7 +127,7 @@ class DatabaseGatewayTest extends TestCase
         $gateway->turnOn('my-feature');
     }
 
-    public function testItCanStoreTheStateOfFeaturesSwitchedOff()
+    public function test_it_can_store_the_state_of_features_switched_off(): void
     {
         $connection = \Mockery::mock(Connection::class);
         $query = \Mockery::mock(Builder::class);

@@ -15,7 +15,7 @@ class CommandsTest extends TestCase
         ];
     }
 
-    public function testTurnFeaturesOn(): void
+    public function test_turn_features_on(): void
     {
         Features::shouldReceive('turnOn')
             ->with('test', 'my-feature')
@@ -25,7 +25,7 @@ class CommandsTest extends TestCase
             ->assertExitCode(0);
     }
 
-    public function testTurnFeaturesOff(): void
+    public function test_turn_features_off(): void
     {
         Features::shouldReceive('turnOff')
             ->with('test', 'my-feature')

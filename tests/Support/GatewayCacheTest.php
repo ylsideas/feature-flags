@@ -12,7 +12,7 @@ class GatewayCacheTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function test_it_hits_the_cache_correct()
+    public function test_it_hits_the_cache_correct(): void
     {
         $repository = \Mockery::mock(Repository::class);
         $cachable = \Mockery::mock(Cacheable::class);
@@ -32,7 +32,7 @@ class GatewayCacheTest extends TestCase
         $this->assertTrue($cache->hits('my-feature'));
     }
 
-    public function test_it_stores_with_a_ttl_correctly()
+    public function test_it_stores_with_a_ttl_correctly(): void
     {
         $repository = \Mockery::mock(Repository::class);
         $cachable = \Mockery::mock(Cacheable::class);

@@ -30,14 +30,14 @@ class ManagerTest extends TestCase
         $this->container = \Mockery::mock(Container::class);
     }
 
-    public function testItCanBeInitialised()
+    public function test_it_can_be_initialised(): void
     {
         $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
 
         $this->assertInstanceOf(Manager::class, $manager);
     }
 
-    public function testItCanCheckIfFeaturesAreAccessible()
+    public function test_it_can_check_if_features_are_accessible(): void
     {
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
@@ -75,7 +75,7 @@ class ManagerTest extends TestCase
         $this->assertTrue($manager->accessible('my-feature'));
     }
 
-    public function testItCanTurnOnFeatures()
+    public function test_it_can_turn_on_features(): void
     {
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
@@ -108,7 +108,7 @@ class ManagerTest extends TestCase
         $manager->turnOn('test', 'my-feature');
     }
 
-    public function testItCanTurnOffFeatures()
+    public function test_it_can_turn_off_features(): void
     {
         $dispatcher = \Mockery::mock(Dispatcher::class);
         $config = \Mockery::mock(Repository::class);
@@ -144,7 +144,7 @@ class ManagerTest extends TestCase
     /**
      * @dataProvider services
      */
-    public function testItCanFlagPartsOfThePackageToBeTurnedOff($item)
+    public function test_it_can_flag_parts_of_the_package_to_be_turned_off($item): void
     {
         $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
 
@@ -155,7 +155,7 @@ class ManagerTest extends TestCase
         $this->assertFalse($manager->{"uses$item"}());
     }
 
-    public function services()
+    public function services(): array
     {
         return [
             ['Blade'],

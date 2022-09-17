@@ -12,7 +12,7 @@ class FeaturesFileDiscovererTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
 
-    public function test_it_discovers_absolute_files()
+    public function test_it_discovers_absolute_files(): void
     {
         $app = \Mockery::mock(Application::class);
         $files = \Mockery::mock(Filesystem::class);
@@ -30,7 +30,7 @@ class FeaturesFileDiscovererTest extends TestCase
         $this->assertSame('/tmp/test.php', $discoverer->find());
     }
 
-    public function test_it_discovers_relative_files()
+    public function test_it_discovers_relative_files(): void
     {
         $app = \Mockery::mock(Application::class);
         $files = \Mockery::mock(Filesystem::class);
@@ -53,7 +53,7 @@ class FeaturesFileDiscovererTest extends TestCase
         $this->assertSame('/path/to/app/.features.php', $discoverer->find());
     }
 
-    public function test_it_discovers_relative_dist_files()
+    public function test_it_discovers_relative_dist_files(): void
     {
         $app = \Mockery::mock(Application::class);
         $files = \Mockery::mock(Filesystem::class);
@@ -86,7 +86,7 @@ class FeaturesFileDiscovererTest extends TestCase
         $this->assertSame('/path/to/app/.features.php.dist', $discoverer->find());
     }
 
-    public function test_it_throws_an_exception_if_no_file_is_discovered()
+    public function test_it_throws_an_exception_if_no_file_is_discovered(): void
     {
         $app = \Mockery::mock(Application::class);
         $files = \Mockery::mock(Filesystem::class);

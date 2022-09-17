@@ -9,7 +9,7 @@ use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class BladeDirectivesTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             FeatureFlagsServiceProvider::class,
@@ -23,7 +23,7 @@ class BladeDirectivesTest extends TestCase
         View::addNamespace('testing', __DIR__.'/views');
     }
 
-    public function testBladeDirectiveIncludesWhenFeatureIsOnAndExpectedOn()
+    public function test_blade_directive_includes_when_feature_is_on_and_expected_on(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -34,7 +34,7 @@ class BladeDirectivesTest extends TestCase
         $this->assertStringContainsString('feature is on', $page);
     }
 
-    public function testBladeDirectiveExcludesWhenFeatureIsOffAndExpectedOn()
+    public function test_blade_directive_excludes_when_feature_is_off_and_expected_on(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -45,7 +45,7 @@ class BladeDirectivesTest extends TestCase
         $this->assertStringNotContainsString('feature is on', $page);
     }
 
-    public function testBladeDirectiveIncludesWhenFeatureIsOffAndExpectedOff()
+    public function test_blade_directive_includes_when_feature_is_off_and_expected_off(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')
@@ -56,7 +56,7 @@ class BladeDirectivesTest extends TestCase
         $this->assertStringContainsString('feature is on', $page);
     }
 
-    public function testBladeDirectiveExcludesWhenFeatureIsOnAndExpectedOff()
+    public function test_blade_directive_excludes_when_feature_is_on_and_expected_off(): void
     {
         Features::shouldReceive('accessible')
             ->with('my-feature')

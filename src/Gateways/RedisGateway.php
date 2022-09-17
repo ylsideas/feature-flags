@@ -11,7 +11,7 @@ use YlsIdeas\FeatureFlags\Contracts\Gateway;
  */
 class RedisGateway implements Gateway, Cacheable
 {
-    public function __construct(protected Connection $connection, protected string $prefix = 'features')
+    public function __construct(protected Connection $connection, protected ?string $prefix = 'features')
     {
     }
 

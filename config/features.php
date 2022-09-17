@@ -23,6 +23,7 @@ return [
 
     'gateways' => [
         'in_memory' => [
+            'file' => env('FEATURE_FLAG_IN_MEMORY_FILE', '.features.php'),
             'driver' => 'in_memory',
             'caching' => [
                 'ttl' => 300,
@@ -31,21 +32,21 @@ return [
         'database' => [
             'driver' => 'database',
             'cache' => [
-                'ttl' => 3600,
+                'ttl' => 600,
             ],
             'connection' => env('FEATURE_FLAG_DATABASE_CONNECTION'),
             'table' => env('FEATURE_FLAG_DATABASE_TABLE', 'features'),
         ],
         'gate' => [
             'driver' => 'gate',
-            'gate' => 'feature-flag',
+            'gate' => env('FEATURE_FLAG_GATE_GATE', 'feature'),
             'cache' => [
-                'ttl' => 3600,
+                'ttl' => 600,
             ],
         ],
         'redis' => [
             'driver' => 'redis',
-            'prefix' => 'features',
+            'prefix' => env('FEATURE_FLAG_REDIS_PREFIX', 'features'),
             'connection' => env('FEATURE_FLAG_REDIS_CONNECTION', 'default'),
         ],
     ],

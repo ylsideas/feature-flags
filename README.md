@@ -54,11 +54,35 @@ php artisan vendor:publish --tag=features-migration
 
 This driver will use the nominated Database connection & table for your gateway.
 
+```php
+'gateways' => [
+    'database' => [
+        'driver' => 'database',
+        'cache' => [
+            'ttl' => 600,
+        ],
+        'connection' => env('FEATURE_FLAG_DATABASE_CONNECTION'),
+        'table' => env('FEATURE_FLAG_DATABASE_TABLE', 'features'),
+    ],
+],
+```
+
 You may also use the on/off commands to affect the state of the features with this driver.
 
 #### Redis Driver
 
-This driver will use the nominated Redis connection for your gateway.
+This driver will use the nominated Redis connection for your gateway. You may add a prefix as well
+making it easier to delete the keys stored by the gateway.
+
+```php
+'gateways' => [
+    'redis' => [
+        'driver' => 'redis',
+        'prefix' => env('FEATURE_FLAG_REDIS_PREFIX', 'features'),
+        'connection' => env('FEATURE_FLAG_REDIS_CONNECTION', 'default'),
+    ],
+],
+```
 
 You may also use the on/off commands to affect the state of the features with this driver.
 
@@ -67,6 +91,18 @@ You may also use the on/off commands to affect the state of the features with th
 This driver will use a `.features.php` file in the base of the project to configure the in memory features.
 You may wish to also create a `.features.php.dist` file. This file will be used when a `.features.php` does not
 exist.
+
+```php
+'gateways' => [
+    'in_memory' => [
+        'file' => env('FEATURE_FLAG_IN_MEMORY_FILE', '.features.php'),
+        'driver' => 'in_memory',
+        'caching' => [
+            'ttl' => 300,
+        ],
+    ],
+],
+```
 
 You can create the `.features.php` file using the following command:
 
@@ -83,6 +119,18 @@ You can not use the on/off commands to affect the state of the features with thi
 The gate driver will allow you to use a [gate defined in Laravel](https://laravel.com/docs/9.x/authorization#gates). 
 This gate will then receive the feature being accessed, you may apply logic based on a user or guest accessing the site through
 the gate chosen.
+
+```php
+'gateways' => [
+    'gate' => [
+        'driver' => 'gate',
+        'gate' => env('FEATURE_FLAG_GATE_GATE', 'feature'),
+        'cache' => [
+            'ttl' => 600,
+        ],
+    ],
+],
+```
 
 The gate behaviour is different to other gateways in that it will always provide a true or false result. If you put this
 gateway before any others their will always be a result meaning gateways after the gate will not be executed.

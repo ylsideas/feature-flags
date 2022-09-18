@@ -168,7 +168,14 @@ class Manager
         return $this->useMiddlewares;
     }
 
-    public function getContainer(): Container
+    public function extend(string $driver, callable $builder): self
+    {
+        $this->gatewayDrivers[$driver] = $builder;
+
+        return $this;
+    }
+
+    protected function getContainer(): Container
     {
         return $this->container;
     }
@@ -229,7 +236,7 @@ class Manager
             ->all();
     }
 
-    public function buildCache(string $namespace, array $config, Cacheable $cacheable): GatewayCache
+    protected function buildCache(string $namespace, array $config, Cacheable $cacheable): GatewayCache
     {
         $cache = $this->getContainer()->make(CacheManager::class)->driver($config['store'] ?? null);
 
@@ -237,7 +244,7 @@ class Manager
             ->configureTtl($config['ttl']);
     }
 
-    public function buildDatabaseGateway(array $config): DatabaseGateway
+    protected function buildDatabaseGateway(array $config): DatabaseGateway
     {
         return new DatabaseGateway(
             connection: $this->getContainer()->make(DatabaseManager::class)->connection(
@@ -248,7 +255,7 @@ class Manager
         );
     }
 
-    public function buildRedisGateway(array $config): RedisGateway
+    protected function buildRedisGateway(array $config): RedisGateway
     {
         return new RedisGateway(
             connection: $this->getContainer()->make(RedisManager::class)->connection($config['connection'] ?? null),
@@ -256,7 +263,7 @@ class Manager
         );
     }
 
-    public function buildGateGateway(array $config, string $name): GateGateway
+    protected function buildGateGateway(array $config, string $name): GateGateway
     {
         if ($config['gate'] ?? false) {
             throw new \RuntimeException(sprintf('No gate is configured for connection `%s`', $name));
@@ -269,7 +276,7 @@ class Manager
         );
     }
 
-    public function buildInMemoryGateway(array $config): InMemoryGateway
+    protected function buildInMemoryGateway(array $config): InMemoryGateway
     {
         return new InMemoryGateway(
             loader: new FileLoader(new FeaturesFileDiscoverer(
@@ -279,14 +286,7 @@ class Manager
         );
     }
 
-    public function extend(string $driver, callable $builder): self
-    {
-        $this->gatewayDrivers[$driver] = $builder;
-
-        return $this;
-    }
-
-    private function driverIsNative(string $driver): bool
+    protected function driverIsNative(string $driver): bool
     {
         return method_exists($this, 'build' . Str::ucfirst(Str::camel($driver)) . 'Gateway');
     }

@@ -62,7 +62,7 @@
                 "YlsIdeas\\FeatureFlags\\FeatureFlagsServiceProvider"
             ],
             "aliases": {
-                "FeatureFlags": "YlsIdeas\\FeatureFlags\\Facades\\Features"
+                "Features": "YlsIdeas\\FeatureFlags\\Facades\\Features"
             }
         }
     },

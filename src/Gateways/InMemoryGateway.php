@@ -20,7 +20,7 @@ class InMemoryGateway implements Gateway, Cacheable
 
     public function accessible(string $feature): ?bool
     {
-        if (($result = data_get($this->flags, $feature)) !== null) {
+        if (($result = ($this->flags[$feature] ?? null)) !== null) {
             return (bool) $result;
         }
 

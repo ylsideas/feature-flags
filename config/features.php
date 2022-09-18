@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'pipe' => ['in_memory', 'database'],
+    'pipeline' => ['in_memory', 'database'],
 
     /*
     |--------------------------------------------------------------------------
@@ -40,6 +40,7 @@ return [
         'gate' => [
             'driver' => 'gate',
             'gate' => env('FEATURE_FLAG_GATE_GATE', 'feature'),
+            'guard' => env('FEATURE_FLAG_GATE_GUARD'),
             'cache' => [
                 'ttl' => 600,
             ],

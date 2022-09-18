@@ -140,11 +140,18 @@ the gate chosen.
     'gate' => [
         'driver' => 'gate',
         'gate' => env('FEATURE_FLAG_GATE_GATE', 'feature'),
+        'guard' => env('FEATURE_FLAG_GATE_GUARD'),
         'cache' => [
             'ttl' => 600,
         ],
     ],
 ],
+```
+
+```php
+Gate::define('feature', function (?User $user, $feature) {
+    return true;
+});
 ```
 
 The gate behaviour is different to other gateways in that it will always provide a true or false result. If you put this

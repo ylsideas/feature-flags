@@ -2,9 +2,9 @@
 
 namespace YlsIdeas\FeatureFlags;
 
-use Illuminate\Auth\Access\Gate;
 use Illuminate\Auth\AuthManager;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Container\Container;
@@ -187,7 +187,7 @@ class Manager
                 ->configureTtl($config['cache']['ttl'] ?? 300);
         }
         if (($config['filter'] ?? null)) {
-            if (Str::contains($config['filter'], '|')) {
+            if (is_string($config['filter']) && Str::contains($config['filter'], '|')) {
                 $config['filter'] = explode('|', $config['filter']);
             }
             $config['filter'] = Arr::wrap($config['filter']);
@@ -269,7 +269,7 @@ class Manager
         );
     }
 
-    public function buildInMemoryGate(array $config): InMemoryGateway
+    public function buildInMemoryGateway(array $config): InMemoryGateway
     {
         return new InMemoryGateway(
             loader: new FileLoader(new FeaturesFileDiscoverer(

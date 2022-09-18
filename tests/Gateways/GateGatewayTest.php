@@ -41,7 +41,7 @@ class GateGatewayTest extends TestCase
             ->andReturn($gate);
 
         $gate->shouldReceive('allows')
-            ->with('access.gate', ['feature' => 'my-feature'])
+            ->with('access.gate', ['my-feature'])
             ->andReturn(true);
 
         $gateway = new GateGateway(
@@ -68,7 +68,7 @@ class GateGatewayTest extends TestCase
             ->andReturn($gate);
 
         $gate->shouldReceive('allows')
-            ->with('access.gate', ['feature' => 'my-feature'])
+            ->with('access.gate', ['my-feature'])
             ->andReturn(false);
 
         $gateway = new GateGateway(

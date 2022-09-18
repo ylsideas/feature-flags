@@ -32,7 +32,7 @@ class RedisGateway implements Gateway, Cacheable
 
     protected function key(string $key): string
     {
-        return $this->prefix . ':' . $key;
+        return implode(':', array_filter([$this->prefix, $key]));
     }
 
     public function generateKey(string $feature): string

@@ -243,8 +243,8 @@ class Manager
             connection: $this->getContainer()->make(DatabaseManager::class)->connection(
                 $config['connection'] ?? null
             ),
-            table: $config['table'] ?? null,
-            field: $config['field'] ?? null,
+            table: $config['table'] ?? 'features',
+            field: $config['field'] ?? 'active_at',
         );
     }
 
@@ -252,7 +252,7 @@ class Manager
     {
         return new RedisGateway(
             connection: $this->getContainer()->make(RedisManager::class)->connection($config['connection'] ?? null),
-            prefix: $config['prefix'] ?? null,
+            prefix: $config['prefix'] ?? 'features',
         );
     }
 

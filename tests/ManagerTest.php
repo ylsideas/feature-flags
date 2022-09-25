@@ -52,10 +52,10 @@ class ManagerTest extends TestCase
             ->andReturn(['test']);
 
         $config->shouldReceive('get')
-            ->with('features.gateways.test')
-            ->andReturn([
+            ->with('features.gateways')
+            ->andReturn(['test' => [
                 'driver' => 'null',
-            ]);
+            ]]);
 
         $dispatcher->shouldReceive('dispatch')
             ->with(\Mockery::type(FeatureAccessing::class))
@@ -90,10 +90,10 @@ class ManagerTest extends TestCase
             ->andReturn(['test']);
 
         $config->shouldReceive('get')
-            ->with('features.gateways.test')
-            ->andReturn([
+            ->with('features.gateways')
+            ->andReturn(['test' => [
                 'driver' => 'null',
-            ]);
+            ]]);
 
         $dispatcher->shouldReceive('dispatch')
             ->with(\Mockery::type(FeatureSwitchedOn::class))
@@ -123,10 +123,10 @@ class ManagerTest extends TestCase
             ->andReturn(['test']);
 
         $config->shouldReceive('get')
-            ->with('features.gateways.test')
-            ->andReturn([
+            ->with('features.gateways')
+            ->andReturn(['test' => [
                 'driver' => 'null',
-            ]);
+            ]]);
 
         $dispatcher->shouldReceive('dispatch')
             ->with(\Mockery::type(FeatureSwitchedOff::class))
@@ -163,6 +163,7 @@ class ManagerTest extends TestCase
             ['Commands'],
             ['Scheduling'],
             ['Middlewares'],
+            ['QueryBuilderMixin'],
         ];
     }
 }

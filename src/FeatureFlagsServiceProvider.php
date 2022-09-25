@@ -3,14 +3,16 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
 use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
+use YlsIdeas\FeatureFlags\Support\QueryBuilderMixin;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\FeatureFlagsServiceProviderTest
@@ -62,6 +64,10 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->make(Router::class)
                 ->aliasMiddleware('feature', GuardFeature::class);
         }
+
+        if (Features::usesQueryBuilderMixin()) {
+            $this->queryBuilder();
+        }
     }
 
     /**
@@ -73,9 +79,9 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/features.php', 'features');
 
         if (method_exists($this->app, 'scoped')) {
-            $this->app->scoped(Gateway::class, Manager::class);
+            $this->app->scoped(FeaturesContract::class, Manager::class);
         } else {
-            $this->app->singleton(Gateway::class, Manager::class);
+            $this->app->singleton(FeaturesContract::class, Manager::class);
         }
     }
 
@@ -108,5 +114,10 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     protected function validator()
     {
         Validator::extendImplicit('requiredWithFeature', FeatureOnRule::class);
+    }
+
+    protected function queryBuilder()
+    {
+        Builder::mixin(new QueryBuilderMixin());
     }
 }

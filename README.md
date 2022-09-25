@@ -234,6 +234,7 @@ Features::noScheduling();
 Features::noValidations();
 Features::noCommands();
 Features::noMiddlewares();
+Features::noQueryBuilderMixin();
 ```
 
 ## Usage
@@ -301,6 +302,22 @@ $schedule->command('emails:send Peter --force')
     ->skipWithoutFeature('my-other-feature')    
 ```
 
+### Query Builder
+
+A useful extension of this package is also in being able to decide if part of a query should occur if a feature is
+enabled or disabled.
+
+```php
+$results = DB::table('users')
+    ->whenFeatureIsAccessible('my-feature', function (Builder $query) {
+        return $query->where('type', 'new');
+    })
+    ->whenFeatureIsNotAccessible('my-feature', function (Builder $query) {
+        return $query->where('type', 'old');
+    })
+    ->get();
+```
+
 ### Artisan Commands
 
 You may run the following commands to toggle the on or off state of the feature.
@@ -309,6 +326,36 @@ You may run the following commands to toggle the on or off state of the feature.
 php artisan feature:on <gateway> <feature>
 
 php artisan feature:off <gateway> <feature>
+```
+
+### Cleaning up Features
+
+Often when working with feature flags you will want to remove flags frequently but aren't clear where
+such flags are referenced within the application you're developing. To help with this you can then
+add a list of features that you have expired. When these features are accessed, an exception will be thrown.
+
+This is useful when used in conjunction with a test suit.
+
+```php
+Features::callOnExpiredFeatures([
+    'my-feature',
+])
+```
+
+You may also customise this and provide your own callback if you wish to.
+
+```php
+Features::callOnExpiredFeatures([
+    'my-feature',
+], function (string $feature): void {
+    logger()->debug('Expired Feature!', ['feature' => $feature]);
+})
+```
+
+You can even implement your own `ExpiredFeaturesHandler` which decides how a feature is expired etc.
+
+```php
+Features::applyOnExpiredHandler(new CustomExpiredFeaturesHandler));
 ```
 
 ### Implementing your Own Gateway Drivers
@@ -361,7 +408,73 @@ Then you only need use it in your `features.php` config.
 
 You may also make your driver be `Toggleable` and `Cacheable`
 
-## Testing
+### Writing tests with Flags
+
+There is a simple Features Fake that can be used when writing tests. You can do so by simply listing the
+feature you wish to be faked.
+
+```php
+Features::fake(['my-feature' => true])
+```
+
+If you know a feature will be called multiple times that you wish to change the state of during the test you
+can supply and array of values which will be used.
+
+```php
+Features::fake(['my-feature' => [true, false, true]])
+```
+
+There are then also assertions that can be used to check if a feature was or was not accessed and how many 
+times it was accessed during the test.
+
+```php
+Features::assertAccessed('my-feature');
+Features::assertAccessedCount('my-feature', 2);
+Features::assertNotAccessed('my-feature');
+```
+
+If you are using the service container to resolve the `Features` class you must inject the service using the
+`Accessibles` contract.
+
+```php
+public function get(\YlsIdeas\FeatureFlags\Contracts\Features $features)
+{
+    $features->accessible('my-feature');
+}
+```
+
+### Debugging Flag access
+
+If you wish to see what features are being accessed during a request you can enable the debug mode.
+
+```php
+Features::configureDebugging();
+```
+
+Then using an event listener you can use the ActionDebugLog to inspect how the decision was made, such as
+which gateway responded or if it came from the cache.
+
+```php
+\Illuminate\Support\Facades\Event::listen(
+    \YlsIdeas\FeatureFlags\Events\FeatureAccessed::class, 
+    function (\YlsIdeas\FeatureFlags\Events\FeatureAccessed $event) {
+        $event->log->file; // the file that accessed the feature
+        $event->log->line; // the line of the file that accessed the feature
+        // the decisions made by each gateway in order of access
+        // e.g. [
+        //  ['pipe' => 'redis', 'reason' => ActionDebugLog::REASON_NO_RESULT, 'result' => false],
+        //  ['pipe' => 'database', 'reason' => ActionDebugLog::REASON_RESULT, 'result' => true],
+        // ]
+        $event->log->decisions;
+    }
+);
+```
+
+Logging this information can then help you if you're finding that a feature is not behaving as expected.
+
+## Package Testing
+
+If you wish to develop new features for this package you may run the tests using the following command.
 
 ``` bash
 composer test

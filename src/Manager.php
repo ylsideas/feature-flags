@@ -15,17 +15,16 @@ use Illuminate\Pipeline\Pipeline;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use YlsIdeas\FeatureFlags\Contracts\Cacheable;
-use YlsIdeas\FeatureFlags\Contracts\Gateway;
-use YlsIdeas\FeatureFlags\Contracts\Toggleable;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessed;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
+use YlsIdeas\FeatureFlags\Exceptions\FeatureExpired;
 use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
 use YlsIdeas\FeatureFlags\Gateways\GateGateway;
 use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
 use YlsIdeas\FeatureFlags\Gateways\RedisGateway;
+use YlsIdeas\FeatureFlags\Support\ActionDebugLog;
 use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 use YlsIdeas\FeatureFlags\Support\FileLoader;
@@ -35,13 +34,16 @@ use YlsIdeas\FeatureFlags\Support\GatewayInspector;
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\ManagerTest
  */
-class Manager
+class Manager implements Contracts\Features
 {
     protected bool $useCommands = true;
     protected bool $useBlade = true;
     protected bool $useValidations = true;
     protected bool $useScheduling = true;
     protected bool $useMiddlewares = true;
+    protected bool $useDebugging = false;
+    protected bool $useQueryBuilderMixin = true;
+    protected ?Contracts\ExpiredFeaturesHandler $expiredFeaturesHandler = null;
 
     protected array $gatewayDrivers = [];
 
@@ -63,15 +65,22 @@ class Manager
      */
     public function accessible(string $feature): bool
     {
+        if ($this->expiredFeaturesHandler) {
+            $this->expiredFeaturesHandler->isExpired($feature);
+        }
+
         $flagAction = new ActionableFlag();
         $flagAction->feature = $feature;
+        if ($this->usesDebugging()) {
+            $this->configureDebug($flagAction, debug_backtrace());
+        }
 
-        $this->dispatcher->dispatch(new FeatureAccessing($feature));
+        $this->dispatcher->dispatch(new FeatureAccessing($feature, $flagAction->debug));
 
-        /** @var \YlsIdeas\FeatureFlags\Contracts\ActionableFlag $flagAction */
+        /** @var Contracts\DebuggableFlag $flagAction */
         $flagAction = $this->pipeline()->send($flagAction)->thenReturn();
 
-        $this->dispatcher->dispatch(new FeatureAccessed($feature, $flagAction->getResult()));
+        $this->dispatcher->dispatch(new FeatureAccessed($feature, $flagAction->getResult(), $flagAction->log()));
 
         return (bool) $flagAction->getResult();
     }
@@ -80,7 +89,7 @@ class Manager
     {
         $toggleable = $this->resolve($gateway)->gateway();
 
-        if (! $toggleable instanceof Toggleable) {
+        if (! $toggleable instanceof Contracts\Toggleable) {
             throw new \InvalidArgumentException(sprintf(
                 'Gateway `%s` is not a toggleable gateway.',
                 $gateway
@@ -96,7 +105,7 @@ class Manager
     {
         $toggleable = $this->resolve($gateway)->gateway();
 
-        if (! $toggleable instanceof Toggleable) {
+        if (! $toggleable instanceof Contracts\Toggleable) {
             throw new \InvalidArgumentException(sprintf(
                 'Gateway `%s` is not a toggleable gateway.',
                 $gateway
@@ -143,6 +152,20 @@ class Manager
         return $this;
     }
 
+    public function noQueryBuilderMixin(): static
+    {
+        $this->useQueryBuilderMixin = false;
+
+        return $this;
+    }
+
+    public function configureDebugging(bool $value = true): static
+    {
+        $this->useDebugging = $value;
+
+        return $this;
+    }
+
     public function usesBlade(): bool
     {
         return $this->useBlade;
@@ -168,6 +191,34 @@ class Manager
         return $this->useMiddlewares;
     }
 
+    public function usesDebugging(): bool
+    {
+        return $this->useDebugging;
+    }
+
+    public function usesQueryBuilderMixin(): bool
+    {
+        return $this->useQueryBuilderMixin;
+    }
+
+    public function callOnExpiredFeatures(array $expiredFeatures, callable $handler = null): self
+    {
+        $handler ??= static function ($feature) {
+            throw new FeatureExpired($feature);
+        };
+
+        $this->expiredFeaturesHandler = new ExpiredFeaturesHandler($expiredFeatures, $handler);
+
+        return $this;
+    }
+
+    public function applyOnExpiredHandler(Contracts\ExpiredFeaturesHandler $handler): self
+    {
+        $this->expiredFeaturesHandler = $handler;
+
+        return $this;
+    }
+
     public function extend(string $driver, callable $builder): self
     {
         $this->gatewayDrivers[$driver] = $builder;
@@ -189,7 +240,7 @@ class Manager
         }
 
         $gateway = $this->getGateway($config['driver'], $config, $name);
-        if (($config['cache'] ?? null) && $gateway instanceof Cacheable) {
+        if (($config['cache'] ?? null) && $gateway instanceof Contracts\Cacheable) {
             $cache = $this->buildCache($name, $config['cache'], $gateway)
                 ->configureTtl($config['cache']['ttl'] ?? 300);
         }
@@ -201,15 +252,15 @@ class Manager
             $filter = new FeatureFilter($config['filter']);
         }
 
-        return new GatewayInspector($gateway, $filter ?? null, $cache ?? null);
+        return new GatewayInspector($name, $gateway, $filter ?? null, $cache ?? null);
     }
 
     protected function getConfig($name): ?array
     {
-        return $this->container->make(Repository::class)->get("features.gateways.{$name}");
+        return $this->container->make(Repository::class)->get("features.gateways")[$name] ?? null;
     }
 
-    protected function getGateway(string $driver, array $config, string $name): Gateway
+    protected function getGateway(string $driver, array $config, string $name): Contracts\Gateway
     {
         if (! $this->driverIsNative($driver) &&
             ! isset($this->gatewayDrivers[$driver])
@@ -236,12 +287,21 @@ class Manager
             ->all();
     }
 
-    protected function buildCache(string $namespace, array $config, Cacheable $cacheable): GatewayCache
+    protected function buildCache(string $namespace, array $config, Contracts\Cacheable $cacheable): GatewayCache
     {
         $cache = $this->getContainer()->make(CacheManager::class)->driver($config['store'] ?? null);
 
         return (new GatewayCache($cache, $namespace, $cacheable))
             ->configureTtl($config['ttl']);
+    }
+
+    protected function configureDebug(ActionableFlag $flagAction, array $trace): void
+    {
+        $call = $trace[0] ?? [];
+        $file = $call['file'] ?? null;
+        $line = $call['line'] ?? null;
+
+        $flagAction->debug = new ActionDebugLog($file, $line);
     }
 
     protected function buildDatabaseGateway(array $config): DatabaseGateway
@@ -258,7 +318,9 @@ class Manager
     protected function buildRedisGateway(array $config): RedisGateway
     {
         return new RedisGateway(
-            connection: $this->getContainer()->make(RedisManager::class)->connection($config['connection'] ?? null),
+            connection: $this->getContainer()
+                ->make(RedisManager::class)
+                ->connection($config['connection'] ?? null),
             prefix: $config['prefix'] ?? 'features',
         );
     }

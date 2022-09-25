@@ -30,6 +30,6 @@ class FeaturesFileDiscoverer
             return $path;
         }
 
-        throw new \RuntimeException(sprintf('Not `%s` file could be found.', $this->file));
+        throw new \RuntimeException(sprintf('`%s` file could be found.', $this->file));
     }
 }

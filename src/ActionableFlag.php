@@ -2,12 +2,14 @@
 
 namespace YlsIdeas\FeatureFlags;
 
-use YlsIdeas\FeatureFlags\Contracts\ActionableFlag as ActionableFlagContract;
+use YlsIdeas\FeatureFlags\Contracts\DebuggableFlag as ActionableFlagContract;
+use YlsIdeas\FeatureFlags\Support\ActionDebugLog;
 
 class ActionableFlag implements ActionableFlagContract
 {
     public string $feature;
     public ?bool $result = null;
+    public ?Support\ActionDebugLog $debug = null;
 
     public function feature(): string
     {
@@ -27,5 +29,20 @@ class ActionableFlag implements ActionableFlagContract
     public function hasResult(): bool
     {
         return ! is_null($this->result);
+    }
+
+    public function isDebuggable(): bool
+    {
+        return (bool) $this->debug;
+    }
+
+    public function storeInspectionInformation(string $pipe, string $reason, ?bool $result = null)
+    {
+        $this->debug->addDecision($pipe, $reason, $result);
+    }
+
+    public function log(): ?ActionDebugLog
+    {
+        return $this->debug;
     }
 }

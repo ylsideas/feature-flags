@@ -5,7 +5,9 @@ namespace YlsIdeas\FeatureFlags\Tests\Support;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\ActionableFlag;
+use YlsIdeas\FeatureFlags\Contracts\DebuggableFlag;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Support\ActionDebugLog;
 use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 use YlsIdeas\FeatureFlags\Support\GatewayCache;
 use YlsIdeas\FeatureFlags\Support\GatewayInspector;
@@ -19,6 +21,7 @@ class GatewayInspectorTest extends TestCase
         $gateway = \Mockery::mock(Gateway::class);
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway
         );
 
@@ -30,6 +33,7 @@ class GatewayInspectorTest extends TestCase
         $gateway = \Mockery::mock(Gateway::class);
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway
         );
         $action = new ActionableFlag();
@@ -49,6 +53,7 @@ class GatewayInspectorTest extends TestCase
         $action->feature = 'my-feature';
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway,
             filter: \Mockery::mock(FeatureFilter::class)
                 ->shouldReceive('fails')
@@ -71,6 +76,7 @@ class GatewayInspectorTest extends TestCase
         $action->feature = 'my-feature';
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway,
             cache: \Mockery::mock(GatewayCache::class)
                 ->shouldReceive('hits')
@@ -98,6 +104,7 @@ class GatewayInspectorTest extends TestCase
         $action->feature = 'my-feature';
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway,
             cache: \Mockery::mock(GatewayCache::class)
                 ->shouldReceive('hits')
@@ -125,6 +132,7 @@ class GatewayInspectorTest extends TestCase
         $action->feature = 'my-feature';
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway,
             cache: \Mockery::mock(GatewayCache::class)
                 ->shouldReceive('hits')
@@ -155,6 +163,7 @@ class GatewayInspectorTest extends TestCase
         $action->feature = 'my-feature';
 
         $inspector = new GatewayInspector(
+            'test',
             $gateway
         );
 
@@ -166,5 +175,124 @@ class GatewayInspectorTest extends TestCase
 
         $this->assertSame($action, $result);
         $this->assertFalse($action->getResult());
+    }
+
+    /**
+     * @dataProvider debugScenarios
+     */
+    public function test_it_provides_debug_information(callable $constructs, callable $assert, ?bool $result = null)
+    {
+        $action = new ActionableFlag();
+        if ($result) {
+            $action->result = $result;
+        }
+        $action->feature = 'my-feature';
+        $action->debug = new ActionDebugLog('test.php', 1);
+
+        $inspector = new GatewayInspector(
+            'test',
+            ...($constructs($action->feature))
+        );
+
+        $result = $inspector->handle($action, fn (ActionableFlag $flag) => $flag);
+
+        $this->assertInstanceOf(DebuggableFlag::class, $result);
+
+        $assert($result->log());
+    }
+
+    public function debugScenarios(): \Generator
+    {
+        yield 'found result' => [
+            fn (string $feature) => [
+                'gateway' => \Mockery::mock(Gateway::class)->shouldReceive('accessible')
+                    ->with($feature)
+                    ->andReturn(true)
+                    ->getMock(),
+            ],
+            function (ActionDebugLog $log) {
+                $this->assertSame([
+                    [
+                        'pipe' => 'test',
+                        'reason' => ActionDebugLog::REASON_RESULT,
+                        'result' => true,
+                    ],
+                ], $log->decisions);
+            },
+        ];
+        yield 'cached result' => [
+            fn (string $feature) => [
+                'gateway' => \Mockery::mock(Gateway::class),
+                'cache' => \Mockery::mock(GatewayCache::class)
+                    ->shouldReceive('hits')
+                    ->with($feature)
+                    ->andReturn(true)
+                    ->getMock()
+                    ->shouldReceive('result')
+                    ->with($feature)
+                    ->andReturn(true)
+                    ->getMock(),
+            ],
+            function (ActionDebugLog $log) {
+                $this->assertSame([
+                    [
+                        'pipe' => 'test',
+                        'reason' => ActionDebugLog::REASON_CACHE,
+                        'result' => true,
+                    ],
+                ], $log->decisions);
+            },
+        ];
+        yield 'filter failed' => [
+            fn (string $feature) => [
+                'gateway' => \Mockery::mock(Gateway::class),
+                'filter' => \Mockery::mock(FeatureFilter::class)
+                    ->shouldReceive('fails')
+                    ->with($feature)
+                    ->andReturn(true)
+                    ->getMock(),
+            ],
+            function (ActionDebugLog $log) {
+                $this->assertSame([
+                    [
+                        'pipe' => 'test',
+                        'reason' => ActionDebugLog::REASON_FILTER,
+                        'result' => null,
+                    ],
+                ], $log->decisions);
+            },
+        ];
+        yield 'already has result' => [
+            fn (string $feature) => [
+                'gateway' => \Mockery::mock(Gateway::class),
+            ],
+            function (ActionDebugLog $log) {
+                $this->assertSame([
+                    [
+                        'pipe' => 'test',
+                        'reason' => ActionDebugLog::REASON_RESULT_ALREADY_FOUND,
+                        'result' => true,
+                    ],
+                ], $log->decisions);
+            },
+            true,
+        ];
+        yield 'no result' => [
+            fn (string $feature) => [
+                'gateway' => \Mockery::mock(Gateway::class)->shouldReceive('accessible')
+                    ->with($feature)
+                    ->andReturn(null)
+                    ->getMock(),
+            ],
+            function (ActionDebugLog $log) {
+                $this->assertSame([
+                    [
+                        'pipe' => 'test',
+                        'reason' => ActionDebugLog::REASON_NO_RESULT,
+                        'result' => null,
+                    ],
+                ], $log->decisions);
+            },
+        ];
     }
 }

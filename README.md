@@ -25,7 +25,7 @@ from version 1 to version 2](UPGRADE.md).
 You can install the package via composer:
 
 ```bash
-composer require ylsideas/feature-flags:^2.0
+composer require ylsideas/feature-flags:"^2.0"
 ```
 
 Once installed you should publish the config with the following command.

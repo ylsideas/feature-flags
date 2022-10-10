@@ -5,11 +5,12 @@ namespace YlsIdeas\FeatureFlags\Gateways;
 use Illuminate\Redis\Connections\Connection;
 use YlsIdeas\FeatureFlags\Contracts\Cacheable;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Contracts\Toggleable;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\Gateways\RedisGatewayTest
  */
-class RedisGateway implements Gateway, Cacheable
+class RedisGateway implements Toggleable, Gateway, Cacheable
 {
     public function __construct(protected Connection $connection, protected ?string $prefix = 'features')
     {

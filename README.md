@@ -1,9 +1,10 @@
 # Feature Flags for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/run-tests?label=tests)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/Check%20&%20fix%20styling?label=code%20style)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/run-tests?label=tests&style=flat-square)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/Check%20&%20fix%20styling?label=code%20style&style=flat-square)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
+[![Help Fund](https://img.shields.io/github/sponsors/peterfox?style=flat-square)](https://github.com/sponsors/peterfox)
 
 A Feature flag is at times referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 
 to be used along with source control to make it easier to continuously integrate and deploy. The idea of 

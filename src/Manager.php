@@ -180,7 +180,7 @@ class Manager
         return $this->container;
     }
 
-    protected function resolve($name)
+    protected function resolve($name): GatewayInspector
     {
         $config = $this->getConfig($name);
 
@@ -265,14 +265,14 @@ class Manager
 
     protected function buildGateGateway(array $config, string $name): GateGateway
     {
-        if ($config['gate'] ?? false) {
-            throw new \RuntimeException(sprintf('No gate is configured for connection `%s`', $name));
+        if (! ($config['gate'] ?? false)) {
+            throw new \RuntimeException(sprintf('No gate is configured for gateway `%s`', $name));
         }
 
         return new GateGateway(
             $this->getContainer()->make(AuthManager::class)->guard($config['guard'] ?? null),
             $this->getContainer()->make(Gate::class),
-            $config['gate']
+            $config['gate'],
         );
     }
 

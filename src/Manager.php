@@ -265,7 +265,7 @@ class Manager
 
     protected function buildGateGateway(array $config, string $name): GateGateway
     {
-        if ($config['gate'] ?? false) {
+        if (empty($config['gate'])) {
             throw new \RuntimeException(sprintf('No gate is configured for connection `%s`', $name));
         }
 

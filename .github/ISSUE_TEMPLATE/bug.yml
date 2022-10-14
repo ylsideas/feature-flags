@@ -1,0 +1,51 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+    - peterfox
+body:
+    - type: markdown
+      attributes:
+          value: |
+              We're sorry to hear you have a problem. Can you help us solve it by providing the following details.
+    - type: textarea
+      id: what-happened
+      attributes:
+          label: What happened?
+          description: What did you expect to happen?
+          placeholder: I cannot currently do X thing because when I do, it breaks X thing.
+      validations:
+          required: true
+    - type: textarea
+      id: how-to-reproduce
+      attributes:
+          label: How to reproduce the bug
+          description: How did this occur, please add any config values used and provide a set of reliable steps if possible.
+          placeholder: When I do X I see Y.
+      validations:
+          required: true
+    - type: input
+      id: package-version
+      attributes:
+          label: Version
+          description: What version of our Package are you running?
+          placeholder: 2.0.0
+      validations:
+          required: true
+    - type: input
+      id: php-version
+      attributes:
+          label: Version
+          description: What version of PHP are you running?
+          placeholder: 8.1.0
+      validations:
+          required: true
+    - type: input
+      id: laravel-version
+      attributes:
+        label: Version
+        description: What version of Laravel are you running?
+        placeholder: 9.0.0
+      validations:
+        required: true

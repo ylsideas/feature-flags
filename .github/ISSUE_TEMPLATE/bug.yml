@@ -1,5 +1,5 @@
 name: Bug Report
-description: File a bug report
+description: Report an Issue or Bug with the Package
 title: "[Bug]: "
 labels: ["bug"]
 assignees:
@@ -28,24 +28,40 @@ body:
     - type: input
       id: package-version
       attributes:
-          label: Version
-          description: What version of our Package are you running?
+          label: Package Version
+          description: What version of our Package are you running? Please be as specific as possible
           placeholder: 2.0.0
       validations:
           required: true
     - type: input
       id: php-version
       attributes:
-          label: Version
-          description: What version of PHP are you running?
+          label: PHP Version
+          description: What version of PHP are you running? Please be as specific as possible
           placeholder: 8.1.0
       validations:
           required: true
     - type: input
       id: laravel-version
       attributes:
-        label: Version
-        description: What version of Laravel are you running?
+        label: Laravel Version
+        description: What version of Laravel are you running? Please be as specific as possible
         placeholder: 9.0.0
       validations:
         required: true
+    - type: checkboxes
+      id: operating-systems
+      attributes:
+        label: Which operating systems does with happen with?
+        description: You may select more than one.
+        options:
+        - label: macOS
+        - label: Windows
+        - label: Linux
+    - type: textarea
+      id: notes
+      attributes:
+          label: Notes
+          description: Use this field to provide any other notes that you feel might be relevant to the issue.
+      validations:
+          required: false

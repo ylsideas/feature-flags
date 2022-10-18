@@ -49,15 +49,16 @@ body:
         placeholder: 9.0.0
       validations:
         required: true
-    - type: checkboxes
+    - type: dropdown
       id: operating-systems
       attributes:
         label: Which operating systems does with happen with?
         description: You may select more than one.
+        multiple: true
         options:
-        - label: macOS
-        - label: Windows
-        - label: Linux
+        - macOS
+        - Windows
+        - Linux
     - type: textarea
       id: notes
       attributes:

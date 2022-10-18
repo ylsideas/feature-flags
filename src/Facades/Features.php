@@ -8,7 +8,6 @@ use YlsIdeas\FeatureFlags\Manager;
 /**
  * @see \YlsIdeas\FeatureFlags\Manager
  *
- * @method static array all()
  * @method static bool accessible(string $feature)
  * @method static turnOn(string $gateway, string $feature)
  * @method static turnOff(string $gateway, string $feature)

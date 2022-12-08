@@ -15,6 +15,14 @@ on state.
 This package aims to make implementing such flags across your application a great deal easier by providing solutions
 that work with not only your code but your routes, blade files, task scheduling and validations.
 
+## The Feature flagging dashboard for Laravel
+
+[![flagfox - the power to deploy features form your own dashboard via a single Laravel package](https://www.flagfox.dev/img/github-readme-image.png)](https://www.flagfox.dev)
+
+In late 2022 we decided to start work on a dashboard that will work on top of all the awesomeness that [Feature flags 
+for Laravel](https://github.com/ylsideas/feature-flags) gives you. Right now you can 
+[join the waiting list](https://www.flagfox.dev/#waitlist).
+
 ## Upgrading
 
 This project is currently at version 2 and is somewhat different to version 1. If you are using Laravel 9 and PHP8

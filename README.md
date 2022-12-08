@@ -1,4 +1,4 @@
-# Feature Flags for Laravel
+![Feature Flags - The extendable and adaptable Laravel Feature Flags package for managing flags within code](banner.png "Feature Flags")
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ylsideas/feature-flags/run-tests?label=tests&style=flat-square)](https://github.com/ylsideas/feature-flags/actions?query=workflow%3Arun-tests+branch%3Amain)
@@ -17,7 +17,7 @@ that work with not only your code but your routes, blade files, task scheduling 
 
 ## The Feature flagging dashboard for Laravel
 
-[![flagfox - the power to deploy features form your own dashboard via a single Laravel package](https://www.flagfox.dev/img/github-readme-image.png)](https://www.flagfox.dev)
+[![flagfox - the power to deploy features form your own dashboard via a single Laravel package](https://www.flagfox.dev/img/github-readme-image.png "Flagfox")](https://www.flagfox.dev)
 
 In late 2022 we decided to start work on a dashboard that will work on top of all the awesomeness that [Feature flags 
 for Laravel](https://github.com/ylsideas/feature-flags) gives you. Right now you can 

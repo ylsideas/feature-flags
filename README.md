@@ -17,11 +17,11 @@ that work with not only your code but your routes, blade files, task scheduling 
 
 ## The Feature flagging dashboard for Laravel
 
-[![flagfox - the power to deploy features form your own dashboard via a single Laravel package](https://www.flagfox.dev/img/github-readme-image.png "Flagfox")](https://www.flagfox.dev)
+[![flagfox - the power to deploy features form your own dashboard via a single Laravel package](https://www.flagfox.dev/img/github-readme-image.png "Flagfox")](https://www.flagfox.dev/?utm_campaign=waitlist&utm_source=github&utm_content=featureflags)
 
 In late 2022 we decided to start work on a dashboard that will work on top of all the awesomeness that [Feature flags 
 for Laravel](https://github.com/ylsideas/feature-flags) gives you. Right now you can 
-[join the waiting list](https://www.flagfox.dev/#waitlist).
+[join the waiting list](https://www.flagfox.dev/?utm_campaign=waitlist&utm_source=github&utm_content=featureflags#waitlist).
 
 ## Upgrading
 

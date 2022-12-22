@@ -2,6 +2,13 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 2.1.0 - 2022-10-22
+
+- Adds a new system for debugging features that are accessed.
+- Testing a feature now is easy to do via the Features facade.
+- You can now add a handler for when features should be expired.
+- Adds a mixin for the Eloquent Query Builder allowing you to use the methods whenFeatureIsAccessible() and whenFeatureIsNotAccessible().
+
 ## 2.0.0 - 2022-09-18
 
 - Breaking Changes. Adds a pipeline and gateway system over the old repository system. Allows for multiple use

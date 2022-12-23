@@ -45,6 +45,7 @@
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
+        "lint": "vendor/bin/pint",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest coverage",
         "mod": "vendor/bin/rector"

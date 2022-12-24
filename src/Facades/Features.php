@@ -35,7 +35,7 @@ class Features extends Facade
      * Replace the bound instance with a fake.
      * @param array<string, bool|array> $flagsToFake
      */
-    public static function fake(array $flagsToFake): FeatureFake
+    public static function fake(array $flagsToFake = []): FeatureFake
     {
         static::swap($fake = new FeatureFake(static::getFacadeRoot(), $flagsToFake));
 

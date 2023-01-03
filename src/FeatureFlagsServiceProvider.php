@@ -47,6 +47,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
                     Commands\SwitchOffFeature::class,
                 ]);
             }
+
+            $this->aboutCommandInfo();
         }
 
         if (Features::usesValidations()) {
@@ -125,8 +127,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     protected function aboutCommandInfo(): void
     {
         if (class_exists('Illuminate\Foundation\Console\AboutCommand')) {
-            AboutCommand::add('Feature Flags for Laravel', [
-                'Pipeline' => fn() => implode(',', config('features.pipeline')),
+            AboutCommand::add('Feature Flags', [
+                'Pipeline' => fn () => implode(', Hello', config('features.pipeline')),
             ]);
         }
     }

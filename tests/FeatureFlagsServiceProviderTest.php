@@ -79,6 +79,16 @@ class FeatureFlagsServiceProviderTest extends TestCase
         $this->assertNotNull($filename);
     }
 
+    public function test_posting_about_info(): void
+    {
+        config()->set('features.pipeline', ['in_memory']);
+
+        $this->artisan('about')
+            ->expectsOutputToContain('Feature Flags')
+            ->expectsOutputToContain('Pipeline')
+            ->run();
+    }
+
     protected function cleanUp(): void
     {
         File::delete(config_path('features.php'));

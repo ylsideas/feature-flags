@@ -2,6 +2,7 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
@@ -77,6 +78,20 @@ class FeatureFlagsServiceProviderTest extends TestCase
                 ->first(fn (\SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'));
 
         $this->assertNotNull($filename);
+    }
+
+    public function test_posting_about_info(): void
+    {
+        if (version_compare(Application::VERSION, '9.20.0', '<')) {
+            $this->markTestSkipped('Not available before Laravel 9.20.0');
+        }
+
+        config()->set('features.pipeline', ['in_memory']);
+
+        $this->artisan('about')
+            ->expectsOutputToContain('Feature Flags')
+            ->expectsOutputToContain('Pipeline')
+            ->run();
     }
 
     protected function cleanUp(): void

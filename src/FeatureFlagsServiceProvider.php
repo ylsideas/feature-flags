@@ -4,6 +4,7 @@ namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
@@ -46,6 +47,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
                     Commands\SwitchOffFeature::class,
                 ]);
             }
+
+            $this->aboutCommandInfo();
         }
 
         if (Features::usesValidations()) {
@@ -119,5 +122,14 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     protected function queryBuilder()
     {
         Builder::mixin(new QueryBuilderMixin());
+    }
+
+    protected function aboutCommandInfo(): void
+    {
+        if (class_exists('Illuminate\Foundation\Console\AboutCommand')) {
+            AboutCommand::add('Feature Flags', [
+                'Pipeline' => fn () => implode(', Hello', config('features.pipeline')),
+            ]);
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Middlewares;
 
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
@@ -20,6 +21,7 @@ class GuardFeatureTest extends TestCase
 
         $this->expectExceptionObject($exception);
         $app = \Mockery::mock(Application::class);
+        $translator = \Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
@@ -33,12 +35,17 @@ class GuardFeatureTest extends TestCase
             ->once()
             ->andReturn(false);
 
+        $translator->shouldReceive('get')
+            ->with('')
+            ->once()
+            ->andReturn('');
+
         $request = new Request();
 
-        $middleware = new GuardFeature($manager, $app);
+        $middleware = new GuardFeature($manager, $app, $translator);
 
         $middleware->handle($request, function () {
-        }, 'my-feature', 'on');
+        }, 'my-feature');
     }
 
     public function test_it_can_abort_requests_when_features_are_not_accessible_and_expecting_to_be_off(): void
@@ -47,6 +54,7 @@ class GuardFeatureTest extends TestCase
 
         $this->expectExceptionObject($exception);
         $app = \Mockery::mock(Application::class);
+        $translator = \Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
@@ -60,9 +68,14 @@ class GuardFeatureTest extends TestCase
             ->once()
             ->andReturn(true);
 
+        $translator->shouldReceive('get')
+            ->with('')
+            ->once()
+            ->andReturn('');
+
         $request = new Request();
 
-        $middleware = new GuardFeature($manager, $app);
+        $middleware = new GuardFeature($manager, $app, $translator);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'off');
@@ -71,6 +84,7 @@ class GuardFeatureTest extends TestCase
     public function test_it_continues_the_chain_if_features_are_accessible(): void
     {
         $app = \Mockery::mock(Application::class);
+        $translator = \Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
@@ -83,9 +97,11 @@ class GuardFeatureTest extends TestCase
             ->once()
             ->andReturn(true);
 
+        $translator->shouldNotReceive('get');
+
         $expectedRequest = new Request();
 
-        $middleware = new GuardFeature($manager, $app);
+        $middleware = new GuardFeature($manager, $app, $translator);
 
         $this->assertTrue($middleware->handle(
             $expectedRequest,
@@ -104,6 +120,7 @@ class GuardFeatureTest extends TestCase
 
         $this->expectExceptionObject($exception);
         $app = \Mockery::mock(Application::class);
+        $translator = \Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(404, '')
@@ -117,9 +134,14 @@ class GuardFeatureTest extends TestCase
             ->once()
             ->andReturn(false);
 
+        $translator->shouldReceive('get')
+            ->with('')
+            ->once()
+            ->andReturn('');
+
         $request = new Request();
 
-        $middleware = new GuardFeature($manager, $app);
+        $middleware = new GuardFeature($manager, $app, $translator);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on', 404);
@@ -131,6 +153,7 @@ class GuardFeatureTest extends TestCase
 
         $this->expectExceptionObject($exception);
         $app = \Mockery::mock(Application::class);
+        $translator = \Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(404, 'simple message')
@@ -144,9 +167,14 @@ class GuardFeatureTest extends TestCase
             ->once()
             ->andReturn(false);
 
+        $translator->shouldReceive('get')
+            ->with('simple message')
+            ->once()
+            ->andReturn('simple message');
+
         $request = new Request();
 
-        $middleware = new GuardFeature($manager, $app);
+        $middleware = new GuardFeature($manager, $app, $translator);
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on', 404, 'simple message');

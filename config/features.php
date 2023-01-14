@@ -10,7 +10,7 @@ return [
     |
     */
 
-    'pipeline' => ['in_memory', 'database'],
+    'pipeline' => ['database', 'in_memory'],
 
     /*
     |--------------------------------------------------------------------------
@@ -25,9 +25,6 @@ return [
         'in_memory' => [
             'file' => env('FEATURE_FLAG_IN_MEMORY_FILE', '.features.php'),
             'driver' => 'in_memory',
-            'caching' => [
-                'ttl' => 300,
-            ],
         ],
         'database' => [
             'driver' => 'database',

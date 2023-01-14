@@ -19,14 +19,20 @@ class GuardFeature
     {
     }
 
-    public function handle(Request $request, Closure $next, string $feature, string $state = 'on', $abort = 403): mixed
-    {
+    public function handle(
+        Request $request,
+        Closure $next,
+        string $feature,
+        string $state = 'on',
+        $abort = 403,
+        $message = '',
+    ): mixed {
         if (
             ($this->check($state)
                 ? ! $this->manager->accessible($feature)
                 : $this->manager->accessible($feature))
         ) {
-            $this->application->abort($abort);
+            $this->application->abort($abort, $message);
         }
 
         return $next($request);

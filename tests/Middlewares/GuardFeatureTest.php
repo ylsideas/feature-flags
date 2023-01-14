@@ -22,7 +22,7 @@ class GuardFeatureTest extends TestCase
         $app = \Mockery::mock(Application::class);
 
         $app->shouldReceive('abort')
-            ->with(403)
+            ->with(403, '')
             ->once()
             ->andThrow($exception);
 
@@ -49,7 +49,7 @@ class GuardFeatureTest extends TestCase
         $app = \Mockery::mock(Application::class);
 
         $app->shouldReceive('abort')
-            ->with(403)
+            ->with(403, '')
             ->once()
             ->andThrow($exception);
 
@@ -73,7 +73,7 @@ class GuardFeatureTest extends TestCase
         $app = \Mockery::mock(Application::class);
 
         $app->shouldReceive('abort')
-            ->with(403)
+            ->with(403, '')
             ->never();
 
         $manager = \Mockery::mock(Manager::class);
@@ -106,7 +106,7 @@ class GuardFeatureTest extends TestCase
         $app = \Mockery::mock(Application::class);
 
         $app->shouldReceive('abort')
-            ->with(404)
+            ->with(404, '')
             ->once()
             ->andThrow($exception);
 
@@ -123,5 +123,32 @@ class GuardFeatureTest extends TestCase
 
         $middleware->handle($request, function () {
         }, 'my-feature', 'on', 404);
+    }
+
+    public function test_it_can_abort_requests_with_a_specified_message(): void
+    {
+        $exception = new HttpException(404, 'simple message');
+
+        $this->expectExceptionObject($exception);
+        $app = \Mockery::mock(Application::class);
+
+        $app->shouldReceive('abort')
+            ->with(404, 'simple message')
+            ->once()
+            ->andThrow($exception);
+
+        $manager = \Mockery::mock(Manager::class);
+
+        $manager->shouldReceive('accessible')
+            ->with('my-feature')
+            ->once()
+            ->andReturn(false);
+
+        $request = new Request();
+
+        $middleware = new GuardFeature($manager, $app);
+
+        $middleware->handle($request, function () {
+        }, 'my-feature', 'on', 404, 'simple message');
     }
 }

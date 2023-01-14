@@ -3,6 +3,8 @@
 namespace YlsIdeas\FeatureFlags\Middlewares;
 
 use Closure;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use YlsIdeas\FeatureFlags\Manager;
@@ -15,18 +17,30 @@ class GuardFeature
 {
     use StateChecking;
 
-    public function __construct(protected Manager $manager, protected Application $application)
-    {
+    public function __construct(
+        protected Manager $manager,
+        protected Application $application,
+        protected Translator $translator,
+    ) {
     }
 
-    public function handle(Request $request, Closure $next, string $feature, string $state = 'on', $abort = 403): mixed
-    {
+    /**
+     * @throws BindingResolutionException
+     */
+    public function handle(
+        Request $request,
+        Closure $next,
+        string $feature,
+        string $state = 'on',
+        $abort = 403,
+        $message = '',
+    ): mixed {
         if (
             ($this->check($state)
                 ? ! $this->manager->accessible($feature)
                 : $this->manager->accessible($feature))
         ) {
-            $this->application->abort($abort);
+            $this->application->abort($abort, $this->translator->get($message));
         }
 
         return $next($request);

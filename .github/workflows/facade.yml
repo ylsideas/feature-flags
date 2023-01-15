@@ -1,0 +1,33 @@
+name: Facade Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  generate-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql
+          tools: composer:v2
+
+      - uses: ramsey/composer-install@v2
+
+      - name: Update Facades
+        run: php -f bin/facades.php -- --lint
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+            commit_message: Update Facade Documentation
+

@@ -2,6 +2,16 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 2.3.0 - 2023-01-15
+
+### What's Changed
+
+- Implement a middleware message by @peterfox in https://github.com/ylsideas/feature-flags/pull/49
+- Default config changes by @peterfox in https://github.com/ylsideas/feature-flags/pull/50
+- Support Laravel 10 by @peterfox in https://github.com/ylsideas/feature-flags/pull/51
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.2.0...v2.3.0
+
 ## 2.1.0 - 2022-10-22
 
 - Adds a new system for debugging features that are accessed.
@@ -12,7 +22,7 @@ All notable changes to `feature-flags` will be documented in this file
 ## 2.0.0 - 2022-09-18
 
 - Breaking Changes. Adds a pipeline and gateway system over the old repository system. Allows for multiple use
-of the same driver within the pipeline. Changes config to in_memory driver. Adds a gate based driver.
+- of the same driver within the pipeline. Changes config to in_memory driver. Adds a gate based driver.
 
 ## 1.2.1 - 2019-12-08
 

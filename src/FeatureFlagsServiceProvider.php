@@ -3,8 +3,11 @@
 namespace YlsIdeas\FeatureFlags;
 
 use Illuminate\Console\Scheduling\Event;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Foundation\MaintenanceMode;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Foundation\MaintenanceModeManager;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
@@ -13,6 +16,8 @@ use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
 use YlsIdeas\FeatureFlags\Rules\FeatureOnRule;
+use YlsIdeas\FeatureFlags\Support\MaintenanceDriver;
+use YlsIdeas\FeatureFlags\Support\MaintenanceRepository;
 use YlsIdeas\FeatureFlags\Support\QueryBuilderMixin;
 
 /**
@@ -76,7 +81,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     /**
      * Register the application services.
      */
-    public function register()
+    public function register(): void
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/features.php', 'features');
@@ -86,6 +91,18 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         } else {
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
+
+        $this->app->scoped(MaintenanceRepository::class, function (Container $app) {
+            return new MaintenanceRepository($app->make(Manager::class), $app);
+        });
+
+        $this->app->extend(MaintenanceModeManager::class, function (MaintenanceModeManager $manager) {
+            return $manager->extend('features', function (): MaintenanceMode {
+                return new MaintenanceDriver(
+                    $this->app->make(MaintenanceRepository::class)
+                );
+            });
+        });
     }
 
     protected function schedulingMacros()
@@ -126,7 +143,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
 
     protected function aboutCommandInfo(): void
     {
-        if (class_exists('Illuminate\Foundation\Console\AboutCommand')) {
+        if (class_exists(AboutCommand::class)) {
             AboutCommand::add('Feature Flags', [
                 'Pipeline' => fn () => implode(', Hello', config('features.pipeline')),
             ]);

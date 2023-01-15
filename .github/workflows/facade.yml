@@ -6,7 +6,7 @@ on:
             - 'src/Facades/**.php'
 
 jobs:
-  generate-coverage:
+  update-facades:
     runs-on: ubuntu-latest
 
     steps:

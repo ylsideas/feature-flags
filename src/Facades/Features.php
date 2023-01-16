@@ -28,7 +28,7 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static bool usesQueryBuilderMixin()
  * @method static \self callOnExpiredFeatures(array $expiredFeatures, callable|null $handler = null)
  * @method static \self applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
- * @method static \self extend(string $driver, callable $builder)
+ * @method \self extend(string $driver, callable $builder)
  *
  * @see \YlsIdeas\FeatureFlags\Manager
  */

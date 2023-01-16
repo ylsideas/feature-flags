@@ -26,9 +26,9 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static bool usesMiddlewares()
  * @method static bool usesDebugging()
  * @method static bool usesQueryBuilderMixin()
- * @method static \self callOnExpiredFeatures(array $expiredFeatures, callable|null $handler = null)
- * @method static \self applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
- * @method \self extend(string $driver, callable $builder)
+ * @method static \static callOnExpiredFeatures(array $expiredFeatures, callable|null $handler = null)
+ * @method static \static applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
+ * @method static \static extend(string $driver, callable $builder)
  *
  * @see \YlsIdeas\FeatureFlags\Manager
  */

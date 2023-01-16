@@ -3,7 +3,7 @@ name: Facade Documentation
 on:
     push:
         paths:
-            - 'src/Facades/**.php'
+            - 'src/**.php'
 
 jobs:
   update-facades:

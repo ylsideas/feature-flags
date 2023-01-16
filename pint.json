@@ -1,5 +1,8 @@
 {
     "preset": "psr12",
+    "exclude": [
+        "bin"
+    ],
     "rules": {
         "array_syntax": {
             "syntax": "short"

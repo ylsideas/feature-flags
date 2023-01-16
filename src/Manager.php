@@ -201,7 +201,7 @@ class Manager implements Contracts\Features
         return $this->useQueryBuilderMixin;
     }
 
-    public function callOnExpiredFeatures(array $expiredFeatures, callable $handler = null): self
+    public function callOnExpiredFeatures(array $expiredFeatures, callable $handler = null): static
     {
         $handler ??= static function ($feature) {
             throw new FeatureExpired($feature);
@@ -212,14 +212,14 @@ class Manager implements Contracts\Features
         return $this;
     }
 
-    public function applyOnExpiredHandler(Contracts\ExpiredFeaturesHandler $handler): self
+    public function applyOnExpiredHandler(Contracts\ExpiredFeaturesHandler $handler): static
     {
         $this->expiredFeaturesHandler = $handler;
 
         return $this;
     }
 
-    public function extend(string $driver, callable $builder): self
+    public function extend(string $driver, callable $builder): static
     {
         $this->gatewayDrivers[$driver] = $builder;
 

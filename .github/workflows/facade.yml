@@ -23,7 +23,7 @@ jobs:
       - uses: ramsey/composer-install@v2
 
       - name: Update Facades
-        run: php -f bin/facades.php -- --lint
+        run: php -f bin/facades.php
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4

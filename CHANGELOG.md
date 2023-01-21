@@ -2,6 +2,15 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 2.3.1 - 2023-01-21
+
+### What's Changed
+
+- Automates updating Facade DocBlock by @peterfox in https://github.com/ylsideas/feature-flags/pull/52
+- Fix facade docs to contain fake methods by @peterfox in https://github.com/ylsideas/feature-flags/pull/53
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.3.0...v2.3.1
+
 ## 2.3.0 - 2023-01-15
 
 ### What's Changed

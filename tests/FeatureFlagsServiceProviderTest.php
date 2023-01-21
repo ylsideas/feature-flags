@@ -18,16 +18,18 @@ class FeatureFlagsServiceProviderTest extends TestCase
         ];
     }
 
-    public function setUp(): void
+    /**
+     * @before
+     */
+    protected function cleanUp(): void
     {
-        parent::setUp();
-        $this->cleanUp();
-    }
+        $this->afterApplicationCreated(function () {
+            File::delete(config_path('features.php'));
+            File::delete(base_path('.features.php'));
 
-    public function tearDown(): void
-    {
-        $this->cleanUp();
-        parent::tearDown();
+            collect(File::files(database_path('migrations')))
+                ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));
+        });
     }
 
     public function test_adds_manager_to_the_container(): void
@@ -92,14 +94,5 @@ class FeatureFlagsServiceProviderTest extends TestCase
             ->expectsOutputToContain('Feature Flags')
             ->expectsOutputToContain('Pipeline')
             ->run();
-    }
-
-    protected function cleanUp(): void
-    {
-        File::delete(config_path('features.php'));
-        File::delete(base_path('.features.php'));
-
-        collect(File::files(database_path('migrations')))
-            ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));
     }
 }

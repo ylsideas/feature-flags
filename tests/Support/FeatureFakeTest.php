@@ -25,7 +25,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_can_be_initialised()
     {
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager, ['my-feature' => true]);
+        $fake = $this->getFake($manager, ['my-feature' => true]);
 
         $this->assertInstanceOf(FeatureFake::class, $fake);
     }
@@ -42,7 +42,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertTrue($fake->accessible('my-feature'));
     }
@@ -61,7 +61,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  []);
+        $fake = $this->getFake($manager,  []);
 
         $this->assertFalse($fake->accessible('my-feature'));
     }
@@ -70,7 +70,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => [false, true]]);
+        $fake = $this->getFake($manager,  ['my-feature' => [false, true]]);
 
         $this->assertFalse($fake->accessible('my-feature'));
         $this->assertTrue($fake->accessible('my-feature'));
@@ -81,7 +81,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => [false, true]]);
+        $fake = $this->getFake($manager,  ['my-feature' => [false, true]]);
 
         $this->assertFalse($fake->accessible('my-feature'));
         $this->assertTrue($fake->accessible('my-feature'));
@@ -93,7 +93,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertSame(0, $fake->getCount('my-feature'));
         $fake->accessible('my-feature');
@@ -105,7 +105,7 @@ class FeatureFakeTest extends TestCase
         $this->expectException(AssertionFailedError::class);
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertSame(0, $fake->getCount('my-feature'));
         $fake->assertAccessed('my-feature');
@@ -116,7 +116,7 @@ class FeatureFakeTest extends TestCase
         $this->expectException(AssertionFailedError::class);
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
         $this->assertSame(1, $fake->getCount('my-feature'));
@@ -128,7 +128,7 @@ class FeatureFakeTest extends TestCase
         $this->expectException(AssertionFailedError::class);
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
         $fake->accessible('my-feature');
@@ -142,11 +142,22 @@ class FeatureFakeTest extends TestCase
         Event::fake();
 
         $manager = \Mockery::mock(Manager::class);
-        $fake = new FeatureFake($manager,  ['my-feature' => true]);
+        $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
 
         Event::assertDispatched(FeatureAccessing::class);
         Event::assertDispatched(FeatureAccessed::class);
+    }
+
+    protected function getFake($manager, $features)
+    {
+        return new class($manager, $features) extends FeatureFake {
+
+            public function getCount(string $feature)
+            {
+                return parent::getCount($feature);
+            }
+        };
     }
 }

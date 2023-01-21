@@ -49,11 +49,6 @@ class FeatureFake implements Features
         return $featureValue;
     }
 
-    public function getCount(string $feature)
-    {
-        return Arr::get($this->flagCounts, $feature, 0);
-    }
-
     public function assertAccessed(string $feature, ?int $count = null, string $message = '')
     {
         if ($count === null) {
@@ -76,5 +71,10 @@ class FeatureFake implements Features
     public function __call(string $method, array $args)
     {
         return $this->forwardCallTo($this->manager, $method, $args);
+    }
+
+    protected function getCount(string $feature)
+    {
+        return Arr::get($this->flagCounts, $feature, 0);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace YlsIdeas\FeatureFlags\Facades;
 
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Facade;
 use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Support\FeatureFake;
@@ -31,6 +30,7 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static \static extend(string $driver, callable $builder)
  *
  * @see \YlsIdeas\FeatureFlags\Manager
+ * @see \YlsIdeas\FeatureFlags\Support\FeatureFake
  */
 class Features extends Facade
 {

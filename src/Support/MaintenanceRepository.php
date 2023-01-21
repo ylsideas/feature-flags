@@ -41,17 +41,17 @@ class MaintenanceRepository implements Maintenance
 
     public function callDeactivation(): void
     {
-        $this->container->call($this->uponActivation, ['features' => $this->features]);
+        $this->container->call($this->uponDeactivation, ['features' => $this->features]);
     }
 
-    public function onEnabled($feature)
+    public function onEnabled($feature): MaintenanceScenario
     {
         return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario) {
             $this->scenarios[] = $scenario;
         });
     }
 
-    public function onDisabled($feature)
+    public function onDisabled($feature): MaintenanceScenario
     {
         return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario) {
             $this->scenarios[] = $scenario;

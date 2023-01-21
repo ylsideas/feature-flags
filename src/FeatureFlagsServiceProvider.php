@@ -93,7 +93,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         }
 
         $this->app->scoped(MaintenanceRepository::class, function (Container $app) {
-            return new MaintenanceRepository($app->make(Manager::class), $app);
+            return new MaintenanceRepository($app->make(FeaturesContract::class), $app);
         });
 
         $this->app->extend(MaintenanceModeManager::class, function (MaintenanceModeManager $manager) {

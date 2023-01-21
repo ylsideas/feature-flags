@@ -152,8 +152,7 @@ class FeatureFakeTest extends TestCase
 
     protected function getFake($manager, $features)
     {
-        return new class($manager, $features) extends FeatureFake {
-
+        return new class ($manager, $features) extends FeatureFake {
             public function getCount(string $feature)
             {
                 return parent::getCount($feature);

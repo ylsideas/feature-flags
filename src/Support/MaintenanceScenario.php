@@ -3,7 +3,6 @@
 namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
-use YlsIdeas\FeatureFlags\Contracts\Maintenance;
 
 class MaintenanceScenario implements Arrayable
 {

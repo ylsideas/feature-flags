@@ -9,7 +9,6 @@ class MaintenanceDriver implements MaintenanceMode
 {
     public function __construct(protected MaintenanceContract $features)
     {
-
     }
 
     public function activate(array $payload): void

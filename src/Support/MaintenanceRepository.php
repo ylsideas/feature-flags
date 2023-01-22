@@ -35,7 +35,7 @@ class MaintenanceRepository implements Maintenance
     public function callActivation(array $properties): void
     {
         $this->container->call($this->uponActivation, [
-            'properties' => $properties, 'features' => $this->features
+            'properties' => $properties, 'features' => $this->features,
         ]);
     }
 

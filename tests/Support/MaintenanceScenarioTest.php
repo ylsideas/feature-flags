@@ -27,7 +27,7 @@ class MaintenanceScenarioTest extends TestCase
                 ->whenEnabled('feature')
                 ->secret('my-password'),
             true,
-            ['secret' => 'my-password']
+            ['secret' => 'my-password'],
         ];
 
         yield 'except' => [

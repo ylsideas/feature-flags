@@ -2,11 +2,11 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Route;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
-use Illuminate\Contracts\Http\Kernel;
 
 class MaintenanceModeTest extends TestCase
 {
@@ -16,7 +16,7 @@ class MaintenanceModeTest extends TestCase
         Features::maintenanceMode()
             ->onEnabled('system.down');
 
-        Route::get('/', fn() => 'Foo Bar');
+        Route::get('/', fn () => 'Foo Bar');
 
         $this->get('/')
             ->assertStatus(503);
@@ -30,7 +30,7 @@ class MaintenanceModeTest extends TestCase
         Features::maintenanceMode()
             ->onEnabled('system.down');
 
-        Route::get('/', fn() => 'Foo Bar');
+        Route::get('/', fn () => 'Foo Bar');
 
         $this->get('/')
             ->assertOk();
@@ -48,7 +48,7 @@ class MaintenanceModeTest extends TestCase
             ->onEnabled('system.api')
             ->statusCode(500);
 
-        Route::get('/', fn() => 'Foo Bar');
+        Route::get('/', fn () => 'Foo Bar');
 
         $this->get('/')
             ->assertStatus(500);
@@ -80,8 +80,8 @@ class MaintenanceModeTest extends TestCase
             ->onEnabled('system.down')
             ->exceptPaths(['/test']);
 
-        Route::get('/', fn() => 'Foo Bar');
-        Route::get('/test', fn() => 'Foo Bar Foo');
+        Route::get('/', fn () => 'Foo Bar');
+        Route::get('/test', fn () => 'Foo Bar Foo');
 
         $this->get($path)
             ->assertStatus($status);

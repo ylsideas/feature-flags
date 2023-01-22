@@ -99,7 +99,6 @@ class FeatureFlagsServiceProviderTest extends TestCase
         );
     }
 
-
     public function test_posting_about_info(): void
     {
         if (version_compare(Application::VERSION, '9.20.0', '<')) {

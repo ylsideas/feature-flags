@@ -45,6 +45,10 @@ class FeatureFlagsServiceProvider extends ServiceProvider
                 __DIR__.'/../migrations/create_features_table.php' => database_path('migrations/'.$migration),
             ], 'features-migration');
 
+            $this->publishes([
+                __DIR__.'/../stubs/PreventRequestsDuringMaintenance.php' => app_path('Http/Middleware/PreventRequestsDuringMaintenance.php'),
+            ], 'maintenance-middleware');
+
             // Registering package commands.
             if (Features::usesCommands()) {
                 $this->commands([

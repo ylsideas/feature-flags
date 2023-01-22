@@ -27,6 +27,8 @@ class FeatureFlagsServiceProviderTest extends TestCase
             File::delete(config_path('features.php'));
             File::delete(base_path('.features.php'));
 
+            File::delete(app_path('Http/Middleware/PreventRequestsDuringMaintenance.php.backup'));
+
             collect(File::files(database_path('migrations')))
                 ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));
         });
@@ -81,6 +83,22 @@ class FeatureFlagsServiceProviderTest extends TestCase
 
         $this->assertNotNull($filename);
     }
+
+    public function test_publishes_the_maintenance_middleware(): void
+    {
+        $this->artisan('vendor:publish', [
+            '--tag' => 'maintenance-middleware',
+            '--force' => true,
+        ]);
+
+        $this->assertTrue(File::exists(app_path('Http/Middleware/PreventRequestsDuringMaintenance.php')));
+
+        $this->assertStringContainsString(
+            'use YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance as Middleware;',
+            File::get(app_path('Http/Middleware/PreventRequestsDuringMaintenance.php'))
+        );
+    }
+
 
     public function test_posting_about_info(): void
     {

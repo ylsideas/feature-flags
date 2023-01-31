@@ -15,7 +15,9 @@ and this PR aims to improve that problem by doing X instead of Y.
 -->
 
 ## Checklist before requesting a review
-- [ ] I have written PHP tests.
-- [ ] I have updated the documentation in the readme where needed.
+- [ ] I have written PHPUnit tests.
+- [ ] I have updated the documentation and opened a pull request within
+the [feature flags documentation repo](https://github.com/ylsideas/feature-flags-docs).
 - [ ] I have checked code styles, PHPStan etc. pass.
 - [ ] I have provided an issue/business case.
+- [ ] I have added the `enhancement` label for a new feature.

@@ -22,6 +22,19 @@ In late 2022 we decided to start work on a dashboard that will work on top of al
 for Laravel](https://github.com/ylsideas/feature-flags) gives you. Right now you can 
 [join the waiting list](https://www.flagfox.dev/?utm_campaign=waitlist&utm_source=github&utm_content=featureflags#waitlist).
 
+## How adding feature flags looks with this package
+
+It's pretty simple, you can start of with just simple calls to check if a flag's state is on or off.
+
+```php
+Features::accessible('my-feature') // returns true or false
+```
+
+One of the unique features of this package is that it integrates heavily into Laravel by allowing you to 
+configure different things such as access to route, schedule tasks or modifying the query builder.
+
+To get a full understanding, it's best to [read the docs](https://feature-flags.docs.ylsideas.co/).
+
 ## Upgrading
 
 This project is currently at version 2 and is somewhat different to version 1. If you are using Laravel 9 and PHP8

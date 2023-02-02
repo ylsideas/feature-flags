@@ -30,6 +30,7 @@ use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 use YlsIdeas\FeatureFlags\Support\FileLoader;
 use YlsIdeas\FeatureFlags\Support\GatewayCache;
 use YlsIdeas\FeatureFlags\Support\GatewayInspector;
+use YlsIdeas\FeatureFlags\Support\MaintenanceRepository;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\ManagerTest
@@ -224,6 +225,11 @@ class Manager implements Contracts\Features
         $this->gatewayDrivers[$driver] = $builder;
 
         return $this;
+    }
+
+    public function maintenanceMode(): MaintenanceRepository
+    {
+        return $this->container->make(MaintenanceRepository::class);
     }
 
     protected function getContainer(): Container

@@ -28,6 +28,7 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static \static callOnExpiredFeatures(array $expiredFeatures, callable|null $handler = null)
  * @method static \static applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
  * @method static \static extend(string $driver, callable $builder)
+ * @method static \YlsIdeas\FeatureFlags\Support\MaintenanceRepository maintenanceMode()
  * @method static void assertAccessed(string $feature, int|null $count = null, string $message = '')
  * @method static void assertNotAccessed(string $feature, string $message = '')
  * @method static void assertAccessedCount(string $feature, int $count = 0, string $message = '')

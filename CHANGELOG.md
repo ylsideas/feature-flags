@@ -2,6 +2,14 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## 2.4.0 - 2023-02-02
+
+### What's Changed
+
+- Maintenance mode with flags by @peterfox in https://github.com/ylsideas/feature-flags/pull/54
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.3.1...v2.4.0
+
 ## 2.3.1 - 2023-01-21
 
 ### What's Changed

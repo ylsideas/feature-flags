@@ -3,7 +3,8 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
 [![Tests](https://github.com/ylsideas/feature-flags/actions/workflows/run-tests.yml/badge.svg)](https://github.com/ylsideas/feature-flags/actions/workflows/run-tests.yml)
 [![Check & fix styling](https://github.com/ylsideas/feature-flags/actions/workflows/pint.yml/badge.svg)](https://github.com/ylsideas/feature-flags/actions/workflows/pint.yml)
-[![codecov](https://codecov.io/github/ylsideas/feature-flags/branch/main/graph/badge.svg?token=CWFGB3ROM0)](https://codecov.io/github/ylsideas/feature-flags)
+[![codecov](https://codecov.io/github/ylsideas/feature-flags/branch/main/graph/badge.svg)](https://codecov.io/github/ylsideas/feature-flags)
+[![Total Downloads](https://img.shields.io/packagist/dt/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
 [![Help Fund](https://img.shields.io/github/sponsors/peterfox?style=flat-square)](https://github.com/sponsors/peterfox)
 
 A Feature flag is at times referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 

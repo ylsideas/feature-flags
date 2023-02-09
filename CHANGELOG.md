@@ -2,6 +2,14 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v2.4.1 - 2023-02-09
+
+### Changes
+
+- Fixes a typo in the error message for missing in memory config files #55
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.4.0...v2.4.1
+
 ## 2.4.0 - 2023-02-02
 
 ### What's Changed

@@ -4,7 +4,7 @@ All notable changes to `feature-flags` will be documented in this file
 
 ## v2.4.1 - 2023-02-09
 
-### Changes
+### What's Changed
 
 - Fixes a typo in the error message for missing in memory config files #55
 

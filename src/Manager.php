@@ -20,6 +20,7 @@ use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
 use YlsIdeas\FeatureFlags\Exceptions\FeatureExpired;
+use YlsIdeas\FeatureFlags\Exceptions\GatewayConfigurationMissing;
 use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
 use YlsIdeas\FeatureFlags\Gateways\GateGateway;
 use YlsIdeas\FeatureFlags\Gateways\InMemoryGateway;
@@ -334,7 +335,7 @@ class Manager implements Contracts\Features
     protected function buildGateGateway(array $config, string $name): GateGateway
     {
         if (! ($config['gate'] ?? false)) {
-            throw new \RuntimeException(sprintf('No gate is configured for gateway `%s`', $name));
+            throw new GatewayConfigurationMissing(sprintf('No gate is configured for gateway `%s`', $name), $name);
         }
 
         return new GateGateway(

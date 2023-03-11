@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
+use YlsIdeas\FeatureFlags\Exceptions\FileNotFound;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 
 class FeaturesFileDiscovererTest extends TestCase
@@ -116,7 +117,8 @@ class FeaturesFileDiscovererTest extends TestCase
 
         $discoverer = new FeaturesFileDiscoverer($app, '.features.php');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(FileNotFound::class);
+        $this->expectExceptionMessage('.features.php` file could not be found.');
 
         $discoverer->find();
     }

@@ -10,7 +10,7 @@ class MaintenanceRepository implements Maintenance
 {
     public array $scenarios = [];
 
-    public ?MaintenanceScenario $foundScenario = null;
+    public MaintenanceScenario|null|false $foundScenario = false;
     protected \Closure $uponActivation;
     protected \Closure $uponDeactivation;
 
@@ -65,6 +65,10 @@ class MaintenanceRepository implements Maintenance
 
     public function parameters(): ?array
     {
+        if ($this->foundScenario === false) {
+            $this->findScenario();
+        }
+
         return $this->foundScenario?->toArray();
     }
 

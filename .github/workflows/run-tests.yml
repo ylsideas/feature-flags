@@ -9,7 +9,8 @@ on:
 
 jobs:
     test:
-        if: github.event_name != 'schedule' || github.repository == 'ylsideas/feature-flags'
+        if: (github.event_name != 'schedule' || github.repository == 'ylsideas/feature-flags') &&
+          !(matrix.dependencies != 'stable' && github.event_name == 'scheduled')
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false

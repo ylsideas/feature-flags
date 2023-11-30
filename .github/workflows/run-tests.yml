@@ -30,7 +30,6 @@ jobs:
                     -   php: 8.2
                         dependencies: lowest
                         carbon: ^2.62.1
-                exclude:
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependencies }} - ${{ matrix.os }}
 

@@ -149,7 +149,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     {
         if (class_exists(AboutCommand::class)) {
             AboutCommand::add('Feature Flags', [
-                'Pipeline' => fn () => implode(', Hello', config('features.pipeline')),
+                'Pipeline' => fn () => implode(', ', config('features.pipeline')),
             ]);
         }
     }

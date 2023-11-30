@@ -4,9 +4,12 @@ on:
     push:
     pull_request:
         branches: [main]
+    schedule:
+      - cron: '0 0 * * *'
 
 jobs:
     test:
+        if: github.event_name != 'schedule' || github.repository == 'ylsideas/feature-flags'
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false

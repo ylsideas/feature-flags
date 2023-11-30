@@ -4,15 +4,19 @@ on:
     push:
     pull_request:
         branches: [main]
+    schedule:
+      - cron: '0 0 * * *'
 
 jobs:
     test:
+        if: (github.event_name != 'schedule' || github.repository == 'ylsideas/feature-flags') &&
+          !(matrix.dependencies != 'stable' && github.event_name == 'scheduled')
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
             matrix:
                 os: [ubuntu-latest, windows-latest]
-                php: [8.2, 8.1, 8.0]
+                php: [8.3, 8.2, 8.1]
                 laravel: [9.*, 10.*]
                 dependencies: [lowest, stable]
                 include:
@@ -20,14 +24,13 @@ jobs:
                         testbench: ^7.0
                     -   laravel: 10.*
                         testbench: ^8.0
+                    -   php: 8.3
+                        dependencies: lowest
+                        carbon: ^2.62.1
                     -   php: 8.2
                         dependencies: lowest
                         carbon: ^2.62.1
                 exclude:
-                    -   laravel: 10.*
-                        php: 8.0
-                    -   laravel: 10.*
-                        os: windows-latest
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependencies }} - ${{ matrix.os }}
 

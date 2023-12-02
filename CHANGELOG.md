@@ -2,6 +2,15 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v2.4.2 - 2023-12-02
+
+### What's Changed
+
+* Fix maintenance mode by @peterfox in https://github.com/ylsideas/feature-flags/pull/62
+* Fix a typo in the about command by @peterfox in https://github.com/ylsideas/feature-flags/pull/63
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.4.1...v2.4.2
+
 ## v2.4.1 - 2023-02-09
 
 ### What's Changed

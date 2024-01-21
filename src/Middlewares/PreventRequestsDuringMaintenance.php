@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance as Ba
 
 class PreventRequestsDuringMaintenance extends BasePreventRequestsDuringMaintenance
 {
+    public function handle($request, $next)
+    {
+        dd('here');
+    }
+
     public function getExcludedPaths()
     {
         return $this->app->maintenanceMode()->data()['except'] ?? [];

@@ -3,7 +3,11 @@
 namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+
+use function Orchestra\Testbench\after_resolving;
+
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
@@ -122,7 +126,7 @@ class MaintenanceModeTest extends TestCase
     }
 
     /**
-     * Resolve application HTTP Kernel implementation.
+     * Required override for Pre Laravel 11
      *
      * @param  \Illuminate\Foundation\Application  $app
      * @return void
@@ -135,6 +139,26 @@ class MaintenanceModeTest extends TestCase
             Kernel::class,
             \YlsIdeas\FeatureFlags\Tests\Kernel::class
         );
+    }
+
+    /**
+     * Required override for Laravel 11
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function resolveApplicationHttpMiddlewares($app)
+    {
+        after_resolving($app, Kernel::class, function ($kernel, $app) {
+            /** @var \Illuminate\Foundation\Http\Kernel $kernel */
+            $middleware = new Middleware();
+
+            $kernel->setGlobalMiddleware([
+                \YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance::class,
+            ]);
+            $kernel->setMiddlewareGroups($middleware->getMiddlewareGroups());
+            $kernel->setMiddlewareAliases($middleware->getMiddlewareAliases());
+        });
     }
 
     protected function getPackageProviders($app): array

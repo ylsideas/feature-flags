@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance as Ba
 
 class PreventRequestsDuringMaintenance extends BasePreventRequestsDuringMaintenance
 {
-
     public function handle($request, $next)
     {
         dump('here');

@@ -20,9 +20,9 @@
         "illuminate/contracts": "11.*|10.*|^9.6"
     },
     "require-dev": {
+        "larastan/larastan": "^2.0|^1.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^8.0|^7.8|^6.0",
-        "larastan/larastan": "^2.0|^1.0",
         "orchestra/testbench": "9.*|^8.0|^7.0",
         "pestphp/pest": "^2.20",
         "pestphp/pest-plugin-arch": "^2.6",
@@ -47,7 +47,7 @@
         "lint": "vendor/bin/pint",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest coverage",
-        "mod": "vendor/bin/rector"
+        "fix": "vendor/bin/rector"
     },
     "config": {
         "sort-packages": true,

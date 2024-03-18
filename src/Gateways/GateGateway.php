@@ -34,6 +34,6 @@ class GateGateway implements Gateway, Cacheable
             return md5($feature);
         }
 
-        return implode(':', [md5($feature), get_class($model), $model->getKey()]);
+        return implode(':', [md5($feature), $model::class, $model->getKey()]);
     }
 }

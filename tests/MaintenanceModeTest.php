@@ -70,9 +70,7 @@ class MaintenanceModeTest extends TestCase
         $this->assertTrue($called);
     }
 
-    /**
-     * @dataProvider exceptsValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('exceptsValues')]
     public function test_maintenance_mode_respects_excepts_values(string $path, int $status)
     {
         Features::fake(['system.down' => true]);

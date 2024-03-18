@@ -177,9 +177,7 @@ class GatewayInspectorTest extends TestCase
         $this->assertFalse($action->getResult());
     }
 
-    /**
-     * @dataProvider debugScenarios
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('debugScenarios')]
     public function test_it_provides_debug_information(callable $constructs, callable $assert, ?bool $result = null)
     {
         $action = new ActionableFlag();

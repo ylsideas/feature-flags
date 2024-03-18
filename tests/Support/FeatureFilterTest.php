@@ -14,9 +14,7 @@ class FeatureFilterTest extends TestCase
         $this->assertInstanceOf(FeatureFilter::class, $component);
     }
 
-    /**
-     * @dataProvider successfulPatterns
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('successfulPatterns')]
     public function test_it_fails_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
@@ -24,9 +22,7 @@ class FeatureFilterTest extends TestCase
         $this->assertTrue($component->fails($feature));
     }
 
-    /**
-     * @dataProvider failurePatterns
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('failurePatterns')]
     public function test_it_does_not_fail_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
@@ -34,14 +30,14 @@ class FeatureFilterTest extends TestCase
         $this->assertFalse($component->fails($feature));
     }
 
-    public function successfulPatterns(): \Generator
+    public static function successfulPatterns(): \Generator
     {
         yield 'simple' => ['my-feature', ['system.*']];
         yield 'advanced' => ['my-feature', ['system.*', 'my-feature-1.*']];
         yield 'more advanced' => ['my-feature', ['system.*', '!my-feature']];
     }
 
-    public function failurePatterns(): \Generator
+    public static function failurePatterns(): \Generator
     {
         yield 'simple' => ['my-feature.1', ['my-feature.*']];
     }

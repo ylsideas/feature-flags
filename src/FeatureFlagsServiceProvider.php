@@ -96,35 +96,27 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
 
-        $this->app->scoped(MaintenanceRepository::class, function (Container $app) {
-            return new MaintenanceRepository($app->make(FeaturesContract::class), $app);
-        });
+        $this->app->scoped(MaintenanceRepository::class, fn(Container $app) => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
 
-        $this->app->extend(MaintenanceModeManager::class, function (MaintenanceModeManager $manager) {
-            return $manager->extend('features', function (): MaintenanceMode {
-                return new MaintenanceDriver(
-                    $this->app->make(MaintenanceRepository::class)
-                );
-            });
-        });
+        $this->app->extend(MaintenanceModeManager::class, fn(MaintenanceModeManager $manager) => $manager->extend('features', fn(): MaintenanceMode => new MaintenanceDriver(
+            $this->app->make(MaintenanceRepository::class)
+        )));
     }
 
     protected function schedulingMacros()
     {
         if (! Event::hasMacro('skipWithoutFeature')) {
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
-            Event::macro('skipWithoutFeature', function (string $feature): Event {
+            Event::macro('skipWithoutFeature', fn(string $feature): Event =>
                 /** @var Event $this */
-                return $this->skip(fn () => ! Features::accessible($feature));
-            });
+                $this->skip(fn () => ! Features::accessible($feature)));
         }
 
         if (! Event::hasMacro('skipWithFeature')) {
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
-            Event::macro('skipWithFeature', function ($feature): Event {
+            Event::macro('skipWithFeature', fn($feature): Event =>
                 /** @var Event $this */
-                return $this->skip(fn () => Features::accessible($feature));
-            });
+                $this->skip(fn () => Features::accessible($feature)));
         }
     }
 

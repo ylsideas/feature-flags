@@ -18,9 +18,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @before
-     */
+    #[\PHPUnit\Framework\Attributes\Before]
     protected function cleanUp(): void
     {
         $this->afterApplicationCreated(function () {

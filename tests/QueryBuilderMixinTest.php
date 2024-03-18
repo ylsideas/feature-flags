@@ -33,11 +33,11 @@ class QueryBuilderMixinTest extends TestCase
     {
         yield 'flag is true' => [
             true,
-            'select * from `users` where `id` = ?',
+            'select * from "users" where "id" = ?',
         ];
         yield 'flag is false' => [
             false,
-            'select * from `users`',
+            'select * from "users"',
         ];
     }
 
@@ -57,11 +57,11 @@ class QueryBuilderMixinTest extends TestCase
     {
         yield 'flag is true' => [
             true,
-            'select * from `users`',
+            'select * from "users"',
         ];
         yield 'flag is false' => [
             false,
-            'select * from `users` where `id` = ?',
+            'select * from "users" where "id" = ?',
         ];
     }
 }

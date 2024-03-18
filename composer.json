@@ -20,6 +20,7 @@
         "illuminate/contracts": "11.*|10.*"
     },
     "require-dev": {
+        "composer/semver": "^3.0",
         "larastan/larastan": "^2.0|^1.0",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^8.0|^7.8|^6.0",

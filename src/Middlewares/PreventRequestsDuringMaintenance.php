@@ -6,9 +6,12 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance as Ba
 
 class PreventRequestsDuringMaintenance extends BasePreventRequestsDuringMaintenance
 {
+
     public function handle($request, $next)
     {
-        dd('here');
+        dump('here');
+
+        return parent::handle($request, $next);
     }
 
     public function getExcludedPaths()

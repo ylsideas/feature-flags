@@ -83,17 +83,19 @@ class MaintenanceModeTest extends TestCase
         Route::get('/', fn () => 'Foo Bar');
         Route::get('/test', fn () => 'Foo Bar Foo');
 
-        $this->get($path)
+        $this
+            ->withoutExceptionHandling([\Symfony\Component\HttpKernel\Exception\HttpException::class])
+            ->get($path)
             ->assertStatus($status);
 
         Features::assertAccessed('system.down');
     }
 
-    public function exceptsValues(): \Generator
+    public static function exceptsValues(): \Generator
     {
-//        yield 'blocked' => [
-//            '/', 503,
-//        ];
+        yield 'blocked' => [
+            '/', 503,
+        ];
         yield 'allowed' => [
             '/test', 200,
         ];
@@ -135,13 +137,6 @@ class MaintenanceModeTest extends TestCase
             Kernel::class,
             \YlsIdeas\FeatureFlags\Tests\Kernel::class
         );
-
-        /** @var \Illuminate\Foundation\Http\Kernel $kernel */
-        $kernel = $app->get(Kernel::class);
-
-        $kernel->setGlobalMiddleware([
-            \YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance::class,
-        ]);
     }
 
     protected function getPackageProviders($app): array

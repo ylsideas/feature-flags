@@ -96,9 +96,9 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
 
-        $this->app->scoped(MaintenanceRepository::class, fn(Container $app) => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
+        $this->app->scoped(MaintenanceRepository::class, fn (Container $app) => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
 
-        $this->app->extend(MaintenanceModeManager::class, fn(MaintenanceModeManager $manager) => $manager->extend('features', fn(): MaintenanceMode => new MaintenanceDriver(
+        $this->app->extend(MaintenanceModeManager::class, fn (MaintenanceModeManager $manager) => $manager->extend('features', fn (): MaintenanceMode => new MaintenanceDriver(
             $this->app->make(MaintenanceRepository::class)
         )));
     }
@@ -107,14 +107,14 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     {
         if (! Event::hasMacro('skipWithoutFeature')) {
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
-            Event::macro('skipWithoutFeature', fn(string $feature): Event =>
+            Event::macro('skipWithoutFeature', fn (string $feature): Event =>
                 /** @var Event $this */
                 $this->skip(fn () => ! Features::accessible($feature)));
         }
 
         if (! Event::hasMacro('skipWithFeature')) {
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
-            Event::macro('skipWithFeature', fn($feature): Event =>
+            Event::macro('skipWithFeature', fn ($feature): Event =>
                 /** @var Event $this */
                 $this->skip(fn () => Features::accessible($feature)));
         }

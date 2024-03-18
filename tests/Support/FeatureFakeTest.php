@@ -52,7 +52,7 @@ class FeatureFakeTest extends TestCase
         Event::fake();
         Features::fake(['my-feature' => true]);
 
-        $this->assertTrue(app()->call(fn(FeaturesContract $accessible): bool => $accessible->accessible('my-feature')));
+        $this->assertTrue(app()->call(fn (FeaturesContract $accessible): bool => $accessible->accessible('my-feature')));
     }
 
     public function test_it_can_be_fake_accessibility_results_if_no_value_is_provided()

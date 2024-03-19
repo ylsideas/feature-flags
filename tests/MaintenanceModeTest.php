@@ -3,7 +3,11 @@
 namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+
+use function Orchestra\Testbench\after_resolving;
+
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
@@ -19,7 +23,7 @@ class MaintenanceModeTest extends TestCase
         Route::get('/', fn () => 'Foo Bar');
 
         $this->get('/')
-            ->assertStatus(503);
+            ->assertServiceUnavailable();
 
         Features::assertAccessed('system.down');
     }
@@ -70,9 +74,7 @@ class MaintenanceModeTest extends TestCase
         $this->assertTrue($called);
     }
 
-    /**
-     * @dataProvider exceptsValues
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('exceptsValues')]
     public function test_maintenance_mode_respects_excepts_values(string $path, int $status)
     {
         Features::fake(['system.down' => true]);
@@ -83,13 +85,15 @@ class MaintenanceModeTest extends TestCase
         Route::get('/', fn () => 'Foo Bar');
         Route::get('/test', fn () => 'Foo Bar Foo');
 
-        $this->get($path)
+        $this
+            ->withoutExceptionHandling([\Symfony\Component\HttpKernel\Exception\HttpException::class])
+            ->get($path)
             ->assertStatus($status);
 
         Features::assertAccessed('system.down');
     }
 
-    public function exceptsValues(): \Generator
+    public static function exceptsValues(): \Generator
     {
         yield 'blocked' => [
             '/', 503,
@@ -122,7 +126,7 @@ class MaintenanceModeTest extends TestCase
     }
 
     /**
-     * Resolve application HTTP Kernel implementation.
+     * Required override for Pre Laravel 11
      *
      * @param  \Illuminate\Foundation\Application  $app
      * @return void
@@ -135,6 +139,26 @@ class MaintenanceModeTest extends TestCase
             Kernel::class,
             \YlsIdeas\FeatureFlags\Tests\Kernel::class
         );
+    }
+
+    /**
+     * Required override for Laravel 11
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     * @return void
+     */
+    protected function resolveApplicationHttpMiddlewares($app)
+    {
+        after_resolving($app, Kernel::class, function ($kernel, $app) {
+            /** @var \Illuminate\Foundation\Http\Kernel $kernel */
+            $middleware = new Middleware();
+
+            $kernel->setGlobalMiddleware([
+                \YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance::class,
+            ]);
+            $kernel->setMiddlewareGroups($middleware->getMiddlewareGroups());
+            $kernel->setMiddlewareAliases($middleware->getMiddlewareAliases());
+        });
     }
 
     protected function getPackageProviders($app): array

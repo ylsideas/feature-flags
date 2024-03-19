@@ -15,9 +15,7 @@ use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
 use YlsIdeas\FeatureFlags\Manager;
 
-/**
- * @covers \YlsIdeas\FeatureFlags\Manager
- */
+#[\PHPUnit\Framework\Attributes\CoversClass(\YlsIdeas\FeatureFlags\Manager::class)]
 class ManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -141,9 +139,7 @@ class ManagerTest extends TestCase
         $manager->turnOff('test', 'my-feature');
     }
 
-    /**
-     * @dataProvider services
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('services')]
     public function test_it_can_flag_parts_of_the_package_to_be_turned_off($item): void
     {
         $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
@@ -155,7 +151,7 @@ class ManagerTest extends TestCase
         $this->assertFalse($manager->{"uses$item"}());
     }
 
-    public function services(): array
+    public static function services(): array
     {
         return [
             ['Blade'],

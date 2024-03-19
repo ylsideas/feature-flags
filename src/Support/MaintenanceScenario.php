@@ -4,6 +4,9 @@ namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @see \YlsIdeas\FeatureFlags\Tests\Support\MaintenanceScenarioTest
+ */
 class MaintenanceScenario implements Arrayable
 {
     public string $feature;

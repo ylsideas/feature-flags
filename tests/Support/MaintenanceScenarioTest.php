@@ -7,9 +7,7 @@ use YlsIdeas\FeatureFlags\Support\MaintenanceScenario;
 
 class MaintenanceScenarioTest extends TestCase
 {
-    /**
-     * @dataProvider scenarioOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenarioOptions')]
     public function test_it_builds_a_maintenance_scenario(callable $builder, bool $polarity, array $result)
     {
         $scenario = new MaintenanceScenario();
@@ -20,7 +18,7 @@ class MaintenanceScenarioTest extends TestCase
         $this->assertSame($result, $scenario->toArray());
     }
 
-    public function scenarioOptions(): \Generator
+    public static function scenarioOptions(): \Generator
     {
         yield 'secret' => [
             fn (MaintenanceScenario $scenario): MaintenanceScenario => $scenario

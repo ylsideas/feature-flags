@@ -9,7 +9,6 @@ use PHPUnit\Framework\Assert;
 use YlsIdeas\FeatureFlags\Contracts\Features;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessed;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
-use YlsIdeas\FeatureFlags\Manager;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\Support\FeatureFakeTest
@@ -23,7 +22,7 @@ class FeatureFake implements Features
     /**
      * @param array<string, bool|array> $featureFlags
      */
-    public function __construct(protected Manager $manager, protected array $featureFlags = [])
+    public function __construct(protected Features $manager, protected array $featureFlags = [])
     {
     }
 

@@ -47,6 +47,14 @@ class FeatureFakeTest extends TestCase
         $this->assertTrue($fake->accessible('my-feature'));
     }
 
+    public function test_it_can_switch_a_feature_multiple_times()
+    {
+        Features::fake(['my-feature' => true]);
+        Features::fake(['my-feature' => false]);
+
+        $this->assertFalse(Features::accessible('my-feature'));
+    }
+
     public function test_it_can_be_fake_accessibility_results_from_the_container()
     {
         Event::fake();

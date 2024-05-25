@@ -109,7 +109,6 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
             Event::macro('skipWithoutFeature', fn (string $feature): Event =>
                 /** @var Event $this */
-                /** @phpstan-ignore-next-line annoying issue with macros */
                 $this->skip(fn () => ! Features::accessible($feature)));
         }
 
@@ -117,7 +116,6 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
             Event::macro('skipWithFeature', fn ($feature): Event =>
                 /** @var Event $this */
-                /** @phpstan-ignore-next-line annoying issue with macros */
                 $this->skip(fn () => Features::accessible($feature)));
         }
     }

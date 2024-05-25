@@ -4,6 +4,7 @@ namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Testing\Fakes\Fake;
 use Illuminate\Support\Traits\ForwardsCalls;
 use PHPUnit\Framework\Assert;
 use YlsIdeas\FeatureFlags\Contracts\Features;
@@ -14,7 +15,7 @@ use YlsIdeas\FeatureFlags\Manager;
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\Support\FeatureFakeTest
  */
-class FeatureFake implements Features
+class FeatureFake implements Features, Fake
 {
     use ForwardsCalls;
 
@@ -25,6 +26,11 @@ class FeatureFake implements Features
      */
     public function __construct(protected Manager $manager, protected array $featureFlags = [])
     {
+    }
+
+    public function manager(): Manager
+    {
+        return $this->manager;
     }
 
     public function accessible(string $feature): bool

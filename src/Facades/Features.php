@@ -30,7 +30,6 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static \static applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
  * @method static \static extend(string $driver, callable $builder)
  * @method static \YlsIdeas\FeatureFlags\Support\MaintenanceRepository maintenanceMode()
- * @method static \YlsIdeas\FeatureFlags\Manager manager()
  * @method static void assertAccessed(string $feature, int|null $count = null, string $message = '')
  * @method static void assertNotAccessed(string $feature, string $message = '')
  * @method static void assertAccessedCount(string $feature, int $count = 0, string $message = '')
@@ -47,7 +46,7 @@ class Features extends Facade
     public static function fake(array $flagsToFake = []): FeatureFake
     {
         $manager = static::isFake()
-            ? static::getFacadeRoot()->manager()
+            ? static::getFacadeRoot()->manager
             : static::getFacadeRoot();
 
         static::swap($fake = new FeatureFake($manager, $flagsToFake));

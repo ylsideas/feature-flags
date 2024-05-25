@@ -24,13 +24,8 @@ class FeatureFake implements Features, Fake
     /**
      * @param array<string, bool|array> $featureFlags
      */
-    public function __construct(protected Manager $manager, protected array $featureFlags = [])
+    public function __construct(public Manager $manager, protected array $featureFlags = [])
     {
-    }
-
-    public function manager(): Manager
-    {
-        return $this->manager;
     }
 
     public function accessible(string $feature): bool

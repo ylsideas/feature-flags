@@ -148,6 +148,14 @@ class FeatureFakeTest extends TestCase
         Event::assertDispatched(FeatureAccessed::class);
     }
 
+    public function test_it_can_switch_a_feature_multiple_times()
+    {
+        Features::fake(['my-feature' => true]);
+        Features::fake(['my-feature' => false]);
+
+        $this->assertFalse(Features::accessible('my-feature'));
+    }
+
     protected function getFake($manager, $features)
     {
         return new class ($manager, $features) extends FeatureFake {

@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Testing\Fakes\Fake;
 use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Support\FeatureFake;
 
@@ -44,7 +45,11 @@ class Features extends Facade
      */
     public static function fake(array $flagsToFake = []): FeatureFake
     {
-        static::swap($fake = new FeatureFake(static::getFacadeRoot(), $flagsToFake));
+        $manager = static::isFake()
+            ? static::getFacadeRoot()->manager
+            : static::getFacadeRoot();
+
+        static::swap($fake = new FeatureFake($manager, $flagsToFake));
 
         return $fake;
     }

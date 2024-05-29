@@ -2,6 +2,14 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v2.6.0 - 2024-05-29
+
+### What's Changed
+
+* Allows for multiple fakes to occur by @peterfox @brunodevel in https://github.com/ylsideas/feature-flags/pull/67
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.5.0...v2.6.0
+
 ## v2.5.0 - 2024-03-19
 
 ### What's Changed

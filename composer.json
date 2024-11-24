@@ -23,6 +23,7 @@
         "composer/semver": "^3.0",
         "larastan/larastan": "^2.0|^1.0",
         "laravel/pint": "^1.0",
+        "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.0|^7.8|^6.0",
         "orchestra/testbench": "^9.0|^8.0|^7.0",
         "pestphp/pest": "^1.21|^2.34",

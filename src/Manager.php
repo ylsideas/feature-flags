@@ -66,7 +66,7 @@ class Manager implements Contracts\Features
      */
     public function accessible(string $feature): bool
     {
-        if ($this->expiredFeaturesHandler) {
+        if ($this->expiredFeaturesHandler instanceof \YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler) {
             $this->expiredFeaturesHandler->isExpired($feature);
         }
 
@@ -289,7 +289,7 @@ class Manager implements Contracts\Features
         $pipes = $this->container->make(Repository::class)->get('features.pipeline');
 
         return collect($pipes)
-            ->map(fn (string $pipe) => $this->resolve($pipe))
+            ->map(fn (string $pipe): \YlsIdeas\FeatureFlags\Support\GatewayInspector => $this->resolve($pipe))
             ->all();
     }
 

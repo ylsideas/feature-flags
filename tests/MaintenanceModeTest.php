@@ -14,13 +14,13 @@ use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
 class MaintenanceModeTest extends TestCase
 {
-    public function test_maintenance_mode_enabled()
+    public function test_maintenance_mode_enabled(): void
     {
         Features::fake(['system.down' => true]);
         Features::maintenanceMode()
             ->onEnabled('system.down');
 
-        Route::get('/', fn () => 'Foo Bar');
+        Route::get('/', fn (): string => 'Foo Bar');
 
         $this->get('/')
             ->assertServiceUnavailable();
@@ -28,13 +28,13 @@ class MaintenanceModeTest extends TestCase
         Features::assertAccessed('system.down');
     }
 
-    public function test_maintenance_mode_disabled()
+    public function test_maintenance_mode_disabled(): void
     {
         Features::fake(['system.down' => false]);
         Features::maintenanceMode()
             ->onEnabled('system.down');
 
-        Route::get('/', fn () => 'Foo Bar');
+        Route::get('/', fn (): string => 'Foo Bar');
 
         $this->get('/')
             ->assertOk();
@@ -42,7 +42,7 @@ class MaintenanceModeTest extends TestCase
         Features::assertAccessed('system.down');
     }
 
-    public function test_it_handles_the_first_match()
+    public function test_it_handles_the_first_match(): void
     {
         Features::fake(['system.api' => true,]);
         Features::maintenanceMode()
@@ -52,7 +52,7 @@ class MaintenanceModeTest extends TestCase
             ->onEnabled('system.api')
             ->statusCode(500);
 
-        Route::get('/', fn () => 'Foo Bar');
+        Route::get('/', fn (): string => 'Foo Bar');
 
         $this->get('/')
             ->assertStatus(500);
@@ -61,7 +61,7 @@ class MaintenanceModeTest extends TestCase
         Features::assertAccessed('system.api');
     }
 
-    public function test_upon_activation()
+    public function test_upon_activation(): void
     {
         $called = false;
         Features::maintenanceMode()
@@ -75,15 +75,15 @@ class MaintenanceModeTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('exceptsValues')]
-    public function test_maintenance_mode_respects_excepts_values(string $path, int $status)
+    public function test_maintenance_mode_respects_excepts_values(string $path, int $status): void
     {
         Features::fake(['system.down' => true]);
         Features::maintenanceMode()
             ->onEnabled('system.down')
             ->exceptPaths(['/test']);
 
-        Route::get('/', fn () => 'Foo Bar');
-        Route::get('/test', fn () => 'Foo Bar Foo');
+        Route::get('/', fn (): string => 'Foo Bar');
+        Route::get('/test', fn (): string => 'Foo Bar Foo');
 
         $this
             ->withoutExceptionHandling([\Symfony\Component\HttpKernel\Exception\HttpException::class])
@@ -103,7 +103,7 @@ class MaintenanceModeTest extends TestCase
         ];
     }
 
-    public function test_upon_deactivation()
+    public function test_upon_deactivation(): void
     {
         $called = false;
         Features::fake(['system.down' => true]);

@@ -8,7 +8,7 @@ use YlsIdeas\FeatureFlags\Support\MaintenanceScenario;
 class MaintenanceScenarioTest extends TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('scenarioOptions')]
-    public function test_it_builds_a_maintenance_scenario(callable $builder, bool $polarity, array $result)
+    public function test_it_builds_a_maintenance_scenario(callable $builder, bool $polarity, array $result): void
     {
         $scenario = new MaintenanceScenario();
         /** @var MaintenanceScenario $scenario */

@@ -111,7 +111,7 @@ class DatabaseGatewayTest extends TestCase
             ->andReturn($query);
 
         $query->shouldReceive('updateOrInsert')
-            ->withArgs(function ($find, $data) {
+            ->withArgs(function (array $find, array $data): true {
                 $this->assertArrayHasKey('feature', $find);
                 $this->assertArrayHasKey('active_at', $data);
 

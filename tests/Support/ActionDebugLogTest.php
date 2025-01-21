@@ -7,7 +7,7 @@ use YlsIdeas\FeatureFlags\Support\ActionDebugLog;
 
 class ActionDebugLogTest extends TestCase
 {
-    public function test_it_stores_the_file_and_line_location()
+    public function test_it_stores_the_file_and_line_location(): void
     {
         $log = new ActionDebugLog('test.php', 10);
 
@@ -15,7 +15,7 @@ class ActionDebugLogTest extends TestCase
         $this->assertSame('test.php', $log->file);
     }
 
-    public function test_it_stores_the_log_entries()
+    public function test_it_stores_the_log_entries(): void
     {
         $log = new ActionDebugLog('test.php', 10);
 

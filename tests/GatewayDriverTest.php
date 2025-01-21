@@ -16,7 +16,7 @@ class GatewayDriverTest extends TestCase
         ];
     }
 
-    public function test_throws_exception_creating_a_gateway_driver()
+    public function test_throws_exception_creating_a_gateway_driver(): void
     {
         config()->set('features.pipeline', ['gate']);
         config()->set('features.gateways', [
@@ -30,7 +30,7 @@ class GatewayDriverTest extends TestCase
         $this->app->make(Manager::class)->pipeline();
     }
 
-    public function test_create_a_gateway_driver()
+    public function test_create_a_gateway_driver(): void
     {
         config()->set('features.pipeline', ['gate']);
         config()->set('features.gateways', [

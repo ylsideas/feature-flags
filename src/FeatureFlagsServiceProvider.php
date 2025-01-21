@@ -28,7 +28,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -96,7 +96,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
 
-        $this->app->scoped(MaintenanceRepository::class, fn (Container $app) => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
+        $this->app->scoped(MaintenanceRepository::class, fn (Container $app): \YlsIdeas\FeatureFlags\Support\MaintenanceRepository => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
 
         $this->app->extend(MaintenanceModeManager::class, fn (MaintenanceModeManager $manager) => $manager->extend('features', fn (): MaintenanceMode => new MaintenanceDriver(
             $this->app->make(MaintenanceRepository::class)
@@ -109,7 +109,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             /** @noRector \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector */
             Event::macro('skipWithoutFeature', fn (string $feature): Event =>
                 /** @var Event $this */
-                $this->skip(fn () => ! Features::accessible($feature)));
+                $this->skip(fn (): bool => ! Features::accessible($feature)));
         }
 
         if (! Event::hasMacro('skipWithFeature')) {
@@ -141,7 +141,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
     {
         if (class_exists(AboutCommand::class)) {
             AboutCommand::add('Feature Flags', [
-                'Pipeline' => fn () => implode(', ', config('features.pipeline')),
+                'Pipeline' => fn (): string => implode(', ', config('features.pipeline')),
             ]);
         }
     }

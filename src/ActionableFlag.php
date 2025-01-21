@@ -36,7 +36,7 @@ class ActionableFlag implements ActionableFlagContract
         return (bool) $this->debug;
     }
 
-    public function storeInspectionInformation(string $pipe, string $reason, ?bool $result = null)
+    public function storeInspectionInformation(string $pipe, string $reason, ?bool $result = null): void
     {
         $this->debug->addDecision($pipe, $reason, $result);
     }

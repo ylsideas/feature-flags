@@ -50,7 +50,7 @@ class FeatureFake implements Features, Fake
         return $featureValue;
     }
 
-    public function assertAccessed(string $feature, ?int $count = null, string $message = '')
+    public function assertAccessed(string $feature, ?int $count = null, string $message = ''): void
     {
         if ($count === null) {
             Assert::assertGreaterThan(0, $this->getCount($feature), $message);
@@ -59,12 +59,12 @@ class FeatureFake implements Features, Fake
         }
     }
 
-    public function assertNotAccessed(string $feature, string $message = '')
+    public function assertNotAccessed(string $feature, string $message = ''): void
     {
         Assert::assertLessThan(1, $this->getCount($feature), $message);
     }
 
-    public function assertAccessedCount(string $feature, int $count = 0, string $message = '')
+    public function assertAccessedCount(string $feature, int $count = 0, string $message = ''): void
     {
         $this->assertAccessed($feature, $count, $message);
     }

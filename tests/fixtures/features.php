@@ -1,3 +1,3 @@
 <?php
 
-return static fn () => [];
+return static fn (): array => [];

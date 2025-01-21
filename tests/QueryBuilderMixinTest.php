@@ -21,7 +21,7 @@ class QueryBuilderMixinTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('positiveSqlStatements')]
-    public function test_modifying_queries_when_the_feature_is_enabled(bool $flag, string $expectedSql)
+    public function test_modifying_queries_when_the_feature_is_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
         if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {
@@ -49,7 +49,7 @@ class QueryBuilderMixinTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('negativeSqlStatements')]
-    public function test_modifying_queries_when_the_feature_is_not_enabled(bool $flag, string $expectedSql)
+    public function test_modifying_queries_when_the_feature_is_not_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
         if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {

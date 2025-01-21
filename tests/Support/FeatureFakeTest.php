@@ -22,7 +22,7 @@ class FeatureFakeTest extends TestCase
         ];
     }
 
-    public function test_it_can_be_initialised()
+    public function test_it_can_be_initialised(): void
     {
         $manager = \Mockery::mock(Manager::class);
         $fake = $this->getFake($manager, ['my-feature' => true]);
@@ -30,7 +30,7 @@ class FeatureFakeTest extends TestCase
         $this->assertInstanceOf(FeatureFake::class, $fake);
     }
 
-    public function test_it_can_be_swapped_via_the_facade()
+    public function test_it_can_be_swapped_via_the_facade(): void
     {
         $fake = Features::fake(['my-feature' => true]);
 
@@ -38,7 +38,7 @@ class FeatureFakeTest extends TestCase
         $this->assertTrue(Features::accessible('my-feature'));
     }
 
-    public function test_it_can_be_fake_accessibility_results()
+    public function test_it_can_be_fake_accessibility_results(): void
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
@@ -47,7 +47,7 @@ class FeatureFakeTest extends TestCase
         $this->assertTrue($fake->accessible('my-feature'));
     }
 
-    public function test_it_can_be_fake_accessibility_results_from_the_container()
+    public function test_it_can_be_fake_accessibility_results_from_the_container(): void
     {
         Event::fake();
         Features::fake(['my-feature' => true]);
@@ -55,7 +55,7 @@ class FeatureFakeTest extends TestCase
         $this->assertTrue(app()->call(fn (FeaturesContract $accessible): bool => $accessible->accessible('my-feature')));
     }
 
-    public function test_it_can_be_fake_accessibility_results_if_no_value_is_provided()
+    public function test_it_can_be_fake_accessibility_results_if_no_value_is_provided(): void
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
@@ -64,7 +64,7 @@ class FeatureFakeTest extends TestCase
         $this->assertFalse($fake->accessible('my-feature'));
     }
 
-    public function test_it_can_be_fake_accessibility_results_with_an_array()
+    public function test_it_can_be_fake_accessibility_results_with_an_array(): void
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
@@ -75,7 +75,7 @@ class FeatureFakeTest extends TestCase
         $this->assertSame(2, $fake->getCount('my-feature'));
     }
 
-    public function test_it_can_be_fake_accessibility_results_with_an_array_using_the_last_position()
+    public function test_it_can_be_fake_accessibility_results_with_an_array_using_the_last_position(): void
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
@@ -87,7 +87,7 @@ class FeatureFakeTest extends TestCase
         $this->assertSame(3, $fake->getCount('my-feature'));
     }
 
-    public function test_it_counts_how_often_a_feature_is_accessed()
+    public function test_it_counts_how_often_a_feature_is_accessed(): void
     {
         Event::fake();
         $manager = \Mockery::mock(Manager::class);
@@ -98,7 +98,7 @@ class FeatureFakeTest extends TestCase
         $this->assertSame(1, $fake->getCount('my-feature'));
     }
 
-    public function test_it_allows_for_asserting_if_a_feature_has_been_accessed()
+    public function test_it_allows_for_asserting_if_a_feature_has_been_accessed(): void
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
@@ -109,7 +109,7 @@ class FeatureFakeTest extends TestCase
         $fake->assertAccessed('my-feature');
     }
 
-    public function test_it_allows_for_asserting_if_a_feature_has_not_been_accessed()
+    public function test_it_allows_for_asserting_if_a_feature_has_not_been_accessed(): void
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
@@ -121,7 +121,7 @@ class FeatureFakeTest extends TestCase
         $fake->assertNotAccessed('my-feature');
     }
 
-    public function test_it_allows_for_asserting_if_a_feature_has_used_multiple_times()
+    public function test_it_allows_for_asserting_if_a_feature_has_used_multiple_times(): void
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
@@ -135,7 +135,7 @@ class FeatureFakeTest extends TestCase
         $fake->assertAccessedCount('my-feature', 2);
     }
 
-    public function test_it_fires_events_still()
+    public function test_it_fires_events_still(): void
     {
         Event::fake();
 
@@ -148,7 +148,7 @@ class FeatureFakeTest extends TestCase
         Event::assertDispatched(FeatureAccessed::class);
     }
 
-    public function test_it_can_switch_a_feature_multiple_times()
+    public function test_it_can_switch_a_feature_multiple_times(): void
     {
         Features::fake(['my-feature' => true]);
         Features::fake(['my-feature' => false]);
@@ -156,7 +156,7 @@ class FeatureFakeTest extends TestCase
         $this->assertFalse(Features::accessible('my-feature'));
     }
 
-    protected function getFake($manager, $features)
+    protected function getFake($manager, $features): \YlsIdeas\FeatureFlags\Support\FeatureFake
     {
         return new class ($manager, $features) extends FeatureFake {
             public function getCount(string $feature)

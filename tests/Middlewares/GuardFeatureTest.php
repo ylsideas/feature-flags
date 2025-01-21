@@ -105,7 +105,7 @@ class GuardFeatureTest extends TestCase
 
         $this->assertTrue($middleware->handle(
             $expectedRequest,
-            function ($request) use ($expectedRequest) {
+            function ($request) use ($expectedRequest): true {
                 $this->assertSame($expectedRequest, $request);
 
                 return true;

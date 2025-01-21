@@ -44,14 +44,14 @@ class MaintenanceRepository implements Maintenance
         $this->container->call($this->uponDeactivation, ['features' => $this->features]);
     }
 
-    public function onEnabled($feature): MaintenanceScenario
+    public function onEnabled(string $feature): MaintenanceScenario
     {
         return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
         });
     }
 
-    public function onDisabled($feature): MaintenanceScenario
+    public function onDisabled(string $feature): MaintenanceScenario
     {
         return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
@@ -75,15 +75,12 @@ class MaintenanceRepository implements Maintenance
     protected function findScenario(): ?MaintenanceScenario
     {
         return $this->foundScenario = collect($this->scenarios)
-            ->first(function (MaintenanceScenario $scenario) {
+            ->first(function (MaintenanceScenario $scenario): bool {
                 if ($scenario->onEnabled && $this->features->accessible($scenario->feature)) {
                     return true;
                 }
-                if (! $scenario->onEnabled && ! $this->features->accessible($scenario->feature)) {
-                    return true;
-                }
 
-                return false;
+                return ! $scenario->onEnabled && ! $this->features->accessible($scenario->feature);
             });
     }
 }

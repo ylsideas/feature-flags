@@ -140,7 +140,7 @@ class ManagerTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('services')]
-    public function test_it_can_flag_parts_of_the_package_to_be_turned_off($item): void
+    public function test_it_can_flag_parts_of_the_package_to_be_turned_off(string $item): void
     {
         $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
 

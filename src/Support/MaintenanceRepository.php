@@ -46,14 +46,14 @@ class MaintenanceRepository implements Maintenance
 
     public function onEnabled($feature): MaintenanceScenario
     {
-        return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario) {
+        return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
         });
     }
 
     public function onDisabled($feature): MaintenanceScenario
     {
-        return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario) {
+        return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
         });
     }

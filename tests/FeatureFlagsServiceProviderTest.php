@@ -21,7 +21,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
     #[\PHPUnit\Framework\Attributes\Before]
     protected function cleanUp(): void
     {
-        $this->afterApplicationCreated(function () {
+        $this->afterApplicationCreated(function (): void {
             File::delete(config_path('features.php'));
             File::delete(base_path('.features.php'));
 

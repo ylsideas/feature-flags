@@ -65,7 +65,7 @@ class MaintenanceModeTest extends TestCase
     {
         $called = false;
         Features::maintenanceMode()
-            ->uponActivation(function () use (&$called) {
+            ->uponActivation(function () use (&$called): void {
                 $called = true;
             });
 
@@ -109,7 +109,7 @@ class MaintenanceModeTest extends TestCase
         Features::fake(['system.down' => true]);
 
         Features::maintenanceMode()
-            ->uponDeactivation(function () use (&$called) {
+            ->uponDeactivation(function () use (&$called): void {
                 $called = true;
             })
             ->onEnabled('system.down');
@@ -149,7 +149,7 @@ class MaintenanceModeTest extends TestCase
      */
     protected function resolveApplicationHttpMiddlewares($app)
     {
-        after_resolving($app, Kernel::class, function ($kernel, $app) {
+        after_resolving($app, Kernel::class, function ($kernel, $app): void {
             /** @var \Illuminate\Foundation\Http\Kernel $kernel */
             $middleware = new Middleware();
 

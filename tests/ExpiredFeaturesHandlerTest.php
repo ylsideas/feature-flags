@@ -10,7 +10,7 @@ class ExpiredFeaturesHandlerTest extends TestCase
 {
     public function test_it_can_be_initiated(): void
     {
-        $handler = new ExpiredFeaturesHandler(['my-feature'], function (string $feature) {
+        $handler = new ExpiredFeaturesHandler(['my-feature'], function (string $feature): void {
             throw new FeatureExpired($feature);
         });
 

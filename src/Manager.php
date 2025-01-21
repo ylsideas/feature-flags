@@ -204,7 +204,7 @@ class Manager implements Contracts\Features
 
     public function callOnExpiredFeatures(array $expiredFeatures, callable $handler = null): static
     {
-        $handler ??= static function ($feature) {
+        $handler ??= static function ($feature): void {
             throw new FeatureExpired($feature);
         };
 

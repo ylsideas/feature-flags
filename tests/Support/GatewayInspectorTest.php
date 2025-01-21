@@ -208,7 +208,7 @@ class GatewayInspectorTest extends TestCase
                     ->andReturn(true)
                     ->getMock(),
             ],
-            function (ActionDebugLog $log) {
+            function (ActionDebugLog $log): void {
                 $this->assertSame([
                     [
                         'pipe' => 'test',
@@ -231,7 +231,7 @@ class GatewayInspectorTest extends TestCase
                     ->andReturn(true)
                     ->getMock(),
             ],
-            function (ActionDebugLog $log) {
+            function (ActionDebugLog $log): void {
                 $this->assertSame([
                     [
                         'pipe' => 'test',
@@ -250,7 +250,7 @@ class GatewayInspectorTest extends TestCase
                     ->andReturn(true)
                     ->getMock(),
             ],
-            function (ActionDebugLog $log) {
+            function (ActionDebugLog $log): void {
                 $this->assertSame([
                     [
                         'pipe' => 'test',
@@ -264,7 +264,7 @@ class GatewayInspectorTest extends TestCase
             fn (string $feature) => [
                 'gateway' => \Mockery::mock(Gateway::class),
             ],
-            function (ActionDebugLog $log) {
+            function (ActionDebugLog $log): void {
                 $this->assertSame([
                     [
                         'pipe' => 'test',
@@ -282,7 +282,7 @@ class GatewayInspectorTest extends TestCase
                     ->andReturn(null)
                     ->getMock(),
             ],
-            function (ActionDebugLog $log) {
+            function (ActionDebugLog $log): void {
                 $this->assertSame([
                     [
                         'pipe' => 'test',

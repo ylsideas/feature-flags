@@ -44,7 +44,7 @@ class GuardFeatureTest extends TestCase
 
         $middleware = new GuardFeature($manager, $app, $translator);
 
-        $middleware->handle($request, function () {
+        $middleware->handle($request, function (): void {
         }, 'my-feature');
     }
 
@@ -77,7 +77,7 @@ class GuardFeatureTest extends TestCase
 
         $middleware = new GuardFeature($manager, $app, $translator);
 
-        $middleware->handle($request, function () {
+        $middleware->handle($request, function (): void {
         }, 'my-feature', 'off');
     }
 
@@ -143,7 +143,7 @@ class GuardFeatureTest extends TestCase
 
         $middleware = new GuardFeature($manager, $app, $translator);
 
-        $middleware->handle($request, function () {
+        $middleware->handle($request, function (): void {
         }, 'my-feature', 'on', 404);
     }
 
@@ -176,7 +176,7 @@ class GuardFeatureTest extends TestCase
 
         $middleware = new GuardFeature($manager, $app, $translator);
 
-        $middleware->handle($request, function () {
+        $middleware->handle($request, function (): void {
         }, 'my-feature', 'on', 404, 'simple message');
     }
 }

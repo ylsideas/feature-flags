@@ -38,7 +38,10 @@ To get a full understanding, it's best to [read the docs](https://feature-flags.
 
 ## Upgrading
 
-This project is currently at version 2 and is somewhat different to version 1. If you are using Laravel 9 and PHP8
+Version 3 and 2 are mostly the same. Some additonal type hinting was adding but not no major
+upgrade work should be required.
+
+Version 2 and is somewhat different to version 1. If you are using Laravel 9 and PHP8
 you should aim to use version 2. Version 1 is no longer supported. There is an [upgrade guide for moving
 from version 1 to version 2](UPGRADE.md).
 
@@ -47,7 +50,7 @@ from version 1 to version 2](UPGRADE.md).
 You can install the package via composer:
 
 ```bash
-composer require ylsideas/feature-flags:^2.0
+composer require ylsideas/feature-flags:^3.0
 ```
 
 Once installed you should publish the config with the following command.

@@ -2,13 +2,16 @@
 
 namespace YlsIdeas\FeatureFlags\Exceptions;
 
-class FeatureExpired extends \RuntimeException
+use RuntimeException;
+use Throwable;
+
+class FeatureExpired extends RuntimeException
 {
     public function __construct(
         protected string $feature,
         string $message = "",
         int $code = 0,
-        ?\Throwable $previous = null
+        ?Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
     }

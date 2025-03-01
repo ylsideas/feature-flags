@@ -2,6 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Support;
 
+use InvalidArgumentException;
+
 trait StateChecking
 {
     /**
@@ -15,6 +17,6 @@ trait StateChecking
             return false;
         }
 
-        throw new \InvalidArgumentException('$state parameters is expected to being be `on` or `off`');
+        throw new InvalidArgumentException('$state parameters is expected to being be `on` or `off`');
     }
 }

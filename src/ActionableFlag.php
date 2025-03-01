@@ -9,7 +9,7 @@ class ActionableFlag implements ActionableFlagContract
 {
     public string $feature;
     public ?bool $result = null;
-    public ?Support\ActionDebugLog $debug = null;
+    public ?ActionDebugLog $debug = null;
 
     public function feature(): string
     {

@@ -2,6 +2,8 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Support;
 
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Support\FeatureFilter;
 
@@ -14,7 +16,7 @@ class FeatureFilterTest extends TestCase
         $this->assertInstanceOf(FeatureFilter::class, $component);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('successfulPatterns')]
+    #[DataProvider('successfulPatterns')]
     public function test_it_fails_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
@@ -22,7 +24,7 @@ class FeatureFilterTest extends TestCase
         $this->assertTrue($component->fails($feature));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('failurePatterns')]
+    #[DataProvider('failurePatterns')]
     public function test_it_does_not_fail_filters_correctly(string $feature, array $filters): void
     {
         $component = new FeatureFilter($filters);
@@ -30,14 +32,14 @@ class FeatureFilterTest extends TestCase
         $this->assertFalse($component->fails($feature));
     }
 
-    public static function successfulPatterns(): \Generator
+    public static function successfulPatterns(): Generator
     {
         yield 'simple' => ['my-feature', ['system.*']];
         yield 'advanced' => ['my-feature', ['system.*', 'my-feature-1.*']];
         yield 'more advanced' => ['my-feature', ['system.*', '!my-feature']];
     }
 
-    public static function failurePatterns(): \Generator
+    public static function failurePatterns(): Generator
     {
         yield 'simple' => ['my-feature.1', ['my-feature.*']];
     }

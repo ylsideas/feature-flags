@@ -2,9 +2,11 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
+use YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance;
+
 class Kernel extends \Orchestra\Testbench\Foundation\Http\Kernel
 {
     protected $middleware = [
-        \YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance::class,
+        PreventRequestsDuringMaintenance::class,
     ];
 }

@@ -2,14 +2,17 @@
 
 namespace YlsIdeas\FeatureFlags\Facades;
 
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Testing\Fakes\Fake;
+use YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler;
 use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Manager;
 use YlsIdeas\FeatureFlags\Support\FeatureFake;
+use YlsIdeas\FeatureFlags\Support\MaintenanceRepository;
 
 /**
- * @method static \Illuminate\Pipeline\Pipeline pipeline()
+ * @method static Pipeline pipeline()
  * @method static bool accessible(string $feature)
  * @method static void turnOn(string $gateway, string $feature)
  * @method static void turnOff(string $gateway, string $feature)
@@ -28,9 +31,9 @@ use YlsIdeas\FeatureFlags\Support\FeatureFake;
  * @method static bool usesDebugging()
  * @method static bool usesQueryBuilderMixin()
  * @method static Manager callOnExpiredFeatures(array $expiredFeatures, callable|null $handler = null)
- * @method static Manager applyOnExpiredHandler(\YlsIdeas\FeatureFlags\Contracts\ExpiredFeaturesHandler $handler)
+ * @method static Manager applyOnExpiredHandler(ExpiredFeaturesHandler $handler)
  * @method static Manager extend(string $driver, callable $builder)
- * @method static \YlsIdeas\FeatureFlags\Support\MaintenanceRepository maintenanceMode()
+ * @method static MaintenanceRepository maintenanceMode()
  * @method static void assertAccessed(string $feature, int|null $count = null, string $message = '')
  * @method static void assertNotAccessed(string $feature, string $message = '')
  * @method static void assertAccessedCount(string $feature, int $count = 0, string $message = '')

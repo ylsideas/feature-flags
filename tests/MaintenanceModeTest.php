@@ -2,15 +2,20 @@
 
 namespace YlsIdeas\FeatureFlags\Tests;
 
+use Generator;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 
 use function Orchestra\Testbench\after_resolving;
 
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
+use YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance;
 
 class MaintenanceModeTest extends TestCase
 {
@@ -74,7 +79,7 @@ class MaintenanceModeTest extends TestCase
         $this->assertTrue($called);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('exceptsValues')]
+    #[DataProvider('exceptsValues')]
     public function test_maintenance_mode_respects_excepts_values(string $path, int $status): void
     {
         Features::fake(['system.down' => true]);
@@ -86,14 +91,14 @@ class MaintenanceModeTest extends TestCase
         Route::get('/test', fn (): string => 'Foo Bar Foo');
 
         $this
-            ->withoutExceptionHandling([\Symfony\Component\HttpKernel\Exception\HttpException::class])
+            ->withoutExceptionHandling([HttpException::class])
             ->get($path)
             ->assertStatus($status);
 
         Features::assertAccessed('system.down');
     }
 
-    public static function exceptsValues(): \Generator
+    public static function exceptsValues(): Generator
     {
         yield 'blocked' => [
             '/', 503,
@@ -128,7 +133,7 @@ class MaintenanceModeTest extends TestCase
     /**
      * Required override for Pre Laravel 11
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return void
      */
     protected function resolveApplicationHttpKernel($app)
@@ -144,7 +149,7 @@ class MaintenanceModeTest extends TestCase
     /**
      * Required override for Laravel 11
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param Application $app
      * @return void
      */
     protected function resolveApplicationHttpMiddlewares($app)
@@ -154,7 +159,7 @@ class MaintenanceModeTest extends TestCase
             $middleware = new Middleware();
 
             $kernel->setGlobalMiddleware([
-                \YlsIdeas\FeatureFlags\Middlewares\PreventRequestsDuringMaintenance::class,
+                PreventRequestsDuringMaintenance::class,
             ]);
             $kernel->setMiddlewareGroups($middleware->getMiddlewareGroups());
             $kernel->setMiddlewareAliases($middleware->getMiddlewareAliases());

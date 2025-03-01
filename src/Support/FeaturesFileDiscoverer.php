@@ -4,6 +4,7 @@ namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\Support\FeaturesFileDiscovererTest
@@ -30,6 +31,6 @@ class FeaturesFileDiscoverer
             return $path;
         }
 
-        throw new \RuntimeException(sprintf('`%s` file could not be found.', $this->file));
+        throw new RuntimeException(sprintf('`%s` file could not be found.', $this->file));
     }
 }

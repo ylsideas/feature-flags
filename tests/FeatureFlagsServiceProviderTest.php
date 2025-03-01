@@ -6,6 +6,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Before;
+use SplFileInfo;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 use YlsIdeas\FeatureFlags\Manager;
 
@@ -18,7 +20,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\Before]
+    #[Before]
     protected function cleanUp(): void
     {
         $this->afterApplicationCreated(function (): void {
@@ -28,7 +30,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
             File::delete(app_path('Http/Middleware/PreventRequestsDuringMaintenance.php.backup'));
 
             collect(File::files(database_path('migrations')))
-                ->each(fn (\SplFileInfo $file) => File::delete($file->getPathname()));
+                ->each(fn (SplFileInfo $file) => File::delete($file->getPathname()));
         });
     }
 
@@ -67,7 +69,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
     {
         $this->assertNull(
             collect(File::files(database_path('migrations')))
-                ->first(fn (\SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'))
+                ->first(fn (SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'))
         );
 
         $this->artisan('vendor:publish', [
@@ -77,7 +79,7 @@ class FeatureFlagsServiceProviderTest extends TestCase
 
         $filename =
             collect(File::files(database_path('migrations')))
-                ->first(fn (\SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'));
+                ->first(fn (SplFileInfo $file) => Str::endsWith($file->getFilename(), '_create_features_table.php'));
 
         $this->assertNotNull($filename);
     }

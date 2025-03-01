@@ -5,6 +5,7 @@ namespace YlsIdeas\FeatureFlags\Tests\Middlewares;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -20,15 +21,15 @@ class GuardFeatureTest extends TestCase
         $exception = new HttpException(403);
 
         $this->expectExceptionObject($exception);
-        $app = \Mockery::mock(Application::class);
-        $translator = \Mockery::mock(Translator::class);
+        $app = Mockery::mock(Application::class);
+        $translator = Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
             ->once()
             ->andThrow($exception);
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
 
         $manager->shouldReceive('accessible')
             ->with('my-feature')
@@ -53,15 +54,15 @@ class GuardFeatureTest extends TestCase
         $exception = new HttpException(404);
 
         $this->expectExceptionObject($exception);
-        $app = \Mockery::mock(Application::class);
-        $translator = \Mockery::mock(Translator::class);
+        $app = Mockery::mock(Application::class);
+        $translator = Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
             ->once()
             ->andThrow($exception);
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
 
         $manager->shouldReceive('accessible')
             ->with('my-feature')
@@ -83,14 +84,14 @@ class GuardFeatureTest extends TestCase
 
     public function test_it_continues_the_chain_if_features_are_accessible(): void
     {
-        $app = \Mockery::mock(Application::class);
-        $translator = \Mockery::mock(Translator::class);
+        $app = Mockery::mock(Application::class);
+        $translator = Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(403, '')
             ->never();
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
 
         $manager->shouldReceive('accessible')
             ->with('my-feature')
@@ -119,15 +120,15 @@ class GuardFeatureTest extends TestCase
         $exception = new HttpException(404);
 
         $this->expectExceptionObject($exception);
-        $app = \Mockery::mock(Application::class);
-        $translator = \Mockery::mock(Translator::class);
+        $app = Mockery::mock(Application::class);
+        $translator = Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(404, '')
             ->once()
             ->andThrow($exception);
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
 
         $manager->shouldReceive('accessible')
             ->with('my-feature')
@@ -152,15 +153,15 @@ class GuardFeatureTest extends TestCase
         $exception = new HttpException(404, 'simple message');
 
         $this->expectExceptionObject($exception);
-        $app = \Mockery::mock(Application::class);
-        $translator = \Mockery::mock(Translator::class);
+        $app = Mockery::mock(Application::class);
+        $translator = Mockery::mock(Translator::class);
 
         $app->shouldReceive('abort')
             ->with(404, 'simple message')
             ->once()
             ->andThrow($exception);
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
 
         $manager->shouldReceive('accessible')
             ->with('my-feature')

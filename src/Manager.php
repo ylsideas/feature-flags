@@ -15,6 +15,12 @@ use Illuminate\Pipeline\Pipeline;
 use Illuminate\Redis\RedisManager;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
+use RuntimeException;
+use YlsIdeas\FeatureFlags\Contracts\Cacheable;
+use YlsIdeas\FeatureFlags\Contracts\Features;
+use YlsIdeas\FeatureFlags\Contracts\Gateway;
+use YlsIdeas\FeatureFlags\Contracts\Toggleable;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessed;
 use YlsIdeas\FeatureFlags\Events\FeatureAccessing;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
@@ -35,7 +41,7 @@ use YlsIdeas\FeatureFlags\Support\MaintenanceRepository;
 /**
  * @see \YlsIdeas\FeatureFlags\Tests\ManagerTest
  */
-class Manager implements Contracts\Features
+class Manager implements Features
 {
     protected bool $useCommands = true;
     protected bool $useBlade = true;
@@ -90,8 +96,8 @@ class Manager implements Contracts\Features
     {
         $toggleable = $this->resolve($gateway)->gateway();
 
-        if (! $toggleable instanceof Contracts\Toggleable) {
-            throw new \InvalidArgumentException(sprintf(
+        if (! $toggleable instanceof Toggleable) {
+            throw new InvalidArgumentException(sprintf(
                 'Gateway `%s` is not a toggleable gateway.',
                 $gateway
             ));
@@ -106,8 +112,8 @@ class Manager implements Contracts\Features
     {
         $toggleable = $this->resolve($gateway)->gateway();
 
-        if (! $toggleable instanceof Contracts\Toggleable) {
-            throw new \InvalidArgumentException(sprintf(
+        if (! $toggleable instanceof Toggleable) {
+            throw new InvalidArgumentException(sprintf(
                 'Gateway `%s` is not a toggleable gateway.',
                 $gateway
             ));
@@ -242,11 +248,11 @@ class Manager implements Contracts\Features
         $config = $this->getConfig($name);
 
         if (is_null($config)) {
-            throw new \InvalidArgumentException("The [{$name}] feature gateway has not been configured.");
+            throw new InvalidArgumentException("The [{$name}] feature gateway has not been configured.");
         }
 
         $gateway = $this->getGateway($config['driver'], $config, $name);
-        if (($config['cache'] ?? null) && $gateway instanceof Contracts\Cacheable) {
+        if (($config['cache'] ?? null) && $gateway instanceof Cacheable) {
             $cache = $this->buildCache($name, $config['cache'], $gateway)
                 ->configureTtl($config['cache']['ttl'] ?? 300);
         }
@@ -266,12 +272,12 @@ class Manager implements Contracts\Features
         return $this->container->make(Repository::class)->get("features.gateways")[$name] ?? null;
     }
 
-    protected function getGateway(string $driver, array $config, string $name): Contracts\Gateway
+    protected function getGateway(string $driver, array $config, string $name): Gateway
     {
         if (! $this->driverIsNative($driver) &&
             ! isset($this->gatewayDrivers[$driver])
         ) {
-            throw new \InvalidArgumentException("No gateway for [$driver].");
+            throw new InvalidArgumentException("No gateway for [$driver].");
         }
 
         if ($this->driverIsNative($driver)) {
@@ -289,11 +295,11 @@ class Manager implements Contracts\Features
         $pipes = $this->container->make(Repository::class)->get('features.pipeline');
 
         return collect($pipes)
-            ->map(fn (string $pipe): \YlsIdeas\FeatureFlags\Support\GatewayInspector => $this->resolve($pipe))
+            ->map(fn (string $pipe): GatewayInspector => $this->resolve($pipe))
             ->all();
     }
 
-    protected function buildCache(string $namespace, array $config, Contracts\Cacheable $cacheable): GatewayCache
+    protected function buildCache(string $namespace, array $config, Cacheable $cacheable): GatewayCache
     {
         $cache = $this->getContainer()->make(CacheManager::class)->driver($config['store'] ?? null);
 
@@ -334,7 +340,7 @@ class Manager implements Contracts\Features
     protected function buildGateGateway(array $config, string $name): GateGateway
     {
         if (! ($config['gate'] ?? false)) {
-            throw new \RuntimeException(sprintf('No gate is configured for gateway `%s`', $name));
+            throw new RuntimeException(sprintf('No gate is configured for gateway `%s`', $name));
         }
 
         return new GateGateway(

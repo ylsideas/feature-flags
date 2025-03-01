@@ -4,6 +4,7 @@ namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Pipeline\Pipeline;
 use Orchestra\Testbench\TestCase;
+use RuntimeException;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 use YlsIdeas\FeatureFlags\Manager;
 
@@ -25,7 +26,7 @@ class GatewayDriverTest extends TestCase
             ],
         ]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $this->app->make(Manager::class)->pipeline();
     }

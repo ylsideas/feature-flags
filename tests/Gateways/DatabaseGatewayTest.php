@@ -5,6 +5,7 @@ namespace YlsIdeas\FeatureFlags\Tests\Gateways;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Gateways\DatabaseGateway;
@@ -15,7 +16,7 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_can_be_initialised(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $gateway = new DatabaseGateway(
             $connection
@@ -26,8 +27,8 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_returns_true_if_features_are_accessible(): void
     {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
+        $connection = Mockery::mock(Connection::class);
+        $query = Mockery::mock(Builder::class);
 
         $connection->shouldReceive('table')
             ->with('features')
@@ -52,8 +53,8 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_returns_false_if_features_are_not_accessible(): void
     {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
+        $connection = Mockery::mock(Connection::class);
+        $query = Mockery::mock(Builder::class);
 
         $connection->shouldReceive('table')
             ->with('features')
@@ -78,8 +79,8 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_returns_null_if_features_are_not_defined(): void
     {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
+        $connection = Mockery::mock(Connection::class);
+        $query = Mockery::mock(Builder::class);
 
         $connection->shouldReceive('table')
             ->with('features')
@@ -102,8 +103,8 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_can_store_the_state_of_features_switched_on(): void
     {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
+        $connection = Mockery::mock(Connection::class);
+        $query = Mockery::mock(Builder::class);
 
         $connection->shouldReceive('table')
             ->with('features')
@@ -129,8 +130,8 @@ class DatabaseGatewayTest extends TestCase
 
     public function test_it_can_store_the_state_of_features_switched_off(): void
     {
-        $connection = \Mockery::mock(Connection::class);
-        $query = \Mockery::mock(Builder::class);
+        $connection = Mockery::mock(Connection::class);
+        $query = Mockery::mock(Builder::class);
 
         $connection->shouldReceive('table')
             ->with('features')

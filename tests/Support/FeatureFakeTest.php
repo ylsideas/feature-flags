@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Tests\Support;
 
 use Illuminate\Support\Facades\Event;
+use Mockery;
 use Orchestra\Testbench\TestCase;
 use PHPUnit\Framework\AssertionFailedError;
 use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
@@ -24,7 +25,7 @@ class FeatureFakeTest extends TestCase
 
     public function test_it_can_be_initialised(): void
     {
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager, ['my-feature' => true]);
 
         $this->assertInstanceOf(FeatureFake::class, $fake);
@@ -41,7 +42,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_can_be_fake_accessibility_results(): void
     {
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertTrue($fake->accessible('my-feature'));
@@ -58,7 +59,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_can_be_fake_accessibility_results_if_no_value_is_provided(): void
     {
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  []);
 
         $this->assertFalse($fake->accessible('my-feature'));
@@ -67,7 +68,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_can_be_fake_accessibility_results_with_an_array(): void
     {
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => [false, true]]);
 
         $this->assertFalse($fake->accessible('my-feature'));
@@ -78,7 +79,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_can_be_fake_accessibility_results_with_an_array_using_the_last_position(): void
     {
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => [false, true]]);
 
         $this->assertFalse($fake->accessible('my-feature'));
@@ -90,7 +91,7 @@ class FeatureFakeTest extends TestCase
     public function test_it_counts_how_often_a_feature_is_accessed(): void
     {
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertSame(0, $fake->getCount('my-feature'));
@@ -102,7 +103,7 @@ class FeatureFakeTest extends TestCase
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $this->assertSame(0, $fake->getCount('my-feature'));
@@ -113,7 +114,7 @@ class FeatureFakeTest extends TestCase
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
@@ -125,7 +126,7 @@ class FeatureFakeTest extends TestCase
     {
         $this->expectException(AssertionFailedError::class);
         Event::fake();
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
@@ -139,7 +140,7 @@ class FeatureFakeTest extends TestCase
     {
         Event::fake();
 
-        $manager = \Mockery::mock(Manager::class);
+        $manager = Mockery::mock(Manager::class);
         $fake = $this->getFake($manager,  ['my-feature' => true]);
 
         $fake->accessible('my-feature');
@@ -156,7 +157,7 @@ class FeatureFakeTest extends TestCase
         $this->assertFalse(Features::accessible('my-feature'));
     }
 
-    protected function getFake($manager, $features): \YlsIdeas\FeatureFlags\Support\FeatureFake
+    protected function getFake($manager, $features): FeatureFake
     {
         return new class ($manager, $features) extends FeatureFake {
             public function getCount(string $feature)

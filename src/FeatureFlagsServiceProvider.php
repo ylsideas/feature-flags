@@ -12,6 +12,8 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use YlsIdeas\FeatureFlags\Commands\SwitchOffFeature;
+use YlsIdeas\FeatureFlags\Commands\SwitchOnFeature;
 use YlsIdeas\FeatureFlags\Contracts\Features as FeaturesContract;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Middlewares\GuardFeature;
@@ -52,8 +54,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             // Registering package commands.
             if (Features::usesCommands()) {
                 $this->commands([
-                    Commands\SwitchOnFeature::class,
-                    Commands\SwitchOffFeature::class,
+                    SwitchOnFeature::class,
+                    SwitchOffFeature::class,
                 ]);
             }
 
@@ -96,7 +98,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
 
-        $this->app->scoped(MaintenanceRepository::class, fn (Container $app): \YlsIdeas\FeatureFlags\Support\MaintenanceRepository => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
+        $this->app->scoped(MaintenanceRepository::class, fn (Container $app): MaintenanceRepository => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
 
         $this->app->extend(MaintenanceModeManager::class, fn (MaintenanceModeManager $manager) => $manager->extend('features', fn (): MaintenanceMode => new MaintenanceDriver(
             $this->app->make(MaintenanceRepository::class)

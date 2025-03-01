@@ -2,6 +2,7 @@
 
 namespace YlsIdeas\FeatureFlags\Support;
 
+use Closure;
 use Illuminate\Contracts\Container\Container;
 use YlsIdeas\FeatureFlags\Contracts\Features;
 use YlsIdeas\FeatureFlags\Contracts\Maintenance;
@@ -11,8 +12,8 @@ class MaintenanceRepository implements Maintenance
     public array $scenarios = [];
 
     public MaintenanceScenario|null|false $foundScenario = false;
-    protected \Closure $uponActivation;
-    protected \Closure $uponDeactivation;
+    protected Closure $uponActivation;
+    protected Closure $uponDeactivation;
 
     public function __construct(protected Features $features, protected Container $container)
     {
@@ -20,14 +21,14 @@ class MaintenanceRepository implements Maintenance
 
     public function uponActivation(callable $callable): static
     {
-        $this->uponActivation = \Closure::fromCallable($callable);
+        $this->uponActivation = Closure::fromCallable($callable);
 
         return $this;
     }
 
     public function uponDeactivation(callable $callable): static
     {
-        $this->uponDeactivation = \Closure::fromCallable($callable);
+        $this->uponDeactivation = Closure::fromCallable($callable);
 
         return $this;
     }

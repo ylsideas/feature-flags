@@ -27,6 +27,9 @@ jobs:
                         testbench: 10.*
                     -   dependencies: lowest
                         carbon: ^3.8.4
+                    -   laravel: 10.*
+                        dependencies: lowest
+                        carbon: ^2.62.1
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependencies }} - ${{ matrix.os }}
 

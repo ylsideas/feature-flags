@@ -2,6 +2,20 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v3.0.0 - 2025-03-01
+
+### What's Changed
+
+* Update workflow for 8.4 by @peterfox in https://github.com/ylsideas/feature-flags/pull/68
+* change instance of manager by @uesley in https://github.com/ylsideas/feature-flags/pull/71
+* Upgrade static analysis tools & Laravel 12 compatibility by @peterfox in https://github.com/ylsideas/feature-flags/pull/72
+
+### New Contributors
+
+* @uesley made their first contribution in https://github.com/ylsideas/feature-flags/pull/71
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v2.6.0...v3.0.0
+
 ## v2.6.0 - 2024-05-29
 
 ### What's Changed

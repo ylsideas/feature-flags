@@ -7,7 +7,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
-use YlsIdeas\FeatureFlags\Manager;
+use YlsIdeas\FeatureFlags\Contracts\Features;
 use YlsIdeas\FeatureFlags\Support\StateChecking;
 
 /**
@@ -18,7 +18,7 @@ class GuardFeature
     use StateChecking;
 
     public function __construct(
-        protected Manager $manager,
+        protected Features $manager,
         protected Application $application,
         protected Translator $translator,
     ) {

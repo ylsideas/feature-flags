@@ -2,6 +2,14 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v3.0.1 - 2025-03-01
+
+### What's Fixed
+
+* Force casting cache result to boolean by @peterfox in https://github.com/ylsideas/feature-flags/pull/73
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v3.0.0...v3.0.1
+
 ## v3.0.0 - 2025-03-01
 
 ### What's Changed

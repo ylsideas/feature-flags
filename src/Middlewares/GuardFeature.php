@@ -18,9 +18,9 @@ class GuardFeature
     use StateChecking;
 
     public function __construct(
-        protected Features $manager,
+        protected Features    $features,
         protected Application $application,
-        protected Translator $translator,
+        protected Translator  $translator,
     ) {
     }
 
@@ -37,8 +37,8 @@ class GuardFeature
     ): mixed {
         if (
             ($this->check($state)
-                ? ! $this->manager->accessible($feature)
-                : $this->manager->accessible($feature))
+                ? ! $this->features->accessible($feature)
+                : $this->features->accessible($feature))
         ) {
             $this->application->abort($abort, $this->translator->get($message));
         }

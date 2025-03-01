@@ -50,7 +50,13 @@
         "lint": "vendor/bin/pint",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest coverage",
-        "fix": "vendor/bin/rector"
+        "fix": "vendor/bin/rector",
+        "ci": [
+            "@fix",
+            "@lint",
+            "@test",
+            "@analyse"
+        ]
     },
     "config": {
         "sort-packages": true,

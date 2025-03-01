@@ -36,7 +36,7 @@ class GatewayCache
         $this->repository->delete($this->generateKey($feature));
     }
 
-    public function generateKey($feature)
+    public function generateKey(string $feature): string
     {
         return $this->namespace . ':' . $this->cacheable->generateKey($feature);
     }

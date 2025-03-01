@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Rules;
 
 use Illuminate\Validation\Concerns\ValidatesAttributes;
+use InvalidArgumentException;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\Support\StateChecking;
 
@@ -14,7 +15,7 @@ class FeatureOnRule
     public function validate($attribute, $value, $parameters): bool
     {
         if (! is_string($parameters[0] ?? null)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'First parameter for `requiredWithFeature` validation rule must be the name of the feature'
             );
         }

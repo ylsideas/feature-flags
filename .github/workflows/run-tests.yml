@@ -16,14 +16,19 @@ jobs:
             matrix:
                 os: [ubuntu-latest]
                 php: [8.4, 8.3, 8.2]
-                laravel: [11.*, 10.*]
+                laravel: [12.*, 11.*, 10.*]
                 dependencies: [lowest, stable]
                 include:
                     -   laravel: 10.*
                         testbench: ^8.0
                     -   laravel: 11.*
                         testbench: 9.*
+                    -   laravel: 12.*
+                        testbench: 10.*
                     -   dependencies: lowest
+                        carbon: ^3.8.4
+                    -   laravel: 10.*
+                        dependencies: lowest
                         carbon: ^2.62.1
 
         name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependencies }} - ${{ matrix.os }}

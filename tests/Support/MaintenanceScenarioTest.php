@@ -2,13 +2,15 @@
 
 namespace YlsIdeas\FeatureFlags\Tests\Support;
 
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Support\MaintenanceScenario;
 
 class MaintenanceScenarioTest extends TestCase
 {
-    #[\PHPUnit\Framework\Attributes\DataProvider('scenarioOptions')]
-    public function test_it_builds_a_maintenance_scenario(callable $builder, bool $polarity, array $result)
+    #[DataProvider('scenarioOptions')]
+    public function test_it_builds_a_maintenance_scenario(callable $builder, bool $polarity, array $result): void
     {
         $scenario = new MaintenanceScenario();
         /** @var MaintenanceScenario $scenario */
@@ -18,7 +20,7 @@ class MaintenanceScenarioTest extends TestCase
         $this->assertSame($result, $scenario->toArray());
     }
 
-    public static function scenarioOptions(): \Generator
+    public static function scenarioOptions(): Generator
     {
         yield 'secret' => [
             fn (MaintenanceScenario $scenario): MaintenanceScenario => $scenario

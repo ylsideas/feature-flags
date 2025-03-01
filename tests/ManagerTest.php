@@ -5,7 +5,10 @@ namespace YlsIdeas\FeatureFlags\Tests;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Events\Dispatcher;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Contracts\Gateway;
 use YlsIdeas\FeatureFlags\Contracts\Toggleable;
@@ -15,7 +18,7 @@ use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOff;
 use YlsIdeas\FeatureFlags\Events\FeatureSwitchedOn;
 use YlsIdeas\FeatureFlags\Manager;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(\YlsIdeas\FeatureFlags\Manager::class)]
+#[CoversClass(Manager::class)]
 class ManagerTest extends TestCase
 {
     use MockeryPHPUnitIntegration;
@@ -25,20 +28,20 @@ class ManagerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->container = \Mockery::mock(Container::class);
+        $this->container = Mockery::mock(Container::class);
     }
 
     public function test_it_can_be_initialised(): void
     {
-        $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->container, Mockery::mock(Dispatcher::class));
 
         $this->assertInstanceOf(Manager::class, $manager);
     }
 
     public function test_it_can_check_if_features_are_accessible(): void
     {
-        $dispatcher = \Mockery::mock(Dispatcher::class);
-        $config = \Mockery::mock(Repository::class);
+        $dispatcher = Mockery::mock(Dispatcher::class);
+        $config = Mockery::mock(Repository::class);
 
         $this->container->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
@@ -56,15 +59,15 @@ class ManagerTest extends TestCase
             ]]);
 
         $dispatcher->shouldReceive('dispatch')
-            ->with(\Mockery::type(FeatureAccessing::class))
+            ->with(Mockery::type(FeatureAccessing::class))
             ->once();
 
         $dispatcher->shouldReceive('dispatch')
-            ->with(\Mockery::type(FeatureAccessed::class))
+            ->with(Mockery::type(FeatureAccessed::class))
             ->once();
 
         $manager = new Manager($this->container, $dispatcher);
-        $manager->extend('null', fn () => \Mockery::mock(Gateway::class)
+        $manager->extend('null', fn () => Mockery::mock(Gateway::class)
             ->shouldReceive('accessible')
             ->with('my-feature')
             ->andReturn(true)
@@ -75,8 +78,8 @@ class ManagerTest extends TestCase
 
     public function test_it_can_turn_on_features(): void
     {
-        $dispatcher = \Mockery::mock(Dispatcher::class);
-        $config = \Mockery::mock(Repository::class);
+        $dispatcher = Mockery::mock(Dispatcher::class);
+        $config = Mockery::mock(Repository::class);
 
         $this->container->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
@@ -94,11 +97,11 @@ class ManagerTest extends TestCase
             ]]);
 
         $dispatcher->shouldReceive('dispatch')
-            ->with(\Mockery::type(FeatureSwitchedOn::class))
+            ->with(Mockery::type(FeatureSwitchedOn::class))
             ->once();
 
         $manager = new Manager($this->container, $dispatcher);
-        $manager->extend('null', fn () => \Mockery::mock(Gateway::class, Toggleable::class)
+        $manager->extend('null', fn () => Mockery::mock(Gateway::class, Toggleable::class)
             ->shouldReceive('turnOn')
             ->with('my-feature')
             ->getMock());
@@ -108,8 +111,8 @@ class ManagerTest extends TestCase
 
     public function test_it_can_turn_off_features(): void
     {
-        $dispatcher = \Mockery::mock(Dispatcher::class);
-        $config = \Mockery::mock(Repository::class);
+        $dispatcher = Mockery::mock(Dispatcher::class);
+        $config = Mockery::mock(Repository::class);
 
         $this->container->shouldReceive('make')
             ->with(\Illuminate\Contracts\Config\Repository::class)
@@ -127,11 +130,11 @@ class ManagerTest extends TestCase
             ]]);
 
         $dispatcher->shouldReceive('dispatch')
-            ->with(\Mockery::type(FeatureSwitchedOff::class))
+            ->with(Mockery::type(FeatureSwitchedOff::class))
             ->once();
 
         $manager = new Manager($this->container, $dispatcher);
-        $manager->extend('null', fn () => \Mockery::mock(Gateway::class, Toggleable::class)
+        $manager->extend('null', fn () => Mockery::mock(Gateway::class, Toggleable::class)
             ->shouldReceive('turnOff')
             ->with('my-feature')
             ->getMock());
@@ -139,10 +142,10 @@ class ManagerTest extends TestCase
         $manager->turnOff('test', 'my-feature');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('services')]
-    public function test_it_can_flag_parts_of_the_package_to_be_turned_off($item): void
+    #[DataProvider('services')]
+    public function test_it_can_flag_parts_of_the_package_to_be_turned_off(string $item): void
     {
-        $manager = new Manager($this->container, \Mockery::mock(Dispatcher::class));
+        $manager = new Manager($this->container, Mockery::mock(Dispatcher::class));
 
         $this->assertTrue($manager->{"uses$item"}());
 

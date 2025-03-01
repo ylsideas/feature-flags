@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Tests\Gateways;
 
 use Illuminate\Redis\Connections\Connection;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Gateways\RedisGateway;
@@ -13,7 +14,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_can_be_initialised(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $gateway = new RedisGateway($connection);
 
@@ -22,7 +23,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_returns_true_if_features_are_accessible(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $connection->shouldReceive('get')
             ->with('features:my-feature')
@@ -36,7 +37,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_returns_false_if_features_are_not_accessible(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $connection->shouldReceive('get')
             ->with('features:my-feature')
@@ -50,7 +51,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_returns_null_if_features_are_not_defined(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $connection->shouldReceive('get')
             ->with('features:my-feature')
@@ -64,7 +65,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_can_store_the_state_of_features_switched_on(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $connection->shouldReceive('set')
             ->with('features:my-feature', true)
@@ -77,7 +78,7 @@ class RedisGatewayTest extends TestCase
 
     public function test_it_can_store_the_state_of_features_switched_off(): void
     {
-        $connection = \Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class);
 
         $connection->shouldReceive('set')
             ->with('features:my-feature', false)

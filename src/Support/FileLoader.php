@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Contracts\Container\Container;
+use RuntimeException;
 use YlsIdeas\FeatureFlags\Contracts\InMemoryLoader;
 
 /**
@@ -18,7 +19,7 @@ class FileLoader implements InMemoryLoader
     {
         $callable = require($file = $this->discoverer->find());
         if (! is_callable($callable)) {
-            throw new \RuntimeException(sprintf('File `%s` does not return a callable', $file));
+            throw new RuntimeException(sprintf('File `%s` does not return a callable', $file));
         }
 
         return $this->container->call($callable);

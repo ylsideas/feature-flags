@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Tests\Support;
 
 use Illuminate\Contracts\Container\Container;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
@@ -14,8 +15,8 @@ class FileLoaderTest extends TestCase
 
     public function test_it_loads_features_from_php_file(): void
     {
-        $discoverer = \Mockery::mock(FeaturesFileDiscoverer::class);
-        $container = \Mockery::mock(Container::class);
+        $discoverer = Mockery::mock(FeaturesFileDiscoverer::class);
+        $container = Mockery::mock(Container::class);
 
         $features = [
             'my-feature' => true,
@@ -26,7 +27,7 @@ class FileLoaderTest extends TestCase
             ->andReturn(__DIR__ . '/../fixtures/features.php');
 
         $container->shouldReceive('call')
-            ->with(\Mockery::on(fn ($callable) => is_callable($callable)))
+            ->with(Mockery::on(fn ($callable): bool => is_callable($callable)))
             ->once()
             ->andReturn($features);
 

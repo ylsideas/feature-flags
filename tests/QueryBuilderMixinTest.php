@@ -4,10 +4,12 @@ namespace YlsIdeas\FeatureFlags\Tests;
 
 use Composer\InstalledVersions;
 use Composer\Semver\VersionParser;
+use Generator;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
 
@@ -20,11 +22,11 @@ class QueryBuilderMixinTest extends TestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('positiveSqlStatements')]
-    public function test_modifying_queries_when_the_feature_is_enabled(bool $flag, string $expectedSql)
+    #[DataProvider('positiveSqlStatements')]
+    public function test_modifying_queries_when_the_feature_is_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
-        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^12.0|^11.0')) {
             $expectedSql = Str::replace('"', '`', $expectedSql);
         }
         Features::fake(['my-feature' => $flag]);
@@ -36,7 +38,7 @@ class QueryBuilderMixinTest extends TestCase
         $this->assertSame($expectedSql, $sql);
     }
 
-    public static function positiveSqlStatements(): \Generator
+    public static function positiveSqlStatements(): Generator
     {
         yield 'flag is true' => [
             true,
@@ -48,11 +50,11 @@ class QueryBuilderMixinTest extends TestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('negativeSqlStatements')]
-    public function test_modifying_queries_when_the_feature_is_not_enabled(bool $flag, string $expectedSql)
+    #[DataProvider('negativeSqlStatements')]
+    public function test_modifying_queries_when_the_feature_is_not_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
-        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^12.0|^11.0')) {
             $expectedSql = Str::replace('"', '`', $expectedSql);
         }
         Features::fake(['my-feature' => $flag]);
@@ -64,7 +66,7 @@ class QueryBuilderMixinTest extends TestCase
         $this->assertSame($expectedSql, $sql);
     }
 
-    public static function negativeSqlStatements(): \Generator
+    public static function negativeSqlStatements(): Generator
     {
         yield 'flag is true' => [
             true,

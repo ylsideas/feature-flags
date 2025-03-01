@@ -4,8 +4,10 @@ namespace YlsIdeas\FeatureFlags\Tests\Support;
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\Filesystem;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use YlsIdeas\FeatureFlags\Support\FeaturesFileDiscoverer;
 
 class FeaturesFileDiscovererTest extends TestCase
@@ -14,8 +16,8 @@ class FeaturesFileDiscovererTest extends TestCase
 
     public function test_it_discovers_absolute_files(): void
     {
-        $app = \Mockery::mock(Application::class);
-        $files = \Mockery::mock(Filesystem::class);
+        $app = Mockery::mock(Application::class);
+        $files = Mockery::mock(Filesystem::class);
         $app->shouldReceive('make')
             ->with('files')
             ->andReturn($files);
@@ -32,8 +34,8 @@ class FeaturesFileDiscovererTest extends TestCase
 
     public function test_it_discovers_relative_files(): void
     {
-        $app = \Mockery::mock(Application::class);
-        $files = \Mockery::mock(Filesystem::class);
+        $app = Mockery::mock(Application::class);
+        $files = Mockery::mock(Filesystem::class);
         $app->shouldReceive('make')
             ->with('files')
             ->andReturn($files);
@@ -55,8 +57,8 @@ class FeaturesFileDiscovererTest extends TestCase
 
     public function test_it_discovers_relative_dist_files(): void
     {
-        $app = \Mockery::mock(Application::class);
-        $files = \Mockery::mock(Filesystem::class);
+        $app = Mockery::mock(Application::class);
+        $files = Mockery::mock(Filesystem::class);
         $app->shouldReceive('make')
             ->with('files')
             ->andReturn($files);
@@ -88,8 +90,8 @@ class FeaturesFileDiscovererTest extends TestCase
 
     public function test_it_throws_an_exception_if_no_file_is_discovered(): void
     {
-        $app = \Mockery::mock(Application::class);
-        $files = \Mockery::mock(Filesystem::class);
+        $app = Mockery::mock(Application::class);
+        $files = Mockery::mock(Filesystem::class);
         $app->shouldReceive('make')
             ->with('files')
             ->andReturn($files);
@@ -116,7 +118,7 @@ class FeaturesFileDiscovererTest extends TestCase
 
         $discoverer = new FeaturesFileDiscoverer($app, '.features.php');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $discoverer->find();
     }

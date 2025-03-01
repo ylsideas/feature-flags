@@ -2,6 +2,7 @@
 
 namespace YlsIdeas\FeatureFlags\Support;
 
+use Closure;
 use Illuminate\Contracts\Container\Container;
 use YlsIdeas\FeatureFlags\Contracts\Features;
 use YlsIdeas\FeatureFlags\Contracts\Maintenance;
@@ -11,8 +12,8 @@ class MaintenanceRepository implements Maintenance
     public array $scenarios = [];
 
     public MaintenanceScenario|null|false $foundScenario = false;
-    protected \Closure $uponActivation;
-    protected \Closure $uponDeactivation;
+    protected Closure $uponActivation;
+    protected Closure $uponDeactivation;
 
     public function __construct(protected Features $features, protected Container $container)
     {
@@ -20,14 +21,14 @@ class MaintenanceRepository implements Maintenance
 
     public function uponActivation(callable $callable): static
     {
-        $this->uponActivation = \Closure::fromCallable($callable);
+        $this->uponActivation = Closure::fromCallable($callable);
 
         return $this;
     }
 
     public function uponDeactivation(callable $callable): static
     {
-        $this->uponDeactivation = \Closure::fromCallable($callable);
+        $this->uponDeactivation = Closure::fromCallable($callable);
 
         return $this;
     }
@@ -44,16 +45,16 @@ class MaintenanceRepository implements Maintenance
         $this->container->call($this->uponDeactivation, ['features' => $this->features]);
     }
 
-    public function onEnabled($feature): MaintenanceScenario
+    public function onEnabled(string $feature): MaintenanceScenario
     {
-        return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario) {
+        return tap((new MaintenanceScenario())->whenEnabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
         });
     }
 
-    public function onDisabled($feature): MaintenanceScenario
+    public function onDisabled(string $feature): MaintenanceScenario
     {
-        return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario) {
+        return tap((new MaintenanceScenario())->whenDisabled($feature), function (MaintenanceScenario $scenario): void {
             $this->scenarios[] = $scenario;
         });
     }
@@ -75,15 +76,12 @@ class MaintenanceRepository implements Maintenance
     protected function findScenario(): ?MaintenanceScenario
     {
         return $this->foundScenario = collect($this->scenarios)
-            ->first(function (MaintenanceScenario $scenario) {
+            ->first(function (MaintenanceScenario $scenario): bool {
                 if ($scenario->onEnabled && $this->features->accessible($scenario->feature)) {
                     return true;
                 }
-                if (! $scenario->onEnabled && ! $this->features->accessible($scenario->feature)) {
-                    return true;
-                }
 
-                return false;
+                return ! $scenario->onEnabled && ! $this->features->accessible($scenario->feature);
             });
     }
 }

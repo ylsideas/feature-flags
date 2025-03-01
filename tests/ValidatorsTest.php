@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Tests;
 
 use Illuminate\Support\Facades\Validator;
+use InvalidArgumentException;
 use Orchestra\Testbench\TestCase;
 use YlsIdeas\FeatureFlags\Facades\Features;
 use YlsIdeas\FeatureFlags\FeatureFlagsServiceProvider;
@@ -110,7 +111,7 @@ class ValidatorsTest extends TestCase
 
     public function test_rule_must_be_used_with_feature_name_parameter(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $validator = Validator::make([
         ], [

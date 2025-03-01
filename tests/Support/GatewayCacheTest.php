@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Tests\Support;
 
 use Illuminate\Contracts\Cache\Repository;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\Contracts\Cacheable;
@@ -14,8 +15,8 @@ class GatewayCacheTest extends TestCase
 
     public function test_it_hits_the_cache_correct(): void
     {
-        $repository = \Mockery::mock(Repository::class);
-        $cachable = \Mockery::mock(Cacheable::class);
+        $repository = Mockery::mock(Repository::class);
+        $cachable = Mockery::mock(Cacheable::class);
 
         $cachable->shouldReceive('generateKey')
             ->with('my-feature')
@@ -34,8 +35,8 @@ class GatewayCacheTest extends TestCase
 
     public function test_it_stores_with_a_ttl_correctly(): void
     {
-        $repository = \Mockery::mock(Repository::class);
-        $cachable = \Mockery::mock(Cacheable::class);
+        $repository = Mockery::mock(Repository::class);
+        $cachable = Mockery::mock(Cacheable::class);
 
         $cachable->shouldReceive('generateKey')
             ->with('my-feature')

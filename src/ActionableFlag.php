@@ -9,7 +9,7 @@ class ActionableFlag implements ActionableFlagContract
 {
     public string $feature;
     public ?bool $result = null;
-    public ?Support\ActionDebugLog $debug = null;
+    public ?ActionDebugLog $debug = null;
 
     public function feature(): string
     {
@@ -36,7 +36,7 @@ class ActionableFlag implements ActionableFlagContract
         return (bool) $this->debug;
     }
 
-    public function storeInspectionInformation(string $pipe, string $reason, ?bool $result = null)
+    public function storeInspectionInformation(string $pipe, string $reason, ?bool $result = null): void
     {
         $this->debug->addDecision($pipe, $reason, $result);
     }

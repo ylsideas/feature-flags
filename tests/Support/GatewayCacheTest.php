@@ -33,6 +33,26 @@ class GatewayCacheTest extends TestCase
         $this->assertTrue($cache->hits('my-feature'));
     }
 
+    public function test_it_retrieves_the_cache_correctly(): void
+    {
+        $repository = Mockery::mock(Repository::class);
+        $cachable = Mockery::mock(Cacheable::class);
+
+        $cachable->shouldReceive('generateKey')
+            ->with('my-feature')
+            ->once()
+            ->andReturn('key');
+
+        $repository->shouldReceive('get')
+            ->with('test:key')
+            ->once()
+            ->andReturn(null);
+
+        $cache = new GatewayCache($repository, 'test', $cachable);
+
+        $this->assertFalse($cache->result('my-feature'));
+    }
+
     public function test_it_stores_with_a_ttl_correctly(): void
     {
         $repository = Mockery::mock(Repository::class);

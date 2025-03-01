@@ -5,6 +5,7 @@ namespace YlsIdeas\FeatureFlags\Tests\Support;
 use Generator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use YlsIdeas\FeatureFlags\ActionableFlag;
@@ -202,7 +203,7 @@ class GatewayInspectorTest extends TestCase
         $assert($result->log());
     }
 
-    public function debugScenarios(): Generator
+    public static function debugScenarios(): Generator
     {
         yield 'found result' => [
             fn (string $feature): array => [
@@ -212,7 +213,7 @@ class GatewayInspectorTest extends TestCase
                     ->getMock(),
             ],
             function (ActionDebugLog $log): void {
-                $this->assertSame([
+                Assert::assertSame([
                     [
                         'pipe' => 'test',
                         'reason' => ActionDebugLog::REASON_RESULT,
@@ -235,7 +236,7 @@ class GatewayInspectorTest extends TestCase
                     ->getMock(),
             ],
             function (ActionDebugLog $log): void {
-                $this->assertSame([
+                Assert::assertSame([
                     [
                         'pipe' => 'test',
                         'reason' => ActionDebugLog::REASON_CACHE,
@@ -254,7 +255,7 @@ class GatewayInspectorTest extends TestCase
                     ->getMock(),
             ],
             function (ActionDebugLog $log): void {
-                $this->assertSame([
+                Assert::assertSame([
                     [
                         'pipe' => 'test',
                         'reason' => ActionDebugLog::REASON_FILTER,
@@ -268,7 +269,7 @@ class GatewayInspectorTest extends TestCase
                 'gateway' => Mockery::mock(Gateway::class),
             ],
             function (ActionDebugLog $log): void {
-                $this->assertSame([
+                Assert::assertSame([
                     [
                         'pipe' => 'test',
                         'reason' => ActionDebugLog::REASON_RESULT_ALREADY_FOUND,
@@ -286,7 +287,7 @@ class GatewayInspectorTest extends TestCase
                     ->getMock(),
             ],
             function (ActionDebugLog $log): void {
-                $this->assertSame([
+                Assert::assertSame([
                     [
                         'pipe' => 'test',
                         'reason' => ActionDebugLog::REASON_NO_RESULT,

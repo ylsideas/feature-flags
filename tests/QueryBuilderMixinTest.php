@@ -26,7 +26,7 @@ class QueryBuilderMixinTest extends TestCase
     public function test_modifying_queries_when_the_feature_is_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
-        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^12.0|^11.0')) {
             $expectedSql = Str::replace('"', '`', $expectedSql);
         }
         Features::fake(['my-feature' => $flag]);
@@ -54,7 +54,7 @@ class QueryBuilderMixinTest extends TestCase
     public function test_modifying_queries_when_the_feature_is_not_enabled(bool $flag, string $expectedSql): void
     {
         // Laravel 11 for some reason changed how SQL is generated
-        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^11.0')) {
+        if (! InstalledVersions::satisfies(new VersionParser(), 'illuminate/contracts', '^12.0|^11.0')) {
             $expectedSql = Str::replace('"', '`', $expectedSql);
         }
         Features::fake(['my-feature' => $flag]);

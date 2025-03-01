@@ -3,6 +3,7 @@
 namespace YlsIdeas\FeatureFlags\Support;
 
 use Illuminate\Contracts\Cache\Repository;
+use Psr\SimpleCache\InvalidArgumentException;
 use YlsIdeas\FeatureFlags\Contracts\Cacheable;
 
 /**
@@ -21,9 +22,12 @@ class GatewayCache
         return $this->repository->has($this->generateKey($feature));
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function result(string $feature): bool
     {
-        return $this->repository->get($this->generateKey($feature));
+        return (bool) $this->repository->get($this->generateKey($feature));
     }
 
     public function store(string $feature, ?bool $result): void

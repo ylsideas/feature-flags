@@ -2,6 +2,18 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v3.0.2 - 2025-05-11
+
+### What's Changed
+
+* Fix deprecated implicit nullable parameter by @brunodevel in https://github.com/ylsideas/feature-flags/pull/74
+
+### New Contributors
+
+* @brunodevel made their first contribution in https://github.com/ylsideas/feature-flags/pull/74
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v3.0.1...v3.0.2
+
 ## v3.0.1 - 2025-03-01
 
 ### What's Fixed

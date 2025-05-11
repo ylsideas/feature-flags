@@ -208,7 +208,7 @@ class Manager implements Features
         return $this->useQueryBuilderMixin;
     }
 
-    public function callOnExpiredFeatures(array $expiredFeatures, callable $handler = null): static
+    public function callOnExpiredFeatures(array $expiredFeatures, ?callable $handler = null): static
     {
         $handler ??= static function ($feature): void {
             throw new FeatureExpired($feature);

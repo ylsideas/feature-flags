@@ -101,7 +101,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         $this->app->scoped(
             MaintenanceRepository::class,
             fn (Container $app): MaintenanceRepository => new MaintenanceRepository(
-                $app->make(FeaturesContract::class), $app
+                $app->make(FeaturesContract::class),
+                $app
             )
         );
 

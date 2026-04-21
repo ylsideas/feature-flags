@@ -101,7 +101,8 @@ class FeatureFlagsServiceProvider extends ServiceProvider
         $this->app->scoped(
             MaintenanceRepository::class,
             fn (Container $app): MaintenanceRepository => new MaintenanceRepository(
-                $app->make(FeaturesContract::class), $app
+                $app->make(FeaturesContract::class),
+                $app
             )
         );
 
@@ -110,7 +111,7 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             fn (MaintenanceModeManager $manager) => $manager->extend(
                 'features',
                 fn (): MaintenanceMode => new MaintenanceDriver(
-                    $this->container->make(MaintenanceRepository::class)
+                    \Illuminate\Container\Container::getInstance()->make(MaintenanceRepository::class)
                 )
             )
         );

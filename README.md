@@ -5,11 +5,12 @@
 [![Check & fix styling](https://github.com/ylsideas/feature-flags/actions/workflows/pint.yml/badge.svg)](https://github.com/ylsideas/feature-flags/actions/workflows/pint.yml)
 [![codecov](https://codecov.io/github/ylsideas/feature-flags/branch/main/graph/badge.svg)](https://codecov.io/github/ylsideas/feature-flags)
 [![Total Downloads](https://img.shields.io/packagist/dt/ylsideas/feature-flags.svg?style=flat-square)](https://packagist.org/packages/ylsideas/feature-flags)
+[![Laravel Compatibility](https://badge.laravel.cloud/badge/ylsideas/feature-flags?style=flat)](https://packagist.org/packages/ylsideas/feature-flags)
 [![Help Fund](https://img.shields.io/github/sponsors/peterfox?style=flat-square)](https://github.com/sponsors/peterfox)
 
 A Feature flag is at times referred to as a feature toggle or feature switch. Ultimately it's a coding strategy 
 to be used along with source control to make it easier to continuously integrate and deploy. The idea of 
-the flags works by essentially safe guarding sections of code from executing if a feature flag isn't in a switched 
+the flags works by essentially safeguarding sections of code from executing if a feature flag isn't in a switched 
 on state.
 
 This package aims to make implementing such flags across your application a great deal easier by providing solutions

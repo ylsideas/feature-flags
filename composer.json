@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/contracts": "12.*|11.*|10.*"
+        "illuminate/contracts": "12.*|11.*|10.*|^13.0"
     },
     "require-dev": {
         "composer/semver": "^3.0",
@@ -25,7 +25,7 @@
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.6.12",
         "nunomaduro/collision": "^8.0|^7.8|^6.0",
-        "orchestra/testbench": "^10.0|^9.0|^8.0",
+        "orchestra/testbench": "^10.0|^9.0|^8.0|^11.0",
         "pestphp/pest": "^1.21|^2.34|^3.0",
         "pestphp/pest-plugin-arch": "^2.6|^3.0",
         "pestphp/pest-plugin-laravel": "^1.1|^2.3|^3.0",

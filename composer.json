@@ -16,19 +16,19 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "illuminate/contracts": "12.*|11.*|10.*"
+        "php": "^8.3",
+        "illuminate/contracts": "13.*|12.*|11.*"
     },
     "require-dev": {
         "composer/semver": "^3.0",
         "larastan/larastan": "^3.0|^2.0|^1.0",
         "laravel/pint": "^1.0",
         "mockery/mockery": "^1.6.12",
-        "nunomaduro/collision": "^8.0|^7.8|^6.0",
-        "orchestra/testbench": "^10.0|^9.0|^8.0",
-        "pestphp/pest": "^1.21|^2.34|^3.0",
-        "pestphp/pest-plugin-arch": "^2.6|^3.0",
-        "pestphp/pest-plugin-laravel": "^1.1|^2.3|^3.0",
+        "nunomaduro/collision": "^8.0",
+        "orchestra/testbench": "^11.0|^10.0|^9.17.0",
+        "pestphp/pest": "^1.21|^2.34|^3.0|^4.0",
+        "pestphp/pest-plugin-arch": "^2.6|^3.0|^4.0",
+        "pestphp/pest-plugin-laravel": "^1.1|^2.3|^3.0|^4.0",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpdoc-parser": "^2.0",
         "phpstan/phpstan-deprecation-rules": "^1.0|^2.0",
@@ -47,8 +47,8 @@
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
         "lint": "vendor/bin/pint",
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest coverage",
+        "test": "vendor/bin/pest --no-coverage",
+        "test-coverage": "vendor/bin/pest",
         "fix": "vendor/bin/rector",
         "ci": [
             "@fix",

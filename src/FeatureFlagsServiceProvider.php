@@ -98,11 +98,23 @@ class FeatureFlagsServiceProvider extends ServiceProvider
             $this->app->singleton(FeaturesContract::class, Manager::class);
         }
 
-        $this->app->scoped(MaintenanceRepository::class, fn (Container $app): MaintenanceRepository => new MaintenanceRepository($app->make(FeaturesContract::class), $app));
+        $this->app->scoped(
+            MaintenanceRepository::class,
+            fn (Container $app): MaintenanceRepository => new MaintenanceRepository(
+                $app->make(FeaturesContract::class),
+                $app
+            )
+        );
 
-        $this->app->extend(MaintenanceModeManager::class, fn (MaintenanceModeManager $manager) => $manager->extend('features', fn (): MaintenanceMode => new MaintenanceDriver(
-            $this->app->make(MaintenanceRepository::class)
-        )));
+        $this->app->extend(
+            MaintenanceModeManager::class,
+            fn (MaintenanceModeManager $manager) => $manager->extend(
+                'features',
+                fn (): MaintenanceMode => new MaintenanceDriver(
+                    \Illuminate\Container\Container::getInstance()->make(MaintenanceRepository::class)
+                )
+            )
+        );
     }
 
     protected function schedulingMacros()

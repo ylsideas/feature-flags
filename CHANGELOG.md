@@ -2,6 +2,14 @@
 
 All notable changes to `feature-flags` will be documented in this file
 
+## v3.1.0 - 2026-05-11
+
+### What's Changed
+
+* Laravel 13 by @peterfox in https://github.com/ylsideas/feature-flags/pull/76
+
+**Full Changelog**: https://github.com/ylsideas/feature-flags/compare/v3.0.2...v3.1.0
+
 ## v3.0.2 - 2025-05-11
 
 ### What's Changed

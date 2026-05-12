@@ -3,7 +3,9 @@
     "description": "A Laravel package for handling feature flags",
     "keywords": [
         "ylsideas",
-        "feature-flags"
+        "feature flags",
+        "feature flag",
+        "laravel"
     ],
     "homepage": "https://github.com/ylsideas/feature-flags",
     "license": "MIT",
